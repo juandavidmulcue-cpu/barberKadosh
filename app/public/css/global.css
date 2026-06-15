@@ -1,0 +1,122 @@
+/* =========================
+   RESET GLOBAL
+========================= */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* =========================
+   VARIABLES DE COLOR
+========================= */
+:root{
+    --negro: #0a0a0a;
+    --negro-suave: rgba(0,0,0,0.75);
+    --morado: #7b2cbf;
+    --morado-claro: #9d4edd;
+    --dorado: #d4af37;
+    --blanco: #ffffff;
+    --gris: #bfbfbf;
+}
+
+/* =========================
+   BODY GLOBAL
+========================= */
+body{
+    background: linear-gradient(135deg, var(--negro) 55%, #240046 100%);
+    color: var(--blanco);
+    min-height: 100vh;
+}
+
+/* =========================
+   LINKS
+========================= */
+a{
+    color: inherit;
+    text-decoration: none;
+}
+
+/* =========================
+   BOTONES GENERALES
+========================= */
+.btn-primary{
+    padding: 14px 22px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--morado), var(--morado-claro));
+    color: var(--blanco);
+    transition: 0.3s;
+}
+
+.btn-primary:hover{
+    box-shadow: 0 8px 25px rgba(157,78,221,0.6);
+}
+
+/* =========================
+   TITULOS
+========================= */
+h1, h2, h3, h4{
+    font-weight: 700;
+}
+
+.title-gold{
+    color: var(--dorado);
+}
+
+/* =========================
+   CONTENEDORES
+========================= */
+.container{
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* =========================
+   TARJETAS
+========================= */
+.card{
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 25px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* =========================
+   INPUTS GENERALES
+========================= */
+input, select, textarea{
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(255,255,255,0.08);
+    color: var(--blanco);
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    outline: 1px solid var(--morado-claro);
+}
+
+/* =========================
+   MENSAJES
+========================= */
+.error-msg{
+    background: rgba(255,0,0,0.15);
+    color: #ffb3b3;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.success-msg{
+    background: rgba(0,255,0,0.15);
+    color: #b3ffb3;
+    padding: 10px;
+    border-radius: 10px;
+}

@@ -1,0 +1,125 @@
+/* ===== RESET ===== */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== BODY ===== */
+body{
+    background: linear-gradient(135deg, #0a0a0a 55%, #240046 100%);
+    color: #fff;
+    min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.admin-header{
+    padding: 20px 40px;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(212,175,55,0.3);
+}
+
+.admin-header h1{
+    color: #d4af37;
+    font-size: 26px;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: 240px;
+    height: calc(100vh - 80px);
+    background: rgba(0,0,0,0.85);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-title{
+    color: #d4af37;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.sidebar-link{
+    padding: 12px 15px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active{
+    background: linear-gradient(135deg, rgba(123,44,191,0.9), rgba(157,78,221,0.9));
+}
+
+.sidebar a{
+    text-align: center;
+    padding: 12px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #b8962e, #d4af37);
+    color: #000;
+    font-weight: 600;
+}
+
+/* ===== MAIN ===== */
+.main-content{
+    margin-left: 260px;
+    padding: 40px;
+}
+
+.panel{ display: none; }
+.panel.active{ display: block; }
+
+/* ===== SECCIONES ===== */
+.section-title{
+    color: #d4af37;
+    margin-bottom: 15px;
+}
+
+.admin-card,
+.section-card,
+.action-row{
+    background: rgba(255,255,255,0.05);
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 25px;
+}
+
+/* ===== BOTONES ===== */
+.btn-primary{
+    padding: 14px 22px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, rgba(123,44,191,1), rgba(157,78,221,1));
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary:hover{
+    box-shadow: 0 8px 25px rgba(157,78,221,0.6);
+}
+
+/* ===== TABLAS ===== */
+.data-table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th{
+    background: rgba(155,89,182,0.25);
+    color: #d4af37;
+    padding: 12px;
+}
+
+.data-table td{
+    padding: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}

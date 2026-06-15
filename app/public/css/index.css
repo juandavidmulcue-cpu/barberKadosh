@@ -1,0 +1,289 @@
+/* --- RESET PARA EVITAR INTERFERENCIAS DE OTROS CSS --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    background-color: #050307;
+    font-family: 'Montserrat', 'Arial', sans-serif;
+    color: #ffffff;
+}
+
+/* --- CONTENEDOR PRINCIPAL BLINDADO --- */
+.hero-master-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Clave: Header arriba, Contenido al centro, Barra abajo */
+    align-items: center;
+    /* Metemos la imagen aquí para que NUNCA empuje el contenido hacia abajo */
+    background-image: url('../assets/img/logo.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+/* Capa oscura para asegurar el contraste de las letras */
+.hero-dark-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(5, 3, 7, 0.85) 0%, rgba(5, 3, 7, 0.95) 100%);
+    z-index: 1; /* Al fondo */
+}
+
+/* --- NAV SUPERIOR (HEADER) --- */
+.main-header {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding: 25px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mini-logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 1px solid #c5a880;
+    object-fit: cover;
+}
+
+.brand-name {
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 1.1rem;
+    color: #ffffff;
+}
+
+.auth-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-link {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #c5a880;
+}
+
+.highlight-link {
+    border: 1px solid #7c3aed;
+    background: rgba(124, 58, 237, 0.1);
+    padding: 6px 16px;
+    border-radius: 20px;
+    color: #ffffff;
+}
+
+/* --- AREA CENTRAL COMPLETA --- */
+.center-content-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    flex-grow: 1; /* Toma todo el espacio disponible entre el header y el footer */
+    display: flex;
+    justify-content: center; /* Centrado perfecto horizontal */
+    align-items: center;     /* Centrado perfecto vertical */
+    padding: 20px;
+}
+
+.aesthetic-card {
+    max-width: 680px;
+    text-align: center; /* Todo el texto simétrico en el eje central */
+    padding: 20px;
+}
+
+.tagline {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #c5a880;
+    margin-bottom: 20px;
+}
+
+.main-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+}
+
+.gold {
+    color: #c5a880;
+}
+
+.description {
+    font-size: 1rem;
+    color: #94a3b8;
+    line-height: 1.7;
+    margin-bottom: 35px;
+}
+
+/* BOTONES INTEGRADOS */
+.action-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn-aesthetic {
+    padding: 14px 32px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 30px; /* Bordes redondeados finos de la imagen Trim */
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-filled {
+    background-color: #c5a880;
+    color: #050307;
+}
+
+.btn-filled:hover {
+    background-color: #b0936d;
+    transform: translateY(-2px);
+}
+
+.btn-bordered {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+}
+
+.btn-bordered:hover {
+    background-color: #ffffff;
+    color: #050307;
+    border-color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* --- BARRA INFERIOR DE INFORMACIÓN ESTILO TRIM --- */
+.bottom-info-bar {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 3fr 1fr; /* 75% datos, 25% redes sociales */
+    background-color: #000000;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.info-section {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 25px;
+    gap: 25px;
+}
+
+.info-cell {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cell-icon {
+    font-size: 1.4rem;
+    color: #c5a880;
+}
+
+.cell-text strong {
+    display: block;
+    font-size: 0.9rem;
+    color: #ffffff;
+}
+
+.cell-text p {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* Módulo Ocre Derecho */
+.social-section {
+    background-color: #c5a880;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    padding: 25px;
+}
+
+.social-btn {
+    color: #050307;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: opacity 0.2s;
+}
+
+.social-btn:hover {
+    opacity: 0.6;
+}
+
+/* --- MÓVIL RESPONSIVE --- */
+@media (max-width: 868px) {
+    .hero-master-container {
+        height: auto;
+        min-height: 100vh;
+    }
+    .main-header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+    }
+    .center-content-wrapper {
+        padding: 50px 20px;
+    }
+    .main-title {
+        font-size: 2.4rem;
+    }
+    .action-row {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+    }
+    .btn-aesthetic {
+        text-align: center;
+        width: 100%;
+    }
+    .bottom-info-bar {
+        grid-template-columns: 1fr;
+    }
+    .info-section {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 30px 20px;
+        gap: 20px;
+    }
+}
