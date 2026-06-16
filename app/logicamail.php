@@ -133,7 +133,7 @@ function EnviarCorreoResetPassword($correo, $nombre, $id, $token)
         $mail->isHTML(true);
         $mail->Subject = 'Recupera tu clave aqui';
         $mail->Body = "
-            Hola <b>$nombre</b><br><br>,
+            Hola <b>$nombre</b><br><br>
             Haz clic en el enlace para cambiar tu contraseña y poder acceder correctamente a tu cuenta, y agendar tus proximas citas:<br>
             <a href='$link'>Cambiar contraseña</a><br><br>
             <small>Este enlace expira en 10 minutos</small>
