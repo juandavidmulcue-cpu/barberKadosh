@@ -25,7 +25,7 @@
    BODY GLOBAL
 ========================= */
 body{
-    background: linear-gradient(135deg, var(--negro) 55%, #240046 100%);
+    background: var(--negro);
     color: var(--blanco);
     min-height: 100vh;
 }
