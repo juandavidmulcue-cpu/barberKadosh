@@ -54,6 +54,7 @@
             <div class="action-row">
                 <h3>Registrar Barbero</h3>
                 <p>Crear cuentas de barberos</p>
+                <br>
                 <a href="index.php?controller=admin&action=registerBarbero"
                     class="btn btn-primary">
                     + Registrar Barbero
