@@ -2,13 +2,13 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Editar Producto | Admin - Kadosh</title>
+    <title>editarProducto | Admin - Kadosh</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="public/css/global.css">
-    <link rel="stylesheet" href="public/css/admin.css">
-</head>
+   <!-- CSS -->
+<link rel="stylesheet" href="public/css/global.css">
+<link rel="stylesheet" href="public/css/admin.css">
+<link rel="stylesheet" href="/barberKadosh/app/public/css/producto/editarProducto.css">
 
 <body>
 

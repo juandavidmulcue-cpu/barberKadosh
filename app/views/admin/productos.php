@@ -7,20 +7,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="public/css/global.css">
-    <link rel="stylesheet" href="public/css/admin.css">
-    <link rel="stylesheet" href="public/css/datatable.css">
+<link rel="stylesheet" href="public/css/global.css">
+<link rel="stylesheet" href="public/css/admin.css">
+<link rel="stylesheet" href="public/css/datatable.css">
+<link rel="stylesheet" href="public/css/producto/productos.css">
 
-    <!-- DataTables -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-</head>
+<!-- DataTables -->
+<link rel="stylesheet" href="/barberKadosh/app/public/css/producto/productos.css">
 
 <body>
 
-    <header class="admin-header">
-        <h1>Gestión de Productos</h1>
-        <a href="index.php?controller=admin&action=panel" class="logout-btn">← Volver</a>
-    </header>
+    <a href="index.php?controller=admin&action=panel" class="btn-back">
+    <i class="fa-solid fa-arrow-left"></i>
+    Volver
+</a>
 
     <main class="admin-panel">
 
@@ -55,14 +55,16 @@
                                 <td><?= htmlspecialchars($p['nombre']) ?></td>
                                 <td>$<?= number_format($p['precio'], 2) ?></td>
                                 <td>
-                                    <a class="btn-danger"
-                                        href="index.php?controller=producto&action=eliminarProducto&id_producto=<?= $p['id_producto'] ?>"
-                                        onclick="return confirm('¿Eliminar este producto?')">
-                                        Eliminar
-                                    </a>
-                                    <a class="btn-warning"
-                                    href="index.php?controller=admin&action=editarProducto&id_producto=<?= $p['id_producto'] ?>">
-                                    Editar</a>
+                                   <a class="btn-danger"
+   href="index.php?controller=producto&action=eliminarProducto&id_producto=<?= $p['id_producto'] ?>"
+   onclick="return confirm('¿Eliminar este producto?')">
+    Eliminar
+</a>
+
+<a class="btn-warning"
+   href="index.php?controller=admin&action=editarProducto&id_producto=<?= $p['id_producto'] ?>">
+   Editar
+</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -83,15 +85,25 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('#tablaProductos').DataTable({
-                language: {
-                    url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
-                }
-            });
-        });
-    </script>
+   <script>
+$(document).ready(function() {
+
+    $('#tablaProductos').DataTable({
+
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+        },
+
+        paging: false,
+        info: false,
+        lengthChange: false,
+        ordering: false,
+        searching: true
+
+    });
+
+});
+</script>
 
 </body>
 

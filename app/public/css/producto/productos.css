@@ -1,0 +1,296 @@
+:root{
+    --gold:#d4af37;
+    --purple:#6d28d9;
+    --purple-dark:#4c1d95;
+    --card:rgba(20,20,30,.75);
+    --border:rgba(255,255,255,.08);
+    --red:#ef4444;
+    --yellow:#facc15;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:
+    radial-gradient(circle at top,#24143f,#09090f 65%);
+    color:white;
+    font-family:'Poppins',sans-serif;
+}
+
+/* HEADER */
+
+.admin-header{
+    padding:40px;
+}
+
+.admin-header h1{
+    color:var(--gold);
+    font-size:55px;
+    margin-bottom:20px;
+}
+
+/* BOTON VOLVER */
+
+.btn-back{
+    display:inline-block;
+    border:2px solid var(--gold);
+    color:#b45cff;
+    padding:12px 25px;
+    border-radius:14px;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+}
+
+.btn-back:hover{
+    background:var(--purple);
+    color:white;
+}
+
+/* PANEL */
+
+.admin-panel{
+    width:95%;
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+}
+
+/* TARJETAS */
+
+.admin-card{
+    background:var(--card);
+    backdrop-filter:blur(20px);
+
+    border:1px solid var(--border);
+
+    border-radius:25px;
+
+    padding:30px;
+
+    box-shadow:
+    0 15px 40px
+    rgba(0,0,0,.5);
+}
+
+.admin-card h3{
+    color:var(--gold);
+    font-size:35px;
+    margin-bottom:30px;
+}
+
+/* FORMULARIO */
+
+.admin-card form{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    align-items:center;
+}
+
+.admin-card form input{
+    flex:1;
+    min-width:220px;
+}
+
+/* INPUTS */
+
+input,
+select{
+    background:
+    rgba(25,25,35,.85);
+
+    color:white;
+
+    border:
+    1px solid
+    rgba(255,255,255,.1);
+
+    border-radius:15px;
+
+    padding:16px;
+
+    font-size:17px;
+}
+
+input:focus{
+    outline:none;
+
+    border-color:var(--purple);
+
+    box-shadow:
+    0 0 15px
+    rgba(109,40,217,.4);
+}
+
+/* BOTON AGREGAR */
+
+.btn-primary{
+    background:
+    linear-gradient(
+    90deg,
+    var(--purple-dark),
+    var(--purple)
+    );
+
+    border:none;
+
+    color:white;
+
+    padding:16px 35px;
+
+    border-radius:15px;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.btn-primary:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 10px 25px
+    rgba(109,40,217,.5);
+}
+
+/* TABLA */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    overflow:hidden;
+    border-radius:20px;
+}
+
+thead{
+    background:
+    linear-gradient(
+    90deg,
+    #5825b8,
+    #7c3aed
+    );
+}
+
+th{
+    padding:22px;
+    color:white;
+    font-size:20px;
+}
+
+td{
+    padding:25px;
+    text-align:center;
+    border-bottom:
+    1px solid
+    rgba(255,255,255,.05);
+}
+
+tbody tr{
+    background:
+    rgba(15,15,20,.6);
+}
+
+tbody tr:nth-child(even){
+    background:
+    rgba(30,30,40,.6);
+}
+
+tbody tr:hover{
+    background:
+    rgba(50,50,60,.8);
+}
+
+/* BOTONES TABLA */
+
+.btn-warning{
+    background:none;
+    border:2px solid var(--yellow);
+    color:var(--yellow);
+
+    padding:12px 18px;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    margin-right:10px;
+
+    transition:.3s;
+}
+
+.btn-warning:hover{
+    background:var(--yellow);
+    color:black;
+}
+
+.btn-danger{
+    background:none;
+    border:2px solid var(--red);
+    color:var(--red);
+
+    padding:12px 18px;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    transition:.3s;
+}
+
+.btn-danger:hover{
+    background:var(--red);
+    color:white;
+}
+
+/* DATATABLES */
+
+.dataTables_length,
+.dataTables_info,
+.dataTables_paginate{
+    display:none;
+}
+
+.dataTables_filter{
+    margin-bottom:25px;
+    text-align:right;
+}
+
+.dataTables_filter input{
+    width:280px !important;
+    height:45px;
+    border-radius:15px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+    .admin-card form{
+        flex-direction:column;
+    }
+
+    .admin-card form input{
+        width:100%;
+    }
+
+    table{
+        display:block;
+        overflow-x:auto;
+    }
+
+    .btn-warning,
+    .btn-danger{
+        display:block;
+        margin-bottom:10px;
+    }
+}
