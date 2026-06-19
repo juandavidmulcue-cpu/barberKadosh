@@ -51,6 +51,8 @@ class AdminController
 
     public function registerBarbero()
     {
+        $error = null;
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $data = [
@@ -62,8 +64,15 @@ class AdminController
                 ':password' => password_hash($_POST['password'], PASSWORD_DEFAULT)
             ];
 
-            $this->adminModel->registrarBarbero($data);
-            header("Location: index.php?controller=admin&action=panel");
+            $ok = $this->adminModel->registrarBarbero($data);
+
+            if ($ok) {
+                $_SESSION['mensaje_exito'] = "Registrado correctamente";
+                header("Location: index.php?controller=admin&action=panel");
+                exit;
+            } else {
+                $error = "No se pudo registrar (revisa duplicados o BD)";
+            }
         }
 
         require 'app/views/admin/register_barbero.php';

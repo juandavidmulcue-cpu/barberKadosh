@@ -5,7 +5,7 @@ define("USERNAME", "kadoshbar1230@gmail.com");
 define("PASSWORD", "rbcn efqd qklw jsev");
 
 define("SMTP_SECURE", "TLS");
-define("TIEMPO_VIDA", time() + 120);
+define("TIEMPO_VIDA", time() + 180);
 
   // define("TIEMPO_VIDA", time() + 60); 1 minuto (1x60 = 60 segundos)
   // define("TIEMPO_VIDA", time() + 600); 10 minutos (10x60 = 600 segundos)

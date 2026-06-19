@@ -424,3 +424,11 @@
 </body>
 
 </html>
+
+<?php if (!empty($_SESSION['mensaje_exito'])): ?>
+    <div class="success-msg">
+        <?= $_SESSION['mensaje_exito']; ?>
+    </div>
+
+    <?php unset($_SESSION['mensaje_exito']); ?>
+<?php endif; ?>

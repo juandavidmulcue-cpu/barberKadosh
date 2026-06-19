@@ -40,13 +40,19 @@ class AdminModel
 
     public function registrarBarbero($data)
     {
-        $stmt = $this->db->prepare(
-            "INSERT INTO usuarios 
-            (id_usuario, id_rol, nombre, apellido, telefono, correo, password)
-            VALUES (:id, 2, :nombre, :apellido, :telefono, :correo, :password)"
-        );
+        $stmt = $this->db->prepare("
+        INSERT INTO usuarios 
+        (id_usuario, id_rol, nombre, apellido, telefono, correo, password)
+        VALUES (:id, 2, :nombre, :apellido, :telefono, :correo, :password)
+    ");
 
-        return $stmt->execute($data);
+        $ok = $stmt->execute($data);
+
+        if (!$ok) {
+            print_r($stmt->errorInfo());
+        }
+
+        return $ok;
     }
 
     public function eliminarBarbero($id)

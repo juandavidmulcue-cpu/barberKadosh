@@ -51,6 +51,8 @@
                 <input type="password" name="password" required>
             </div>
 
+            <div id="mensaje" class="error-msg" style="color: #ff9999; background: rgba(214, 40, 40, 0.15); border: 1px solid #d62828; padding: 12px; border-radius: 8px; margin-bottom: 15px; display: none;"></div>
+
             <button type="submit" class="btn-primary">
                 Registrar al barbero </button>
         </form>

@@ -15,8 +15,8 @@
 
         <!-- 🔝 BOTÓN SUPERIOR -->
         <div class="login-switch">
-            <a href="index.php?controller=auth&action=loginCliente" class="switch-btn">
-                Cliente
+            <a href="index.php?controller=auth&action=loginBarbero" class="switch-btn">
+                Barbero
             </a>
         </div>
 
@@ -30,7 +30,7 @@
 
             <div class="form-group">
                 <label>Correo</label>
-                <input type="email" name="email" required>
+                <input type="email" name="correo" required>
             </div>
 
             <div class="form-group">
