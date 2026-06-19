@@ -6,15 +6,19 @@
     <title>Panel Admin | Kadosh</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- CSS PROPIO -->
     <link rel="stylesheet" href="app/public/css/admin.css">
     <link rel="stylesheet" href="app/public/css/global.css">
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
 </head>
 
-<body>
+<body class="admin-body">
 
     <header class="admin-header">
         <h1>Panel Administrador</h1>
-
     </header>
 
     <!-- SIDEBAR -->
@@ -23,40 +27,64 @@
 
         <div class="sidebar-link active" onclick="showPanel('inicio')">📊 Panel</div>
         <div class="sidebar-link" onclick="showPanel('barberos')">👤 Barberos</div>
+        <div class="sidebar-link" onclick="showPanel('clientes')">👤 Clientes</div>
         <div class="sidebar-link" onclick="showPanel('productos')">📦 Productos</div>
         <div class="sidebar-link" onclick="showPanel('reportes')">📈 Reportes</div>
 
         <div style="flex:1;"></div>
 
         <a href="index.php?controller=auth&action=logout">Cerrar sesión</a>
-
     </aside>
-
 
     <main class="main-content">
 
         <!-- INICIO -->
         <div class="panel active" id="panel-inicio">
-            <h2>Bienvenido, ADMIN 👋</h2>
-            <p>Panel administrativo activo.</p>
+            <h2>Bienvenido, Señor ADMIN 👋</h2><br>
+            <p class="subtext">Panel administrativo de la barbería</p>
+            <br>
+            <div class="inicio-cards">
+                <div class="card">
+                    <h3>Gestión de Barberos</h3>
+                    <p>Administra barberos, horarios y disponibilidad.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Gestión de Clientes</h3>
+                    <p>Administra clientes y sus datos.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Productos</h3>
+                    <p>Controla el inventario y precios.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Citas</h3>
+                    <p>Revisa y organiza las citas del día.</p>
+                </div>
+            </div>
+            <br>
+            <p class="footer-text">
+                Usa el menú lateral para comenzar a administrar la barbería 💈
+            </p>
         </div>
 
-        <!-- Barberos -->
 
+        <!-- BARBEROS -->
         <div class="panel" id="panel-barberos">
 
             <h2 class="section-title">👤 Barberos</h2>
 
             <div class="admin-card">
-                <p>Gestionar clientes y barberos</p>
+                <p>Gestionar barberos</p>
             </div>
 
             <div class="action-row">
                 <h3>Registrar Barbero</h3>
-                <p>Crear cuentas de barberos</p>
+                <p>Añade a un nuevo integrante al equipo</p>
                 <br>
-                <a href="index.php?controller=admin&action=registerBarbero"
-                    class="btn btn-primary">
+                <a href="index.php?controller=admin&action=registerBarbero" class="btn btn-primary">
                     + Registrar Barbero
                 </a>
             </div>
@@ -64,7 +92,9 @@
             <br>
 
             <div class="section-card">
-                <table class="data-table">
+
+                <table class="data-table" id="tablaBarberos">
+                    
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -80,20 +110,21 @@
                         <?php if (!empty($barberos)): ?>
                             <?php foreach ($barberos as $b): ?>
                                 <tr>
-                                    <td><?php echo $b['id_usuario']; ?></td>
-                                    <td><?php echo $b['nombre']; ?></td>
-                                    <td><?php echo $b['apellido']; ?></td>
-                                    <td><?php echo $b['telefono']; ?></td>
-                                    <td><?php echo $b['correo']; ?></td>
+                                    <td><?= $b['id_usuario'] ?></td>
+                                    <td><?= $b['nombre'] ?></td>
+                                    <td><?= $b['apellido'] ?></td>
+                                    <td><?= $b['telefono'] ?></td>
+                                    <td><?= $b['correo'] ?></td>
                                     <td>
                                         <a class="btn-danger"
-                                        href="index.php?controller=admin&action=eliminarBarbero&id=<?= $b['id_usuario'] ?>"
-                                        onclick="return confirm('¿Eliminar este barbero?')">
-                                        Eliminar
-                                    </a>
-                                    <a class="btn-warning"
-                                    href="index.php?controller=admin&action=editarBarbero&id_usuario=<?= $b['id_usuario'] ?>">
-                                    Editar</a>
+                                            href="index.php?controller=admin&action=eliminarBarbero&id=<?= $b['id_usuario'] ?>"
+                                            onclick="return confirm('¿Eliminar este barbero?')">
+                                            Eliminar
+                                        </a>
+                                        <a class="btn-warning"
+                                            href="index.php?controller=admin&action=editarBarbero&id_usuario=<?= $b['id_usuario'] ?>">
+                                            Editar
+                                        </a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -104,18 +135,70 @@
                         <?php endif; ?>
                     </tbody>
                 </table>
+
+            </div>
+        </div>
+
+        <!-- CLIENTES -->
+        <div class="panel" id="panel-clientes">
+
+            <h2 class="section-title">👤 Clientes</h2>
+
+            <div class="admin-card">
+                <p>Gestionar clientes</p>
+            </div>
+            <br>
+
+            <div class="section-card">
+
+                <table class="data-table" id="tablaClientes">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Teléfono</th>
+                            <th>Correo</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <?php if (!empty($clientes)): ?>
+                            <?php foreach ($clientes as $c): ?>
+                                <tr>
+                                    <td><?= $c['id_usuario'] ?></td>
+                                    <td><?= $c['nombre'] ?></td>
+                                    <td><?= $c['apellido'] ?></td>
+                                    <td><?= $c['telefono'] ?></td>
+                                    <td><?= $c['correo'] ?></td>
+                                    <td>
+                                        <a class="btn-danger"
+                                            href="index.php?controller=admin&action=eliminarCliente&id=<?= $c['id_usuario'] ?>"
+                                            onclick="return confirm('¿Eliminar este cliente?')">
+                                            Eliminar
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="6">No hay clientes registrados</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+
             </div>
         </div>
 
         <!-- PRODUCTOS -->
-
         <div class="panel" id="panel-productos">
 
             <h2 class="section-title">📦 Productos</h2>
 
             <div class="action-row">
-                <a href="index.php?controller=admin&action=productos"
-                    class="btn btn-primary">
+                <a href="index.php?controller=admin&action=productos" class="btn btn-primary">
                     Gestionar Productos
                 </a>
             </div>
@@ -124,7 +207,7 @@
 
             <div class="section-card">
 
-                <table class="data-table">
+                <table class="data-table" id="tablaProductos">
                     <thead>
                         <tr>
                             <th>Nombre</th>
@@ -155,7 +238,6 @@
         </div>
 
         <!-- REPORTES -->
-
         <div class="panel" id="panel-reportes">
             <h2 class="section-title">📈 Reportes</h2>
             <p>Próximamente reportes dinámicos.</p>
@@ -163,15 +245,179 @@
 
     </main>
 
+    <!-- JS PANEL -->
     <script>
         function showPanel(panel) {
-            let panels = document.querySelectorAll('.panel');
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('panel-' + panel).classList.add('active');
 
-            panels.forEach(p => {
-                p.classList.remove('active');
+            initTablas(panel);
+        }
+    </script>
+    <!-- LIBRERÍAS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
+    <!-- DataTables INIT -->
+    <script>
+        $(document).ready(function() {
+
+            $('#tablaBarberos').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'excelHtml5',
+                        title: 'Kadosh - Barberos',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4] // sin acciones
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Kadosh - Barberos',
+                        pageSize: 'A4',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Kadosh - Barberos',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        }
+                    }
+                ],
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
+                }
             });
 
-            document.getElementById('panel-' + panel).classList.add('active');
+        });
+    </script>
+
+    <script>
+        let tablaBarberos = null;
+        let tablaProductos = null;
+        let tablaClientes = null;
+
+        function initTablas(panel) {
+
+            /* =========================
+               BARBEROS
+               ========================= */
+            if (panel === 'barberos' && !tablaBarberos) {
+
+                if (!document.getElementById('tablaBarberos')) return;
+
+                tablaBarberos = $('#tablaBarberos').DataTable({
+                    destroy: true,
+                    dom: 'Bfrtip',
+                    buttons: [{
+                            extend: 'excelHtml5',
+                            title: 'Kadosh - Barberos',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'Kadosh - Barberos',
+                            pageSize: 'A4',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            title: 'Kadosh - Barberos',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            }
+                        }
+                    ],
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
+                    }
+                });
+            }
+
+            /* =========================
+            CLIENTES
+            ========================= */
+            if (panel === 'clientes' && !tablaClientes) {
+
+                if (!document.getElementById('tablaClientes')) return;
+
+                tablaClientes = $('#tablaClientes').DataTable({
+                    destroy: true,
+                    dom: 'Bfrtip',
+                    buttons: [{
+                            extend: 'excelHtml5',
+                            title: 'Kadosh - Clientes',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'Kadosh - Clientes',
+                            pageSize: 'A4',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            title: 'Kadosh - Clientes',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            }
+                        }
+                    ],
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
+                    }
+                });
+            }
+
+            /* =========================
+               PRODUCTOS
+               ========================= */
+            if (panel === 'productos' && !tablaProductos) {
+
+                if (!document.getElementById('tablaProductos')) return;
+
+                tablaProductos = $('#tablaProductos').DataTable({
+                    destroy: true,
+                    dom: 'Bfrtip',
+                    buttons: [{
+                            extend: 'excelHtml5',
+                            title: 'Kadosh - Productos'
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'Kadosh - Productos',
+                            pageSize: 'A4'
+                        },
+                        {
+                            extend: 'print',
+                            title: 'Kadosh - Productos'
+                        }
+                    ],
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
+                    }
+                });
+            }
         }
     </script>
 
