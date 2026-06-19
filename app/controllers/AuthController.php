@@ -191,37 +191,63 @@ class AuthController
             $correo      = trim($_POST['correo']);
             $password   = $_POST['password'];
 
+            // Validar que ningún campo esté vacío
             if (
                 empty($id_usuario) || empty($nombre) || empty($apellido) ||
                 empty($telefono) || empty($correo) || empty($password)
             ) {
-                $error = "Todos los campos son obligatorios";
+                $error = "Todos los campos son obligatorios.";
+            }
+            // VALIDAR DOCUMENTO: ¿Son solo números?
+            elseif (!ctype_digit($id_usuario)) {
+                $error = "El documento debe contener únicamente números.";
+            }
+            // VALIDAR DOCUMENTO: Longitud (10 o 11)
+            elseif (strlen($id_usuario) < 10 || strlen($id_usuario) > 11) {
+                $error = "El documento debe tener exactamente 10 o 11 números.";
+            }
+            // VALIDAR TELÉFONO: ¿Son solo números?
+            elseif (!ctype_digit($telefono)) {
+                $error = "El teléfono debe contener únicamente números.";
+            }
+            // VALIDAR TELÉFONO: Longitud exacta de 10 dígitos
+            elseif (strlen($telefono) !== 10) {
+                $error = "El número de teléfono debe tener exactamente 10 dígitos.";
+            }
+            // VALIDAR CONTRASEÑA: Requisitos mínimos
+            elseif (strlen($password) < 8 || !preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password)) {
+                $error = "La contraseña debe tener mínimo 8 caracteres y al menos un símbolo.";
             } else {
+                try {
+                    $rol_id = 3; // Cliente
+                    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-                // 🔒 FORZAR ROL CLIENTE (id = 3)
-                $rol_id = 3;
+                    $stmt = $this->db->prepare(
+                        "INSERT INTO usuarios 
+                    (id_usuario, id_rol, nombre, apellido, telefono, correo, password)
+                    VALUES 
+                    (:id, :rol, :nombre, :apellido, :telefono, :correo, :password)"
+                    );
 
-                $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+                    $stmt->execute([
+                        ':id'       => $id_usuario,
+                        ':rol'      => $rol_id,
+                        ':nombre'   => $nombre,
+                        ':apellido' => $apellido,
+                        ':telefono' => $telefono,
+                        ':correo'   => $correo,
+                        ':password' => $passwordHash
+                    ]);
 
-                $stmt = $this->db->prepare(
-                    "INSERT INTO usuarios 
-                (id_usuario, id_rol, nombre, apellido, telefono, correo, password)
-                VALUES 
-                (:id, :rol, :nombre, :apellido, :telefono, :correo, :password)"
-                );
-
-                $stmt->execute([
-                    ':id'       => $id_usuario,
-                    ':rol'      => $rol_id,
-                    ':nombre'   => $nombre,
-                    ':apellido' => $apellido,
-                    ':telefono' => $telefono,
-                    ':correo'    => $correo,
-                    ':password' => $passwordHash
-                ]);
-
-                header("Location: index.php?controller=auth&action=loginCliente");
-                exit;
+                    header("Location: index.php?controller=auth&action=loginCliente");
+                    exit;
+                } catch (PDOException $e) {
+                    if ($e->getCode() == 23000) {
+                        $error = "El documento o el correo electrónico ya se encuentran registrados.";
+                    } else {
+                        $error = "Ocurrió un error al registrar el usuario. Intenta de nuevo.";
+                    }
+                }
             }
         }
 
@@ -233,36 +259,28 @@ class AuthController
     ========================== */
     public function logout()
     {
-    // 1️⃣ Iniciar sesión si no está activa
-    if (session_status() === PHP_SESSION_NONE) {
         session_start();
+
+        // destruir variables
+        $_SESSION = [];
+
+        // destruir cookie de sesión
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+
+            setcookie(session_name(), '', time() - 420, '/');
+        }
+
+        // destruir sesión
+        session_destroy();
+
+        // asegurar que no se reutilice
+        session_write_close();
+
+        header("Location: index.html");
+        exit;
     }
 
-    // 2️⃣ Vaciar todas las variables de sesión
-    $_SESSION = [];
-
-    // 3️⃣ Eliminar la cookie de sesión
-    if (ini_get("session.use_cookies")) {
-        $params = session_get_cookie_params();
-
-        setcookie(
-            session_name(),
-            '',
-            time() - 42000,
-            $params["path"],
-            $params["domain"],
-            $params["secure"],
-            $params["httponly"]
-        );
-    }
-
-    // 4️⃣ Destruir la sesión
-    session_destroy();
-
-    // 5️⃣ Redirigir
-    header("Location: index.php");
-    exit;
-    }
 
     public function resetPassword()
     {
@@ -282,6 +300,4 @@ class AuthController
 
         require 'app/views/auth/cambiarContraseña.php';
     }
-    
 }
-

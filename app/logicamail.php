@@ -27,7 +27,7 @@ if (isset($_POST['send'])) {
     }
 
     $token  = bin2hex(random_bytes(32));
-    $expira = time() + 600; // 10 minutos
+    $expira = time() + 120; // 2 minutos
 
     updateUser($token, $expira, $usuario->id_usuario);
     EnviarCorreoResetPassword(
@@ -136,7 +136,7 @@ function EnviarCorreoResetPassword($correo, $nombre, $id, $token)
             Hola <b>$nombre</b><br><br>
             Haz clic en el enlace para cambiar tu contraseña y poder acceder correctamente a tu cuenta, y agendar tus proximas citas:<br>
             <a href='$link'>Cambiar contraseña</a><br><br>
-            <small>Este enlace expira en 10 minutos</small>
+            <small>Este enlace expira en 2 minutos</small>
         ";
 
         $mail->send();

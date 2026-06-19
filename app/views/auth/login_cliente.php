@@ -74,7 +74,7 @@
 	<p class="auth-link">
     <a href="index.php?controller=auth&action=resetPassword">¿Olvidaste la contraseña?</a>
     </p>
-    <a href="index.html" class="back-home">← Volver al inicio</a>
+    <a href="index.php?controller=auth&action=logout" class="back-home">← Volver al inicio</a>
 
     
 </div>

@@ -9,7 +9,7 @@
 class Database
 {
     private static $host = "localhost";
-    private static $db   = "barber kadosh";
+    private static $db   = "barberia kadosh";
     private static $user = "root";
     private static $pass = "";
     private static $charset = "utf8mb4";
