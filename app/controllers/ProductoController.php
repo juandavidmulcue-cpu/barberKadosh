@@ -1,65 +1,65 @@
 <?php
-require_once 'app/config/conexion.php';
 
-class ProductoController
+require_once 'app/controllers/Controller.php';
+require_once 'app/models/ProductoModel.php';
+
+class ProductoController extends Controller
 {
-    private $db;
+    private $productoModel;
 
     public function __construct()
     {
+        parent::__construct();
 
-        // Solo admin
-        if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
-            header("Location: index.php?controller=auth&action=login");
-            exit;
-        }
+        $this->requireRole('admin');
 
-        $this->db = Database::conectar();
+        $this->productoModel = new ProductoModel();
     }
 
     /* =========================
        LISTAR PRODUCTOS
-       ========================= */
+    ========================== */
+
     public function index()
     {
-        $stmt = $this->db->query("SELECT * FROM productos");
-        $productos = $stmt->fetchAll();
+        $productos = $this->productoModel->obtenerProductos();
 
-        require 'app/views/admin/productos.php';
+        $this->view('app/views/admin/productos.php', [
+            'productos' => $productos
+        ]);
     }
 
     /* =========================
        CREAR PRODUCTO
-       ========================= */
+    ========================== */
+
     public function crear()
     {
-        $stmt = $this->db->prepare(
-                "INSERT INTO productos (id_producto, nombre, precio, stock)
-                 VALUES (:id, :nombre, :precio, :stock)"
-        );
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        $stmt->execute([
-                ':id' => $_POST['id_producto'],
-                ':nombre' => htmlspecialchars($_POST['nombre']),
-                ':precio' => $_POST['precio'],
-                ':stock' => $_POST['stock']
-        ]);
-            header("Location: index.php?controller=producto&action=index");
-            exit;
+            $data = [
+                'id' => $_POST['id_producto'],
+                'nombre' => htmlspecialchars(trim($_POST['nombre'])),
+                'precio' => $_POST['precio'],
+                'stock' => $_POST['stock']
+            ];
+
+            $this->productoModel->crearProducto($data);
+        }
+
+        $this->redirect("index.php?controller=producto&action=index");
     }
 
     /* =========================
        ELIMINAR PRODUCTO
-       ========================= */
+    ========================== */
+
     public function eliminarProducto()
     {
-        $stmt = $this->db->prepare(
-            "DELETE FROM productos WHERE `productos`.`id_producto` = :id"
-        );
+        if (isset($_GET['id_producto'])) {
+            $this->productoModel->eliminarProducto($_GET['id_producto']);
+        }
 
-        $stmt->execute([':id' => $_GET['id_producto']]);
-
-        header("Location: index.php?controller=producto&action=index");
-        exit;
+        $this->redirect("index.php?controller=producto&action=index");
     }
 }

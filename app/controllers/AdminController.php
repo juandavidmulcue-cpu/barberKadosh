@@ -1,35 +1,41 @@
 <?php
+
+require_once 'app/controllers/Controller.php';
 require_once 'app/models/AdminModel.php';
 
-class AdminController
+class AdminController extends Controller
 {
     private $adminModel;
 
     public function __construct()
     {
-        if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
-            header("Location: index.php");
-            exit;
-        }
+        parent::__construct();
+
+        $this->requireRole('admin');
 
         $this->adminModel = new AdminModel();
     }
 
     /* =========================
        PANEL
-       ========================= */
+    ========================== */
 
     public function panel()
     {
         $barberos = $this->adminModel->obtenerBarberos();
         $clientes = $this->adminModel->obtenerClientes();
         $productos = $this->adminModel->obtenerProductos();
-        require 'app/views/admin/panel.php';
+
+        $this->view('app/views/admin/panel.php', [
+            'barberos' => $barberos,
+            'clientes' => $clientes,
+            'productos' => $productos
+        ]);
     }
 
     /* =========================
        BARBEROS
-       ========================= */
+    ========================== */
 
     public function barberos()
     {
@@ -37,8 +43,15 @@ class AdminController
         $orden  = $_GET['orden'] ?? 'az';
 
         $barberos = $this->adminModel->obtenerBarberos($buscar, $orden);
-        require 'app/views/admin/panel.php';
+
+        $this->view('app/views/admin/panel.php', [
+            'barberos' => $barberos
+        ]);
     }
+
+    /* =========================
+       CLIENTES
+    ========================== */
 
     public function clientes()
     {
@@ -46,8 +59,15 @@ class AdminController
         $orden  = $_GET['orden'] ?? 'az';
 
         $clientes = $this->adminModel->obtenerClientes($buscar, $orden);
-        require 'app/views/admin/panel.php';
+
+        $this->view('app/views/admin/panel.php', [
+            'clientes' => $clientes
+        ]);
     }
+
+    /* =========================
+       REGISTRAR BARBERO
+    ========================== */
 
     public function registerBarbero()
     {
@@ -67,37 +87,53 @@ class AdminController
             $ok = $this->adminModel->registrarBarbero($data);
 
             if ($ok) {
+
                 $_SESSION['mensaje_exito'] = "Registrado correctamente";
-                header("Location: index.php?controller=admin&action=panel");
-                exit;
-            } else {
-                $error = "No se pudo registrar (revisa duplicados o BD)";
+
+                $this->redirect("index.php?controller=admin&action=panel");
             }
+
+            $error = "No se pudo registrar (revisa duplicados o la base de datos)";
         }
 
-        require 'app/views/admin/register_barbero.php';
+        $this->view('app/views/admin/register_barbero.php', [
+            'error' => $error
+        ]);
     }
+
+    /* =========================
+       ELIMINAR
+    ========================== */
 
     public function eliminarBarbero()
     {
-        $this->adminModel->eliminarBarbero($_GET['id']);
-        header("Location: index.php?controller=admin&action=panel");
+        if (isset($_GET['id'])) {
+            $this->adminModel->eliminarBarbero($_GET['id']);
+        }
+
+        $this->redirect("index.php?controller=admin&action=panel");
     }
 
     public function eliminarCliente()
     {
-        $this->adminModel->eliminarCliente($_GET['id']);
-        header("Location: index.php?controller=admin&action=panel");
+        if (isset($_GET['id'])) {
+            $this->adminModel->eliminarCliente($_GET['id']);
+        }
+
+        $this->redirect("index.php?controller=admin&action=panel");
     }
 
     /* =========================
        PRODUCTOS
-       ========================= */
+    ========================== */
 
     public function productos()
     {
         $productos = $this->adminModel->obtenerProductos();
-        require 'app/views/admin/productos.php';
+
+        $this->view('app/views/admin/productos.php', [
+            'productos' => $productos
+        ]);
     }
 
     public function guardarProducto()
@@ -108,36 +144,48 @@ class AdminController
             ':stock' => $_POST['stock']
         ]);
 
-        header("Location: index.php?controller=admin&action=productos");
+        $this->redirect("index.php?controller=admin&action=productos");
     }
 
-    public function eliminarProducto()
+        public function eliminarProducto()
     {
-        $this->adminModel->eliminarProducto($_GET['id']);
-        header("Location: index.php?controller=admin&action=productos");
+        if (isset($_GET['id'])) {
+            $this->adminModel->eliminarProducto($_GET['id']);
+        }
+
+        $this->redirect("index.php?controller=admin&action=productos");
     }
 
     /* =========================
        CITAS
-       ========================= */
+    ========================== */
 
     public function citas()
     {
         $citas = $this->adminModel->obtenerCitas();
-        require 'app/views/admin/citas.php';
+
+        $this->view('app/views/admin/citas.php', [
+            'citas' => $citas
+        ]);
     }
 
     public function cancelarCita()
     {
-        $this->adminModel->cancelarCita($_GET['id']);
-        header("Location: index.php?controller=admin&action=citas");
+        if (isset($_GET['id'])) {
+            $this->adminModel->cancelarCita($_GET['id']);
+        }
+
+        $this->redirect("index.php?controller=admin&action=citas");
     }
+
+    /* =========================
+       EDITAR BARBERO
+    ========================== */
 
     public function editarBarbero()
     {
         if (!isset($_GET['id_usuario']) || empty($_GET['id_usuario'])) {
-            header("Location: index.php?controller=admin&action=panel");
-            exit;
+            $this->redirect("index.php?controller=admin&action=panel");
         }
 
         $id = $_GET['id_usuario'];
@@ -145,10 +193,11 @@ class AdminController
         $barbero = $this->adminModel->getUsuarioById($id);
 
         if (!$barbero) {
-            header("Location: index.php?controller=admin&action=panel");
-            exit;
+            $this->redirect("index.php?controller=admin&action=panel");
         }
 
-        require "app/views/admin/editarBarbero.php";
+        $this->view("app/views/admin/editarBarbero.php", [
+            'barbero' => $barbero
+        ]);
     }
 }

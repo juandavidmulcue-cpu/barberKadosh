@@ -1,131 +1,101 @@
 <?php
 
+require_once 'app/controllers/Controller.php';
 require_once 'app/config/conexion.php';
 require_once 'app/models/AuthModel.php';
 
-class AuthController
+class AuthController extends Controller
 {
     private $authModel;
 
     public function __construct()
     {
+        parent::__construct();
+
         $db = Database::conectar();
         $this->authModel = new AuthModel($db);
+    }
 
-        // session NO aquí obligatoria, pero puedes manejarla global si quieres
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
+    /* =========================
+       MÉTODO PRIVADO LOGIN
+    ========================== */
+
+    private function login($rol, $vista, $destino)
+    {
+        $error = null;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $correo = trim($_POST['correo'] ?? '');
+            $password = $_POST['password'] ?? '';
+
+            if ($correo === '' || $password === '') {
+
+                $error = "Correo o contraseña vacíos";
+
+            } else {
+
+                $user = $this->authModel->getUserByEmailAndRole($correo, $rol);
+
+                if ($user && password_verify($password, $user['password'])) {
+
+                    $this->loginUser($user, $rol);
+
+                    $this->redirect($destino);
+                }
+
+                $error = "Credenciales incorrectas";
+            }
         }
+
+        $this->view($vista, [
+            'error' => $error
+        ]);
     }
 
     /* =========================
        LOGIN CLIENTE
     ========================== */
+
     public function loginCliente()
     {
-        $error = null;
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            $correo = trim($_POST['correo'] ?? '');
-            $password = $_POST['password'] ?? '';
-
-            if ($correo === '' || $password === '') {
-                $error = "Correo o contraseña vacíos";
-            } else {
-
-                $user = $this->authModel->getUserByEmailAndRole($correo, 'cliente');
-
-                if ($user && password_verify($password, $user['password'])) {
-
-                    $_SESSION['id'] = $user['id_usuario'];
-                    $_SESSION['nombre'] = $user['nombre'];
-                    $_SESSION['rol'] = 'cliente';
-
-                    header("Location: index.php?controller=cliente&action=perfil");
-                    exit;
-                }
-
-                $error = "Credenciales incorrectas";
-            }
-        }
-
-        require 'app/views/auth/login_cliente.php';
+        $this->login(
+            'cliente',
+            'app/views/auth/login_cliente.php',
+            'index.php?controller=cliente&action=perfil'
+        );
     }
 
     /* =========================
        LOGIN BARBERO
     ========================== */
+
     public function loginBarbero()
     {
-        $error = null;
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            $correo = trim($_POST['correo'] ?? '');
-            $password = $_POST['password'] ?? '';
-
-            if ($correo === '' || $password === '') {
-                $error = "Correo o contraseña vacíos";
-            } else {
-
-                $user = $this->authModel->getUserByEmailAndRole($correo, 'barbero');
-
-                if ($user && password_verify($password, $user['password'])) {
-
-                    $_SESSION['id'] = $user['id_usuario'];
-                    $_SESSION['nombre'] = $user['nombre'];
-                    $_SESSION['rol'] = 'barbero';
-
-                    header("Location: index.php?controller=barbero&action=perfil");
-                    exit;
-                }
-
-                $error = "Credenciales incorrectas";
-            }
-        }
-
-        require 'app/views/auth/login_barbero.php';
+        $this->login(
+            'barbero',
+            'app/views/auth/login_barbero.php',
+            'index.php?controller=barbero&action=perfil'
+        );
     }
 
     /* =========================
        LOGIN ADMIN
     ========================== */
+
     public function loginAdmin()
     {
-        $error = null;
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            $correo = trim($_POST['correo'] ?? '');
-            $password = $_POST['password'] ?? '';
-
-            if ($correo === '' || $password === '') {
-                $error = "Correo o contraseña vacíos";
-            } else {
-
-                $user = $this->authModel->getUserByEmailAndRole($correo, 'admin');
-
-                if ($user && password_verify($password, $user['password'])) {
-
-                    $_SESSION['id'] = $user['id_usuario'];
-                    $_SESSION['nombre'] = $user['nombre'];
-                    $_SESSION['rol'] = 'admin';
-
-                    header("Location: index.php?controller=admin&action=panel");
-                    exit;
-                }
-
-                $error = "Credenciales incorrectas";
-            }
-        }
-
-        require 'app/views/auth/login_admin.php';
+        $this->login(
+            'admin',
+            'app/views/auth/login_admin.php',
+            'index.php?controller=admin&action=panel'
+        );
     }
 
     /* =========================
        REGISTRO CLIENTE
     ========================== */
+
     public function registerCliente()
     {
         $error = null;
@@ -139,22 +109,40 @@ class AuthController
             $correo = trim($_POST['correo']);
             $password = $_POST['password'];
 
-            // VALIDACIONES
             if (
-                empty($id_usuario) || empty($nombre) || empty($apellido) ||
-                empty($telefono) || empty($correo) || empty($password)
+                empty($id_usuario) ||
+                empty($nombre) ||
+                empty($apellido) ||
+                empty($telefono) ||
+                empty($correo) ||
+                empty($password)
             ) {
+
                 $error = "Todos los campos son obligatorios";
+
             } elseif (!ctype_digit($id_usuario)) {
+
                 $error = "Documento solo números";
+
             } elseif (strlen($id_usuario) < 10 || strlen($id_usuario) > 11) {
+
                 $error = "Documento inválido";
+
             } elseif (!ctype_digit($telefono)) {
+
                 $error = "Teléfono solo números";
-            } elseif (strlen($telefono) !== 10) {
+
+            } elseif (strlen($telefono) != 10) {
+
                 $error = "Teléfono debe tener 10 dígitos";
-            } elseif (strlen($password) < 8 || !preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password)) {
+
+            } elseif (
+                strlen($password) < 8 ||
+                !preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password)
+            ) {
+
                 $error = "Contraseña débil";
+
             } else {
 
                 $passwordHash = password_hash($password, PASSWORD_DEFAULT);
@@ -169,64 +157,61 @@ class AuthController
                     ':password' => $passwordHash
                 ];
 
-                $ok = $this->authModel->registerClient($data);
+                if ($this->authModel->registerClient($data)) {
 
-                if ($ok) {
-                    header("Location: index.php?controller=auth&action=loginCliente");
-                    exit;
-                } else {
-                    $error = "Error al registrar usuario";
+                    $this->redirect("index.php?controller=auth&action=loginCliente");
                 }
+
+                $error = "Error al registrar usuario";
             }
         }
 
-        require 'app/views/auth/register.php';
+        $this->view('app/views/auth/register.php', [
+            'error' => $error
+        ]);
+    }
+        /* =========================
+       LOGOUT
+    ========================== */
+
+    public function logout()
+    {
+        $this->destroySession();
+
+        $this->redirect("index.html");
     }
 
     /* =========================
-       LOGOUT
+       RESET PASSWORD
     ========================== */
-    public function logout()
-
-    {
-
-        session_start();
-        // destruir variables
-        $_SESSION = [];
-
-        // destruir cookie de sesión
-
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 420, '/');
-        }
-        // destruir sesión
-        session_destroy();
-
-        // asegurar que no se reutilice
-
-        session_write_close();
-
-        header("Location: index.html");
-
-        exit;
-    }
 
     public function resetPassword()
     {
-        require 'app/views/auth/reset_password.php';
+        $this->view('app/views/auth/reset_password.php');
     }
+
+    /* =========================
+       CAMBIAR PASSWORD
+    ========================== */
 
     public function cambiarPassword()
     {
-        if (!isset($_GET['id'], $_GET['token'])) {
-            header("Location: index.php?controller=auth&action=loginCliente");
-            exit;
+        if (!isset($_GET['id']) || !isset($_GET['token'])) {
+
+            $this->redirect(
+                "index.php?controller=auth&action=loginCliente"
+            );
         }
 
         $id = $_GET['id'];
         $token = $_GET['token'];
 
-        require 'app/views/auth/cambiarContraseña.php';
+        $this->view(
+            'app/views/auth/cambiarContraseña.php',
+            [
+                'id' => $id,
+                'token' => $token
+            ]
+        );
     }
 }
