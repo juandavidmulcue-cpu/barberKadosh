@@ -94,7 +94,7 @@
             <div class="section-card">
 
                 <table class="data-table" id="tablaBarberos">
-                    
+
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -122,7 +122,7 @@
                                             Eliminar
                                         </a>
                                         <a class="btn-warning"
-                                            href="index.php?controller=admin&action=editarBarbero&id_usuario=<?= $b['id_usuario'] ?>">
+                                            href="index.php?controller=gestionBarbero&action=editar&id_usuario=<?= $b['id_usuario'] ?>">
                                             Editar
                                         </a>
                                     </td>
@@ -420,6 +420,9 @@
             }
         }
     </script>
+
+    <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2026/05/14/17/20260514174101-A2E9JALD.js" defer></script>
 
 </body>
 

@@ -274,3 +274,49 @@ tbody td{
         overflow-x: auto;
     }
 }
+
+/* =========================
+   CARRUSEL
+========================= */
+.carousel-section{
+    position: relative;
+}
+
+.carousel-title{
+    margin-bottom: 20px;
+    color: var(--dorado);
+}
+
+.carousel{
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid rgba(212,175,55,0.4);
+    position: relative;
+}
+
+.carousel-track{
+    display: flex;
+    transition: transform 1s ease;
+}
+
+.carousel-item{
+    min-width: 100%;
+}
+
+.carousel-item img{
+    width: 100%;
+    height: 345px;
+    object-fit: cover;
+    display: block;
+}
+
+/* =========================
+   HERO + CARRUSEL WRAPPER
+========================= */
+.hero-wrapper{
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 50px;
+    padding: 80px 60px;
+    align-items: center;
+}

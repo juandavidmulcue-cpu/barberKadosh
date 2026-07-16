@@ -7,6 +7,7 @@ if (!isset($_SESSION['id'])) {
 }
 
 $nombre = $_SESSION['nombre'] ?? 'Cliente';
+$apellido = $_SESSION['apellido'] ?? '';
 $rol    = $_SESSION['nombre_rol'] ?? 'cliente';
 ?>
 <!DOCTYPE html>
@@ -15,39 +16,52 @@ $rol    = $_SESSION['nombre_rol'] ?? 'cliente';
     <meta charset="UTF-8">
     <title>Perfil Cliente - Kadosh Barber</title>
     <link rel="stylesheet" href="app/public/css/perfilCliente.css">
+    <link rel="stylesheet" href="app/public/css/index.css">
 </head>
 <body>
 
     <div class="barra">
-        BIENVENID@ <?php echo htmlspecialchars($nombre); ?>! 💈
+        HOLA, <?php echo htmlspecialchars($nombre . ' ' . $apellido); ?>! 💈
     </div>
 
     <div class="perfil">
 
         <!-- Usuario -->
         <div class="card info-usuario">
-            <img src="../img/mono_perfil.jpg" class="avatar">
+            <img src="app/public/assets/img/logo1.jpeg" class="avatar">
 
-            <h2><?php echo htmlspecialchars($nombre); ?></h2>
+            <h2><?php echo htmlspecialchars($nombre . ' ' . $apellido); ?></h2>
             <p class="rol"><?php echo strtoupper(htmlspecialchars($rol)); ?></p>
 
             <div class="acciones">
-                <a href="../view/servicios.php" class="btn"><button>Mirar servicios</button></a>
-                <a href="../view/cambiar_contraseña.php" class="btn"><button class="btn-outline">Cambiar contraseña</button></a>
+                <a href="../view/servicios.php" class="btn"><button>AGENDAR</button></a>
+                <a href="index.php?controller=auth&action=resetPassword" class="btn"><button class="btn-outline">Cambiar contraseña</button></a>
             </div>
 
             <a href="index.php?controller=auth&action=logout">Cerrar sesión</a>
         </div>
 
-        <!-- Imagen -->
-        <div class="card galeria">
-            <div class="imagen-principal">
-                <p>Tu estilo 💈</p>
+        <!-- CARRUSEL -->
+        <section class="carousel-section">
+            <h2 class="carousel-title">Nuestro Estilo</h2>
+
+            <div class="carousel">
+                <div class="carousel-track">
+                    <div class="carousel-item">
+                        <img src="app/public/assets/img/foto1.png" alt="Corte clásico">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="app/public/assets/img/foto2.png" alt="Fade moderno">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="app/public/assets/img/foto3.png" alt="Barba profesional">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="app/public/assets/img/foto4.png" alt="Estilo premium">
+                    </div>
+                </div>
             </div>
-            <div class="puntos">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
+        </section>
 
         <!-- Dirección -->
         <div class="card direccion">
@@ -58,33 +72,67 @@ $rol    = $_SESSION['nombre_rol'] ?? 'cliente';
 
     </div>
 
-    <div class="card reservas">
-        <h3>Mis Reservas</h3>
+    <div class="panel" id="panel-reservas">
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Barbero</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Servicio</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Sin datos</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                </tr>
-            </tbody>
-        </table>
+            <h2 class="section-title">Reservas</h2>
 
-        <div class="acciones-tabla">
-            <a href="../view/cancelar_cita.php" class="btn"><button>Cancelar cita</button></a>
-            <a href="../view/reagendar.php" class="btn"><button>Reagendar</button></a>
+            <div class="action-row">
+                <a href="index.php?controller=gestionCita&action=obtenerCita" class="btn btn-primary">
+                    Gestionar Reservas
+                </a>
+            </div>
+
+            <br>
+
+            <div class="section-card">
+
+                <table class="data-table" id="tablaProductos">
+                    <thead>
+                        <tr>
+                            <th>Nombre del Barbero</th>
+                            <th>Servicio</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <?php if (!empty($productos)): ?>
+                            <?php foreach ($productos as $p): ?>
+                                <tr>
+                                    <td><?php echo $p['nombre']; ?></td>
+                                    <td><?php echo $p['servicio']; ?></td>
+                                    <td><?php echo $p['fecha']; ?></td>
+                                    <td><?php echo $p['hora']; ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="4">No hay reservas registradas</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+
+            </div>
+
         </div>
-    </div>
+    
+    <!-- ===== JS CARRUSEL ===== -->
+    <script>
+        const track = document.querySelector(".carousel-track");
+        const items = document.querySelectorAll(".carousel-item");
+        let index = 0;
+
+        function updateCarousel() {
+            track.style.transform = `translateX(-${index * 100}%)`;
+        }
+
+        setInterval(() => {
+            index = (index + 1) % items.length;
+            updateCarousel();
+        }, 5000);
+    </script>
 
 </body>
 </html>

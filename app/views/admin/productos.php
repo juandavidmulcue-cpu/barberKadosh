@@ -93,6 +93,9 @@
         });
     </script>
 
+    <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2026/05/14/17/20260514174101-A2E9JALD.js" defer></script>
+
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Reset Password | Kadosh</title>
@@ -9,10 +10,11 @@
   <link rel="stylesheet" href="app/public/css/resetPassword.css">
   <link rel="stylesheet" href="app/public/css/global.css">
 </head>
+
 <body class="auth-body">
 
   <div class="auth-card">
-    
+
     <!-- LOGO -->
     <img src="app/public/assets/img/logo.jpeg" class="auth-logo" alt="Kadosh">
 
@@ -36,10 +38,14 @@
       <button class="btn-gold" name="send">Enviar enlace</button>
 
       <a href="/barberKadosh/index.php?controller=auth&action=loginCliente"
-             class="btn btn-danger">Cancelar</a>
+        class="btn btn-danger">Cancelar</a>
 
     </form>
   </div>
 
+  <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+  <script src="https://files.bpcontent.cloud/2026/05/14/17/20260514174101-A2E9JALD.js" defer></script>
+
 </body>
+
 </html>
