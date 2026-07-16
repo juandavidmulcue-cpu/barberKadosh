@@ -14,7 +14,7 @@
 
 <header class="admin-header">
     <h1>Editar Producto</h1>
-    <a href="index.php?controller=admin&action=productos" class="logout-btn">← Volver</a>
+    <a href="index.php?controller=gestionProducto&action=listar" class="logout-btn">← Volver</a>
 </header>
 
 <main class="admin-panel">
@@ -23,7 +23,7 @@
 
         <?php if (!empty($producto)): ?>
 
-            <form method="POST" action="index.php?controller=admin&action=actualizarProducto">
+            <form method="POST" action="index.php?controller=gestionProducto&action=actualizarProducto">
 
                 <!-- ID oculto -->
                 <input type="hidden" name="id_producto" value="<?= $producto['id_producto'] ?>">

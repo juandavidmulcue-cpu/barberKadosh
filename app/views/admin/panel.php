@@ -84,7 +84,7 @@
                 <h3>Registrar Barbero</h3>
                 <p>Añade a un nuevo integrante al equipo</p>
                 <br>
-                <a href="index.php?controller=admin&action=registerBarbero" class="btn btn-primary">
+                <a href="index.php?controller=gestionBarbero&action=registrar" class="btn btn-primary">
                     + Registrar Barbero
                 </a>
             </div>
@@ -198,7 +198,7 @@
             <h2 class="section-title">📦 Productos</h2>
 
             <div class="action-row">
-                <a href="index.php?controller=admin&action=productos" class="btn btn-primary">
+                <a href="index.php?controller=gestionProducto&action=listar" class="btn btn-primary">
                     Gestionar Productos
                 </a>
             </div>

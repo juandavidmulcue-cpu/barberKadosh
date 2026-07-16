@@ -2,20 +2,17 @@
 
 require_once 'app/config/conexion.php';
 
-class CitaController
+class CitaController extends Controller
 {
-    private $db;
+    private $citaModel;
 
     public function __construct()
     {
-        session_start();
+        parent::__construct();
 
-        if (!isset($_SESSION['id'])) {
-            header("Location: index.php?controller=auth&action=login");
-            exit;
-        }
+        $this->requireLogin();
 
-        $this->db = Database::conectar();
+        $this->citaModel = new CitaModel();
     }
 
     /* =====================================================
@@ -23,26 +20,13 @@ class CitaController
        ===================================================== */
     public function misCitas()
     {
-        if ($_SESSION['rol'] !== 'cliente') {
-            header("Location: index.php");
-            exit;
-        }
+        $this->requireRole('cliente');
 
-        $stmt = $this->db->prepare(
-            "SELECT c.id, c.fecha, c.hora, c.estado,
-                    u.nombre AS barbero
-             FROM citas c
-             INNER JOIN usuarios u ON c.barbero_id = u.id
-             WHERE c.cliente_id = :cliente"
-        );
+        $citas = $this->citaModel->obtenerPorCliente($_SESSION['id']);
 
-        $stmt->execute([
-            ':cliente' => $_SESSION['id']
+        $this->view('app/views/cliente/mis_citas.php', [
+            'citas' => $citas
         ]);
-
-        $citas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        require 'app/views/cliente/mis_citas.php';
     }
 
     /* =====================================================
@@ -50,35 +34,26 @@ class CitaController
        ===================================================== */
     public function agendarCita()
     {
-        if ($_SESSION['rol'] !== 'cliente') {
-            header("Location: index.php");
-            exit;
-        }
+        $this->requireRole('cliente');
 
-        // Obtener barberos
-        $barberos = $this->db->query(
-            "SELECT id, nombre FROM usuarios WHERE rol_id = 2"
-        )->fetchAll(PDO::FETCH_ASSOC);
+        // Obtener barberos disponibles
+        $barberos = $this->citaModel->obtenerBarberosDisponibles();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            $stmt = $this->db->prepare(
-                "INSERT INTO citas (cliente_id, barbero_id, fecha, hora, estado)
-                 VALUES (:cliente, :barbero, :fecha, :hora, 'activa')"
+            $this->citaModel->crear(
+                $_SESSION['id'],
+                $_POST['barbero_id'],
+                $_POST['fecha'],
+                $_POST['hora']
             );
 
-            $stmt->execute([
-                ':cliente' => $_SESSION['id'],
-                ':barbero' => $_POST['barbero_id'],
-                ':fecha'   => $_POST['fecha'],
-                ':hora'    => $_POST['hora']
-            ]);
-
-            header("Location: index.php?controller=cita&action=misCitas");
-            exit;
+            $this->redirect("index.php?controller=cita&action=misCitas");
         }
 
-        require 'app/views/cliente/agendar.php';
+        $this->view('app/views/cliente/agendar.php', [
+            'barberos' => $barberos
+        ]);
     }
 
     /* =====================================================
@@ -86,24 +61,11 @@ class CitaController
        ===================================================== */
     public function cancelar()
     {
-        if ($_SESSION['rol'] !== 'cliente') {
-            header("Location: index.php");
-            exit;
-        }
+        $this->requireRole('cliente');
 
-        $stmt = $this->db->prepare(
-            "UPDATE citas
-             SET estado = 'cancelada'
-             WHERE id = :id AND cliente_id = :cliente"
-        );
+        $this->citaModel->cancelarDeCliente($_GET['id'], $_SESSION['id']);
 
-        $stmt->execute([
-            ':id'      => $_GET['id'],
-            ':cliente' => $_SESSION['id']
-        ]);
-
-        header("Location: index.php?controller=cita&action=misCitas");
-        exit;
+        $this->redirect("index.php?controller=cita&action=misCitas");
     }
 
     /* =====================================================
@@ -111,26 +73,13 @@ class CitaController
        ===================================================== */
     public function citasBarbero()
     {
-        if ($_SESSION['rol'] !== 'barbero') {
-            header("Location: index.php");
-            exit;
-        }
+        $this->requireRole('barbero');
 
-        $stmt = $this->db->prepare(
-            "SELECT c.id, c.fecha, c.hora, c.estado,
-                    u.nombre AS cliente
-             FROM citas c
-             INNER JOIN usuarios u ON c.cliente_id = u.id
-             WHERE c.barbero_id = :barbero"
-        );
+        $citas = $this->citaModel->obtenerPorBarbero($_SESSION['id']);
 
-        $stmt->execute([
-            ':barbero' => $_SESSION['id']
+        $this->view('app/views/barbero/citas.php', [
+            'citas' => $citas
         ]);
-
-        $citas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        require 'app/views/barbero/citas.php';
     }
 }
 

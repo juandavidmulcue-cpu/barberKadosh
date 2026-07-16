@@ -35,37 +35,3 @@ class ClienteController
         exit;
     }
 }
-
-class BarberoController
-{
-    private $db;
-
-    public function __construct()
-    {
-
-        // 🔐 SOLO BARBEROS
-        if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'barbero') {
-            header("Location: index.html");
-            exit;
-        }
-
-        $this->db = Database::conectar();
-    }
-
-    /* ===============================
-       PERFIL DEL BARBERO
-       =============================== */
-    public function perfil()
-    {
-        require 'app/views/barbero/perfil_barbero.php';
-    }
-
-    /* ===============================
-       IR A AGENDAR CITA
-       =============================== */
-    public function agendar()
-    {
-        header("Location: index.php?controller=cita&action=agendar");
-        exit;
-    }
-}

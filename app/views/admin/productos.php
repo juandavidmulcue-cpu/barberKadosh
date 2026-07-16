@@ -19,7 +19,7 @@
 
     <header class="admin-header">
         <h1>Gestión de Productos</h1>
-        <a href="index.php?controller=admin&action=panel" class="logout-btn">← Volver</a>
+        <a href="index.php?controller=gestionProducto&action=listar" class="logout-btn">← Volver</a>
     </header>
 
     <main class="admin-panel">
@@ -28,7 +28,7 @@
         <div class="admin-card">
             <h3>Agregar Producto</h3>
 
-            <form method="POST" action="index.php?controller=admin&action=guardarProducto">
+            <form method="POST" action="index.php?controller=gestionProducto&action=guardar">
                 <input type="text" name="nombre" placeholder="Nombre del producto" required>
                 <input type="number" name="precio" placeholder="Precio" required step="0.01">
                 <input type="number" name="stock" placeholder="stock" required step="1">
@@ -56,13 +56,13 @@
                                 <td>$<?= number_format($p['precio'], 2) ?></td>
                                 <td>
                                     <a class="btn-danger"
-                                        href="index.php?controller=producto&action=eliminarProducto&id_producto=<?= $p['id_producto'] ?>"
+                                        href="index.php?controller=gestionProducto&action=eliminarProducto&id_producto=<?= $p['id_producto'] ?>"
                                         onclick="return confirm('¿Eliminar este producto?')">
                                         Eliminar
                                     </a>
-                                    <a class="btn-warning"
-                                    href="index.php?controller=admin&action=editarProducto&id_producto=<?= $p['id_producto'] ?>">
-                                    Editar</a>
+                                    <a href="index.php?controller=gestionProducto&action=editarProducto&id=<?= $p['id_producto'] ?>">
+                                        Editar
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
