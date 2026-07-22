@@ -2,7 +2,7 @@
 
 require_once 'app/config/conexion.php';
 
-class ProductoModel
+class GestionProductoModel
 {
     private $db;
 
@@ -29,14 +29,16 @@ class ProductoModel
         return $stmt->execute($data);
     }
 
-    public function eliminarProducto($id)
+    public function eliminar($id)
     {
         $stmt = $this->db->prepare("
             DELETE FROM productos
             WHERE id_producto = :id
         ");
 
-        return $stmt->execute([':id' => $id]);
+        return $stmt->execute([
+            ':id' => $id
+        ]);
     }
 
     public function obtenerProductoPorId($id)

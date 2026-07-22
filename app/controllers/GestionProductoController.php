@@ -14,7 +14,7 @@ class GestionProductoController extends Controller
         // Solo administradores
         $this->requireRole('admin');
 
-        $this->productoModel = new ProductoModel();
+        $this->productoModel = new GestionProductoModel();
     }
 
     /* =========================
@@ -45,34 +45,34 @@ class GestionProductoController extends Controller
             ]);
         }
 
-        $this->redirect("index.php?controller=admin&action=panel");
+        $this->redirect("index.php?controller=gestionProducto&action=listar");
     }
 
     /* =========================
        ELIMINAR PRODUCTO
     ========================== */
 
-    public function eliminar()
-    {
-        if (isset($_GET['id'])) {
-            $this->productoModel->eliminarProducto($_GET['id']);
-        }
+        public function eliminarProducto()
+        {
+            if (isset($_GET['id_producto'])) {
+                $this->productoModel->eliminar($_GET['id_producto']);
+            }
 
-        $this->redirect("index.php?controller=admin&action=panel");
-    }
+            $this->redirect("index.php?controller=gestionProducto&action=listar");
+        }
 
     public function editarProducto()
     {
-        if (!isset($_GET['id']) || empty($_GET['id'])) {
-            $this->redirect("index.php?controller=admin&action=panel");
+        if (!isset($_GET['id_producto']) || empty($_GET['id_producto'])) {
+            $this->redirect("index.php?controller=gestionProducto&action=actualizarProducto");
         }
 
-        $id = $_GET['id'];
+        $id = $_GET['id_producto'];
 
         $producto = $this->productoModel->obtenerProductoPorId($id);
 
         if (!$producto) {
-            $this->redirect("index.php?controller=admin&action=panel");
+            $this->redirect("index.php?controller=gestionProducto&action=editarProducto&id_producto=" . $id);
         }
 
         $this->view("app/views/admin/editarProducto.php", [
@@ -98,6 +98,6 @@ class GestionProductoController extends Controller
             $this->productoModel->actualizarProducto($data);
         }
 
-        $this->redirect("index.php?controller=admin&action=panel");
+        $this->redirect("index.php?controller=gestionProducto&action=listar");
     }
 }

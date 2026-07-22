@@ -1,36 +1,38 @@
 <?php
 
+require_once __DIR__ . '/../core/Session.php';
+require_once __DIR__ . '/../core/View.php';
+require_once __DIR__ . '/../core/Auth.php';
+
+/**
+ * Clase base Controller
+ * -------------------------------------------------
+ * Refactor SRP: antes esta superclase concentraba
+ * sesión + vistas + redirección + autorización + logout.
+ * Ahora cada responsabilidad vive en su propia clase
+ * (Session, View, Auth) y Controller solo DELEGA.
+ *
+ * Los métodos protegidos conservan la misma firma,
+ * por lo que los controladores hijos siguen funcionando
+ * exactamente igual que antes.
+ */
 class Controller
 {
     public function __construct()
     {
-        $this->startSession();
+        Session::iniciar();
     }
 
     /**
-     * Inicia la sesión si aún no existe.
-     */
-    protected function startSession()
-    {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-    }
-
-    /**
-     * Carga una vista.
+     * Carga una vista (delegado a View).
      */
     protected function view($ruta, $data = [])
     {
-        if (!empty($data)) {
-            extract($data);
-        }
-
-        require $ruta;
+        View::render($ruta, $data);
     }
 
     /**
-     * Redirecciona.
+     * Redirecciona a una URL.
      */
     protected function redirect($url)
     {
@@ -39,26 +41,34 @@ class Controller
     }
 
     /**
-     * Verifica que el usuario haya iniciado sesión.
+     * Verifica que el usuario haya iniciado sesión (delegado a Auth).
      */
     protected function requireLogin()
     {
-        if (!isset($_SESSION['id'])) {
-            $this->redirect("index.php");
-        }
+        Auth::requireLogin();
     }
 
     /**
-     * Verifica el rol del usuario.
+     * Verifica el rol del usuario (delegado a Auth).
      */
     protected function requireRole($rol)
     {
-        $this->requireLogin();
-
-        if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== $rol) {
-            $this->redirect("index.php");
-        }
+        Auth::requireRole($rol);
     }
+
+    /**
+     * Guarda datos del usuario en sesión (delegado a Session).
+     */
+    protected function loginUser($user, $rol)
+    {
+        Session::guardarUsuario($user, $rol);
+    }
+
+    /**
+     * Cierra la sesión (delegado a Session).
+     * Se mantiene pública y con la redirección original
+     * para conservar el comportamiento existente.
+     */
 
     /* =========================
        LOGOUT
@@ -66,37 +76,9 @@ class Controller
     public function destroySession()
 
     {
-
-        session_start();
-        // destruir variables
-        $_SESSION = [];
-
-        // destruir cookie de sesión
-
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 420, '/');
-        }
-        // destruir sesión
-        session_destroy();
-
-        // asegurar que no se reutilice
-
-        session_write_close();
+        Session::destruir();
 
         header("Location: index.html");
-
         exit;
-    }
-
-
-    /**
-     * Guarda datos del usuario en sesión.
-     */
-    protected function loginUser($user, $rol)
-    {
-        $_SESSION['id'] = $user['id_usuario'];
-        $_SESSION['nombre'] = $user['nombre'];
-        $_SESSION['rol'] = $rol;
     }
 }

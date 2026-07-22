@@ -13,7 +13,7 @@ class ProductoController extends Controller
 
         $this->requireRole('admin');
 
-        $this->productoModel = new ProductoModel();
+        $this->productoModel = new Producto();
     }
 
     /* =========================

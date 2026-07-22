@@ -9,20 +9,30 @@
 
 /* ===== HEADER ===== */
 .admin-header{
-    padding: 20px 40px;
-    background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(212,175,55,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 15px 25px;
+    background: rgba(0,0,0,.75);
+    border-bottom: 1px solid rgba(212,175,55,.3);
+}
+
+.header-left{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .admin-header h1{
-    color: var(--dorado);
-}
-
-/* ===== ADMIN BODY ===== */
-.admin-body{
-    background: linear-gradient(135deg, #0a0a0a 55%, #240046 100%);
-    min-height: 100vh;
+    margin: 0;
+    color: #D4AF37;
 }
 
 /* ===== SIDEBAR ===== */

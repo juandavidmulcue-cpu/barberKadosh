@@ -19,7 +19,7 @@
 
     <header class="admin-header">
         <h1>Gestión de Productos</h1>
-        <a href="index.php?controller=gestionProducto&action=listar" class="logout-btn">← Volver</a>
+        <a href="index.php?controller=admin&action=panel" class="logout-btn">← Volver</a>
     </header>
 
     <main class="admin-panel">
@@ -60,7 +60,7 @@
                                         onclick="return confirm('¿Eliminar este producto?')">
                                         Eliminar
                                     </a>
-                                    <a href="index.php?controller=gestionProducto&action=editarProducto&id=<?= $p['id_producto'] ?>">
+                                    <a href="index.php?controller=gestionProducto&action=editarProducto&id_producto=<?= $p['id_producto'] ?>">
                                         Editar
                                     </a>
                                 </td>

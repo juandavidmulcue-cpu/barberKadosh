@@ -17,7 +17,7 @@ class AdminController extends Controller
         $this->requireRole('admin');
 
         $this->usuarioModel = new Usuario();
-        $this->productoModel = new ProductoModel();
+        $this->productoModel = new GestionProductoModel();
     }
 
     /* =========================

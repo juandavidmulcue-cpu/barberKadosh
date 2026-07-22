@@ -94,7 +94,7 @@
             <div class="section-card">
 
                 <table class="data-table" id="tablaBarberos">
-
+                    
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -117,7 +117,7 @@
                                     <td><?= $b['correo'] ?></td>
                                     <td>
                                         <a class="btn-danger"
-                                            href="index.php?controller=admin&action=eliminarBarbero&id=<?= $b['id_usuario'] ?>"
+                                            href="index.php?controller=gestionBarbero&action=eliminar&id=<?= $b['id_usuario'] ?>"
                                             onclick="return confirm('¿Eliminar este barbero?')">
                                             Eliminar
                                         </a>
@@ -174,7 +174,7 @@
                                     <td><?= $c['correo'] ?></td>
                                     <td>
                                         <a class="btn-danger"
-                                            href="index.php?controller=admin&action=eliminarCliente&id=<?= $c['id_usuario'] ?>"
+                                            href="index.php?controller=gestionCliente&action=eliminar&id=<?= $c['id_usuario'] ?>"
                                             onclick="return confirm('¿Eliminar este cliente?')">
                                             Eliminar
                                         </a>
@@ -420,9 +420,6 @@
             }
         }
     </script>
-
-    <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
-    <script src="https://files.bpcontent.cloud/2026/05/14/17/20260514174101-A2E9JALD.js" defer></script>
 
 </body>
 

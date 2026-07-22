@@ -2,7 +2,7 @@
 
 require_once 'app/config/conexion.php';
 
-class ProductoModel
+class Producto
 {
     private $db;
 
