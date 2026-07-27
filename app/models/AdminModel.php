@@ -17,7 +17,7 @@ class Usuario
 
     public function obtenerBarberos($buscar = '', $orden = 'az')
     {
-        $sql = "SELECT id_usuario, nombre, apellido, telefono, correo
+        $sql = "SELECT id_usuario, nombre, apellido, telefono, correo, estado
                 FROM usuarios
                 WHERE id_rol = 2";
 
@@ -51,10 +51,23 @@ class Usuario
         return $stmt->execute($data);
     }
 
-    public function eliminarBarbero($id)
+    public function inactivar($id)
     {
         $stmt = $this->db->prepare(
-            "DELETE FROM usuarios WHERE id_usuario = :id"
+            "UPDATE usuarios
+         SET estado = 'inactivo'
+         WHERE id_usuario = :id"
+        );
+
+        return $stmt->execute([':id' => $id]);
+    }
+
+    public function activar($id)
+    {
+        $stmt = $this->db->prepare(
+            "UPDATE usuarios
+         SET estado = 'activo'
+         WHERE id_usuario = :id"
         );
 
         return $stmt->execute([':id' => $id]);
@@ -106,7 +119,7 @@ class Usuario
 
     public function obtenerClientes($buscar = '', $orden = 'az')
     {
-        $sql = "SELECT id_usuario, nombre, apellido, telefono, correo
+        $sql = "SELECT id_usuario, nombre, apellido, telefono, correo, estado
                 FROM usuarios
                 WHERE id_rol = 3";
 
@@ -129,13 +142,4 @@ class Usuario
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
-    public function eliminarCliente($id)
-    {
-        $stmt = $this->db->prepare(
-            "DELETE FROM usuarios
-             WHERE id_usuario = :id"
-        );
-
-        return $stmt->execute([':id' => $id]);
-    }
 }

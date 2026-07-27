@@ -19,7 +19,7 @@
             <div class="error-msg"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="index.php?controller=auth&action=registerCliente" onsubmit="return validarRegistro(event)">
+        <form method="POST" action="index.php?controller=registro&action=registerCliente" onsubmit="return validarRegistro(event)">
 
             <div class="form-group">
                 <label>Documento</label>

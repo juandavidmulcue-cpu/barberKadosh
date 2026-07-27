@@ -29,19 +29,45 @@ class AuthController extends Controller
         $error = null;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $correo   = trim($_POST['correo'] ?? '');
+
+            $correo = trim($_POST['correo'] ?? '');
             $password = $_POST['password'] ?? '';
 
             if ($correo === '' || $password === '') {
+
                 $error = "Correo o contraseña vacíos";
+
             } else {
+
                 $user = $this->authModel->getUserByEmailAndRole($correo, $rol);
 
-                if ($user && password_verify($password, $user['password'])) {
-                    $this->loginUser($user, $rol);
-                    $this->redirect($destino);
+                if ($user) {
+
+                    if (password_verify($password, $user['password'])) {
+
+                        // Verificar si el usuario está inactivo
+                        if ($user['estado'] === 'inactivo') {
+
+                            $error = "Lo sentimos, tu cuenta se encuentra inactiva. Comunícate con el administrador.";
+
+                        } else {
+
+                            $this->loginUser($user, $rol);
+                            $this->redirect($destino);
+                            exit;
+                        }
+
+                    } else {
+
+                        $error = "Credenciales incorrectas.";
+
+                    }
+
+                } else {
+
+                    $error = "Credenciales incorrectas.";
+
                 }
-                $error = "Credenciales incorrectas";
             }
         }
 
@@ -50,20 +76,29 @@ class AuthController extends Controller
 
     public function loginCliente()
     {
-        $this->login('cliente', 'app/views/auth/login_cliente.php',
-            'index.php?controller=cliente&action=perfil');
+        $this->login(
+            'cliente',
+            'app/views/auth/login_cliente.php',
+            'index.php?controller=cliente&action=perfil'
+        );
     }
 
     public function loginBarbero()
     {
-        $this->login('barbero', 'app/views/auth/login_barbero.php',
-            'index.php?controller=barbero&action=perfil');
+        $this->login(
+            'barbero',
+            'app/views/auth/login_barbero.php',
+            'index.php?controller=barbero&action=perfil'
+        );
     }
 
     public function loginAdmin()
     {
-        $this->login('admin', 'app/views/auth/login_admin.php',
-            'index.php?controller=admin&action=panel');
+        $this->login(
+            'admin',
+            'app/views/auth/login_admin.php',
+            'index.php?controller=admin&action=panel'
+        );
     }
 
     public function logout()

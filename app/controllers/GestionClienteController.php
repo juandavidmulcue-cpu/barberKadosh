@@ -1,7 +1,7 @@
 <?php
 
 require_once 'app/controllers/Controller.php';
-require_once 'app/models/UsuarioModel.php';
+require_once 'app/models/AdminModel.php';
 
 class GestionClienteController extends Controller
 {
@@ -37,10 +37,22 @@ class GestionClienteController extends Controller
        ELIMINAR CLIENTE
     ========================== */
 
-    public function eliminar()
+    public function desactivar()
     {
         if (isset($_GET['id'])) {
-            $this->usuarioModel->eliminarCliente($_GET['id']);
+            $this->usuarioModel->inactivar($_GET['id']);
+        }
+
+        $this->redirect("index.php?controller=admin&action=panel");
+    }
+
+    public function activar()
+    {
+        if (isset($_GET['id'])) {
+
+            $id = $_GET['id'];
+
+            $this->usuarioModel->activar($id);
         }
 
         $this->redirect("index.php?controller=admin&action=panel");

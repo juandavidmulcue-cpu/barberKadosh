@@ -15,7 +15,7 @@ class AuthModel
     public function getUserByEmailAndRole($correo, $rol)
     {
         $sql = "
-            SELECT u.id_usuario, u.nombre, u.apellido, u.password, u.correo
+            SELECT u.id_usuario, u.nombre, u.apellido, u.password, u.correo, u.estado
             FROM usuarios u
             INNER JOIN roles r ON u.id_rol = r.id_rol
             WHERE u.correo = :correo

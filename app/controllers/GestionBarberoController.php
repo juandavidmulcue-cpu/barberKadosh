@@ -96,10 +96,22 @@ class GestionBarberoController extends Controller
        ELIMINAR BARBERO
     ========================== */
 
-    public function eliminar()
+    public function desactivar()
     {
         if (isset($_GET['id'])) {
-            $this->usuarioModel->eliminarBarbero($_GET['id']);
+            $this->usuarioModel->inactivar($_GET['id']);
+        }
+
+        $this->redirect("index.php?controller=admin&action=panel");
+    }
+
+    public function activar()
+    {
+        if (isset($_GET['id'])) {
+
+            $id = $_GET['id'];
+
+            $this->usuarioModel->activar($id);
         }
 
         $this->redirect("index.php?controller=admin&action=panel");

@@ -94,7 +94,7 @@
             <div class="section-card">
 
                 <table class="data-table" id="tablaBarberos">
-                    
+
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -102,6 +102,7 @@
                             <th>Apellido</th>
                             <th>Teléfono</th>
                             <th>Correo</th>
+                            <th>Estado</th>
                             <th>Acción</th>
                         </tr>
                     </thead>
@@ -116,11 +117,30 @@
                                     <td><?= $b['telefono'] ?></td>
                                     <td><?= $b['correo'] ?></td>
                                     <td>
-                                        <a class="btn-danger"
-                                            href="index.php?controller=gestionBarbero&action=eliminar&id=<?= $b['id_usuario'] ?>"
-                                            onclick="return confirm('¿Eliminar este barbero?')">
-                                            Eliminar
-                                        </a>
+                                        <?php if ($b['estado'] == 'activo'): ?>
+                                            <span style="color:green;font-weight:bold;">🟢 Activo</span>
+                                        <?php else: ?>
+                                            <span style="color:red;font-weight:bold;">🔴 Inactivo</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($b['estado'] == 'activo'): ?>
+
+                                            <a class="btn-danger"
+                                                href="index.php?controller=gestionBarbero&action=desactivar&id=<?= $b['id_usuario'] ?>"
+                                                onclick="return confirm('¿Desea desactivar este barbero?')">
+                                                Desactivar
+                                            </a>
+
+                                        <?php else: ?>
+
+                                            <a class="btn-success"
+                                                href="index.php?controller=gestionBarbero&action=activar&id=<?= $b['id_usuario'] ?>"
+                                                onclick="return confirm('¿Desea activar este barbero?')">
+                                                Activar
+                                            </a>
+
+                                        <?php endif; ?>
                                         <a class="btn-warning"
                                             href="index.php?controller=gestionBarbero&action=editar&id_usuario=<?= $b['id_usuario'] ?>">
                                             Editar
@@ -130,7 +150,7 @@
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="6">No hay barberos registrados</td>
+                                <td colspan="7">No hay barberos registrados</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
@@ -159,6 +179,7 @@
                             <th>Apellido</th>
                             <th>Teléfono</th>
                             <th>Correo</th>
+                            <th>Estado</th>
                             <th>Acción</th>
                         </tr>
                     </thead>
@@ -173,17 +194,37 @@
                                     <td><?= $c['telefono'] ?></td>
                                     <td><?= $c['correo'] ?></td>
                                     <td>
-                                        <a class="btn-danger"
-                                            href="index.php?controller=gestionCliente&action=eliminar&id=<?= $c['id_usuario'] ?>"
-                                            onclick="return confirm('¿Eliminar este cliente?')">
-                                            Eliminar
+                                        <?php if ($c['estado'] == 'activo'): ?>
+                                            <span style="color:green;font-weight:bold;">🟢 Activo</span>
+                                        <?php else: ?>
+                                            <span style="color:red;font-weight:bold;">🔴 Inactivo</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($c['estado'] == 'activo'): ?>
+
+                                            <a class="btn-danger"
+                                                href="index.php?controller=gestionCliente&action=desactivar&id=<?= $c['id_usuario'] ?>"
+                                                onclick="return confirm('¿Desea desactivar este cliente?')">
+                                                Desactivar
+                                            </a>
+
+                                        <?php else: ?>
+
+                                            <a class="btn-success"
+                                                href="index.php?controller=gestionCliente&action=activar&id=<?= $c['id_usuario'] ?>"
+                                                onclick="return confirm('¿Desea activar este cliente?')">
+                                                Activar
+                                            </a>
+
+                                        <?php endif; ?>
                                         </a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="6">No hay clientes registrados</td>
+                                <td colspan="7">No hay clientes registrados</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
@@ -420,6 +461,9 @@
             }
         }
     </script>
+
+    <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2026/05/14/17/20260514174101-A2E9JALD.js" defer></script>
 
 </body>
 
