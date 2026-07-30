@@ -12,12 +12,14 @@ $rol    = $_SESSION['nombre_rol'] ?? 'cliente';
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Perfil Cliente - Kadosh Barber</title>
     <link rel="stylesheet" href="app/public/css/perfilCliente.css">
     <link rel="stylesheet" href="app/public/css/index.css">
 </head>
+
 <body>
 
     <div class="barra">
@@ -34,12 +36,13 @@ $rol    = $_SESSION['nombre_rol'] ?? 'cliente';
             <p class="rol"><?php echo strtoupper(htmlspecialchars($rol)); ?></p>
 
             <div class="acciones">
-                <a href="../view/servicios.php" class="btn"><button>AGENDAR</button></a>
+                <a href="index.php?controller=gestionCita&action=agendarCita" class="btn btn-primary"><button>AGENDAR</button></a>
                 <a href="index.php?controller=auth&action=resetPassword" class="btn"><button class="btn-outline">Cambiar contraseña</button></a>
             </div>
 
             <a href="index.php?controller=auth&action=logout">Cerrar sesión</a>
         </div>
+
 
         <!-- CARRUSEL -->
         <section class="carousel-section">
@@ -72,67 +75,111 @@ $rol    = $_SESSION['nombre_rol'] ?? 'cliente';
 
     </div>
 
+    <div class="resumen">
+
+        <div class="resumen-card">
+            <h4>📅 Próxima cita</h4>
+            <span>15/08/2026</span>
+        </div>
+
+        <div class="resumen-card">
+            <h4>📖 Total de citas</h4>
+            <span>8</span>
+        </div>
+
+        <div class="resumen-card">
+            <h4>📌 Estado</h4>
+            <span>Confirmada</span>
+        </div>
+
+    </div>
     <div class="panel" id="panel-reservas">
 
-            <h2 class="section-title">Reservas</h2>
+        <h2 class="section-title">Mis Reservas</h2>
 
-            <div class="action-row">
-                <a href="index.php?controller=gestionCita&action=obtenerCita" class="btn btn-primary">
-                    Gestionar Reservas
-                </a>
-            </div>
+        <br>
 
-            <br>
+        <div class="section-card">
 
-            <div class="section-card">
+            <table class="data-table" id="tablaCitas">
 
-                <table class="data-table" id="tablaProductos">
-                    <thead>
-                        <tr>
-                            <th>Nombre del Barbero</th>
-                            <th>Servicio</th>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                        </tr>
-                    </thead>
+                <thead>
+                    <tr>
+                        <th>Barbero</th>
+                        <th>Servicio</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
 
-                    <tbody>
-                        <?php if (!empty($productos)): ?>
-                            <?php foreach ($productos as $p): ?>
-                                <tr>
-                                    <td><?php echo $p['nombre']; ?></td>
-                                    <td><?php echo $p['servicio']; ?></td>
-                                    <td><?php echo $p['fecha']; ?></td>
-                                    <td><?php echo $p['hora']; ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
+                <tbody>
+
+                    <?php if (!empty($citas)): ?>
+
+                        <?php foreach ($citas as $c): ?>
+
                             <tr>
-                                <td colspan="4">No hay reservas registradas</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
 
-            </div>
+                                <td><?= htmlspecialchars($c['barbero']) ?></td>
+
+                                <td><?= htmlspecialchars($c['servicio']) ?></td>
+
+                                <td><?= htmlspecialchars($c['fecha_cita']) ?></td>
+
+                                <td><?= htmlspecialchars($c['hora_cita']) ?></td>
+
+                                <td>
+                                    <?php
+                                    if ($c['estado'] == 'Pendiente') {
+                                        echo "<span style='color:orange;font-weight:bold;'>🟡 Pendiente</span>";
+                                    } elseif ($c['estado'] == 'Confirmada') {
+                                        echo "<span style='color:green;font-weight:bold;'>🟢 Confirmada</span>";
+                                    } elseif ($c['estado'] == 'Cancelada') {
+                                        echo "<span style='color:red;font-weight:bold;'>🔴 Cancelada</span>";
+                                    } else {
+                                        echo htmlspecialchars($c['estado']);
+                                    }
+                                    ?>
+                                </td>
+
+                                <td>
+
+                                    <?php if ($c['estado'] != 'Cancelada'): ?>
+
+                                        <a class="btn-danger"
+                                            href="index.php?controller=gestionCita&action=cancelar&id=<?= $c['id_reservacion'] ?>"
+                                            onclick="return confirm('¿Desea cancelar esta reserva?')">
+                                            Cancelar
+                                        </a>
+
+                                    <?php else: ?>
+
+                                        <span style="color:gray;">Sin acciones</span>
+
+                                    <?php endif; ?>
+
+                                </td>
+
+                            </tr>
+
+                        <?php endforeach; ?>
+
+                    <?php else: ?>
+
+                        <tr>
+                            <td colspan="6" style="text-align:center;">
+                                No tienes reservas registradas.
+                            </td>
+                        </tr>
+
+                    <?php endif; ?>
+
+                </tbody>
+
+            </table>
 
         </div>
-    
-    <!-- ===== JS CARRUSEL ===== -->
-    <script>
-        const track = document.querySelector(".carousel-track");
-        const items = document.querySelectorAll(".carousel-item");
-        let index = 0;
 
-        function updateCarousel() {
-            track.style.transform = `translateX(-${index * 100}%)`;
-        }
-
-        setInterval(() => {
-            index = (index + 1) % items.length;
-            updateCarousel();
-        }, 5000);
-    </script>
-
-</body>
-</html>
+    </div>

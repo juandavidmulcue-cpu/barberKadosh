@@ -2,7 +2,7 @@
 
 require_once 'app/config/conexion.php';
 
-class CitaModel
+class GestionCitaModel
 {
     private $db;
 
@@ -11,36 +11,64 @@ class CitaModel
         $this->db = Database::conectar();
     }
 
-    public function obtenerCitas()
+    // Obtener las reservas del cliente
+    public function obtenerReservasCliente($idCliente)
     {
-        $stmt = $this->db->query("
-            SELECT c.id,
-                   c.fecha,
-                   c.hora,
-                   c.estado,
-                   u.nombre AS cliente,
-                   b.nombre AS barbero
-            FROM citas c
-            INNER JOIN usuarios u
-                ON c.cliente_id = u.id
-            INNER JOIN usuarios b
-                ON c.barbero_id = b.id
-            ORDER BY c.fecha, c.hora
-        ");
+        $sql = "SELECT
+                    r.id_reservacion,
+                    CONCAT(b.nombre,' ',b.apellido) AS barbero,
+                    s.nombre AS servicio,
+                    r.fecha_cita,
+                    r.hora_cita,
+                    r.estado
+                FROM reservacion r
+                INNER JOIN usuarios b
+                    ON r.id_barbero = b.id_usuario
+                INNER JOIN servicios s
+                    ON r.id_servicio = s.id_servicio
+                WHERE r.id_cliente = :cliente
+                ORDER BY r.fecha_cita DESC, r.hora_cita DESC";
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            ':cliente' => $idCliente
+        ]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function cancelarCita($id)
+    // Crear una reserva
+    public function crearReserva($cliente, $barbero, $servicio, $fecha, $hora)
     {
-        $stmt = $this->db->prepare("
-            UPDATE citas
-            SET estado = 'cancelada'
-            WHERE id = :id
-        ");
+        $sql = "INSERT INTO reservacion
+                (id_cliente,id_barbero,id_servicio,fecha_cita,hora_cita,estado)
+                VALUES
+                (:cliente,:barbero,:servicio,:fecha,:hora,'Pendiente')";
+
+        $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
-            ':id' => $id
+            ':cliente'  => $cliente,
+            ':barbero'  => $barbero,
+            ':servicio' => $servicio,
+            ':fecha'    => $fecha,
+            ':hora'     => $hora
+        ]);
+    }
+
+    // Cancelar reserva
+    public function cancelarReserva($idReserva, $idCliente)
+    {
+        $sql = "UPDATE reservacion
+                SET estado='Cancelada'
+                WHERE id_reservacion=:id
+                AND id_cliente=:cliente";
+
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            ':id' => $idReserva,
+            ':cliente' => $idCliente
         ]);
     }
 }

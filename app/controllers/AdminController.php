@@ -30,10 +30,13 @@ class AdminController extends Controller
         $clientes = $this->usuarioModel->obtenerClientes();
         $productos = $this->productoModel->obtenerProductos();
 
+        $panelActivo = $_GET['panel'] ?? 'panel-inicio';
+
         $this->view('app/views/admin/panel.php', [
-            'barberos'  => $barberos,
-            'clientes'  => $clientes,
-            'productos' => $productos
+            'barberos'     => $barberos,
+            'clientes'     => $clientes,
+            'productos'    => $productos,
+            'panelActivo'  => $panelActivo
         ]);
     }
 }

@@ -161,6 +161,19 @@
     <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
     <script src="https://files.bpcontent.cloud/2026/05/14/17/20260514174101-A2E9JALD.js" defer></script>
 
+    <script>
+        (function () {
+            // 1. Insertamos un estado
+            history.pushState(null, null, location.href);
+
+            // 2. Si detectamos un salto atrás en el historial
+            window.onpopstate = function () {
+                // En lugar de solo meter 1 pushState, forzamos al navegador
+                // a ir "hacia adelante" en caso de que intenten saltarse páginas
+                history.go(1);
+            };
+        })();
+    </script>
 </body>
 
 </html>

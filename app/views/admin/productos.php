@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="public/css/global.css">
-    <link rel="stylesheet" href="public/css/admin.css">
-    <link rel="stylesheet" href="public/css/datatable.css">
+    <link rel="stylesheet" href="app/public/css/global.css">
+    <link rel="stylesheet" href="app/public/css/productos.css">
+    <link rel="stylesheet" href="app/public/css/datatable.css">
 
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -19,7 +19,7 @@
 
     <header class="admin-header">
         <h1>Gestión de Productos</h1>
-        <a href="index.php?controller=admin&action=panel" class="logout-btn">← Volver</a>
+        <a href="index.php?controller=admin&action=panel&panel=productos" class="logout-btn">← Volver</a>
     </header>
 
     <main class="admin-panel">

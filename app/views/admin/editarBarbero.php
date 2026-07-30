@@ -7,8 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="public/css/global.css">
-    <link rel="stylesheet" href="public/css/admin.css">
+    <link rel="stylesheet" href="app/public/css/global.css">
+    <link rel="stylesheet" href="app/public/css/editarProducto.css">
+    <link rel="stylesheet" href="app/public/css/admin.css">
 </head>
 
 <body>
@@ -24,7 +25,7 @@
 
             <?php if (!empty($barbero)): ?>
 
-                <form method="POST" action="index.php?controller=gestionBarbero&action=actualizarBarbero">
+                <form method="POST" action="index.php?controller=gestionBarbero&action=actualizar">
 
                     <!-- ID oculto -->
                     <input type="hidden" name="id_usuario" value="<?= $barbero['id_usuario'] ?>">

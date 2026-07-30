@@ -10,11 +10,10 @@
 /* ===== HEADER ===== */
 .admin-header{
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: flex-start;
-    padding: 15px 25px;
-    background: rgba(0,0,0,.75);
-    border-bottom: 1px solid rgba(212,175,55,.3);
+    padding: 20px 60px;
+    border-bottom: 2px solid rgba(255, 196, 0, 0.927);
 }
 
 .header-left{
@@ -35,13 +34,34 @@
     color: #D4AF37;
 }
 
+.logo{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-img-circle{
+    width: 65px;
+    height: 65px;
+    border-radius: 70%;
+    object-fit: cover;
+    border: 2px solid var(--dorado);
+}
+
+.logo-text{
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--dorado);
+}
+
 /* ===== SIDEBAR ===== */
 .sidebar{
-    position: fixed;
-    top: 80px;
+    position: absolute;
+    top: 106px;
     left: 0;
     width: 240px;
-    height: calc(100vh - 80px);
+    height: calc(122vh - 106px);
     background: rgba(0,0,0,0.85);
     padding: 20px;
     display: flex;

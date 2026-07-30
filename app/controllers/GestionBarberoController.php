@@ -101,8 +101,8 @@ class GestionBarberoController extends Controller
         if (isset($_GET['id'])) {
             $this->usuarioModel->inactivar($_GET['id']);
         }
-
-        $this->redirect("index.php?controller=admin&action=panel");
+        $panel = $_GET['panel'] ?? 'panel-barberos';
+        $this->redirect("index.php?controller=admin&action=panel&panel=$panel");
     }
 
     public function activar()
@@ -113,7 +113,32 @@ class GestionBarberoController extends Controller
 
             $this->usuarioModel->activar($id);
         }
+        $panel = $_GET['panel'] ?? 'panel-barberos';
 
-        $this->redirect("index.php?controller=admin&action=panel");
+        $this->redirect("index.php?controller=admin&action=panel&panel=$panel");
+    }
+
+    public function actualizar()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $data = [
+                ':id'        => $_POST['id_usuario'],
+                ':nombre'    => $_POST['nombre'],
+                ':apellido'  => $_POST['apellido'],
+                ':telefono'  => $_POST['telefono'],
+                ':correo'    => $_POST['correo']
+            ];
+
+            $ok = $this->usuarioModel->actualizarBarbero($data);
+
+            if ($ok) {
+                $_SESSION['mensaje_exito'] = "Barbero actualizado correctamente.";
+            } else {
+                $_SESSION['mensaje_error'] = "No se pudo actualizar el barbero.";
+            }
+        }
+
+        $this->redirect("index.php?controller=admin&action=panel&panel=barberos");
     }
 }

@@ -1,3 +1,6 @@
+<?php
+$panelActivo = $_GET['panel'] ?? 'inicio';
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -18,14 +21,17 @@
 <body class="admin-body">
 
     <header class="admin-header">
-        <h1>Panel Administrador</h1>
+        <div class="logo">
+            <img src="app/public/assets/img/logo1.jpeg" alt="Kadosh Barber Shop" class="logo-img-circle">
+            <span class="logo-text">PANEL ADMINISTRADOR</span>
+        </div>
     </header>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <p class="sidebar-title">Gestión</p>
 
-        <div class="sidebar-link active" onclick="showPanel('inicio')">📊 Panel</div>
+        <div class="sidebar-link" onclick="showPanel('inicio')">📊 Panel</div>
         <div class="sidebar-link" onclick="showPanel('barberos')">👤 Barberos</div>
         <div class="sidebar-link" onclick="showPanel('clientes')">👤 Clientes</div>
         <div class="sidebar-link" onclick="showPanel('productos')">📦 Productos</div>
@@ -39,7 +45,7 @@
     <main class="main-content">
 
         <!-- INICIO -->
-        <div class="panel active" id="panel-inicio">
+        <div class="panel" id="panel-inicio">
             <h2>Bienvenido, Señor ADMIN 👋</h2><br>
             <p class="subtext">Panel administrativo de la barbería</p>
             <br>
@@ -127,7 +133,7 @@
                                         <?php if ($b['estado'] == 'activo'): ?>
 
                                             <a class="btn-danger"
-                                                href="index.php?controller=gestionBarbero&action=desactivar&id=<?= $b['id_usuario'] ?>"
+                                                href="index.php?controller=gestionBarbero&action=desactivar&id=<?= $b['id_usuario'] ?>&panel=barberos"
                                                 onclick="return confirm('¿Desea desactivar este barbero?')">
                                                 Desactivar
                                             </a>
@@ -135,12 +141,13 @@
                                         <?php else: ?>
 
                                             <a class="btn-success"
-                                                href="index.php?controller=gestionBarbero&action=activar&id=<?= $b['id_usuario'] ?>"
+                                                href="index.php?controller=gestionBarbero&action=activar&id=<?= $b['id_usuario'] ?>&panel=barberos"
                                                 onclick="return confirm('¿Desea activar este barbero?')">
                                                 Activar
                                             </a>
 
                                         <?php endif; ?>
+
                                         <a class="btn-warning"
                                             href="index.php?controller=gestionBarbero&action=editar&id_usuario=<?= $b['id_usuario'] ?>">
                                             Editar
@@ -204,7 +211,7 @@
                                         <?php if ($c['estado'] == 'activo'): ?>
 
                                             <a class="btn-danger"
-                                                href="index.php?controller=gestionCliente&action=desactivar&id=<?= $c['id_usuario'] ?>"
+                                                href="index.php?controller=gestionCliente&action=desactivar&id=<?= $c['id_usuario'] ?>&panel=clientes"
                                                 onclick="return confirm('¿Desea desactivar este cliente?')">
                                                 Desactivar
                                             </a>
@@ -212,7 +219,7 @@
                                         <?php else: ?>
 
                                             <a class="btn-success"
-                                                href="index.php?controller=gestionCliente&action=activar&id=<?= $c['id_usuario'] ?>"
+                                                href="index.php?controller=gestionCliente&action=activar&id=<?= $c['id_usuario'] ?>&panel=clientes"
                                                 onclick="return confirm('¿Desea activar este cliente?')">
                                                 Activar
                                             </a>
@@ -289,11 +296,31 @@
     <!-- JS PANEL -->
     <script>
         function showPanel(panel) {
+
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+
             document.getElementById('panel-' + panel).classList.add('active');
+
+            const links = document.querySelectorAll('.sidebar-link');
+            const indice = {
+                inicio: 0,
+                barberos: 1,
+                clientes: 2,
+                productos: 3,
+                reportes: 4
+            };
+
+            if (indice[panel] !== undefined) {
+                links[indice[panel]].classList.add('active');
+            }
 
             initTablas(panel);
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            showPanel("<?= $panelActivo ?>");
+        });
     </script>
     <!-- LIBRERÍAS -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -309,41 +336,6 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
     <!-- DataTables INIT -->
-    <script>
-        $(document).ready(function() {
-
-            $('#tablaBarberos').DataTable({
-                dom: 'Bfrtip',
-                buttons: [{
-                        extend: 'excelHtml5',
-                        title: 'Kadosh - Barberos',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4] // sin acciones
-                        }
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        title: 'Kadosh - Barberos',
-                        pageSize: 'A4',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4]
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        title: 'Kadosh - Barberos',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4]
-                        }
-                    }
-                ],
-                language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
-                }
-            });
-
-        });
-    </script>
 
     <script>
         let tablaBarberos = null;

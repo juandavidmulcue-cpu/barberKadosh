@@ -6,8 +6,9 @@
     <title>Registro | Kadosh Barber</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="public/css/global.css">
-    <link rel="stylesheet" href="public/css/auth.css">
+    <link rel="stylesheet" href="app/public/css/global.css">
+    <link rel="stylesheet" href="app/public/css/index.css">
+    <link rel="stylesheet" href="app/public/css/auth.css">
 </head>
 
 <body class="auth-body">
@@ -59,7 +60,7 @@
 
         <script src="app/public/js/validaciones.js"></script>
         
-        <a href="index.php?controller=admin&action=panel" class="back-home">← Volver</a>
+        <a href="index.php?controller=admin&action=panel&panel=barberos" class="logout-btn">← Volver</a>
     </div>
 
     <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>

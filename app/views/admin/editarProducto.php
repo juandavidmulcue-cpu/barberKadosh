@@ -7,8 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="public/css/global.css">
-    <link rel="stylesheet" href="public/css/admin.css">
+    <link rel="stylesheet" href="app/public/css/global.css">
+    <link rel="stylesheet" href="app/public/css/admin.css">
+    <link rel="stylesheet" href="app/public/css/editarProducto.css">
 </head>
 
 <body>

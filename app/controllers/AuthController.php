@@ -102,8 +102,11 @@ class AuthController extends Controller
     }
 
     public function logout()
-    {
-        $this->destroySession();
-        $this->redirect("index.html");
-    }
+{
+    $this->destroySession();
+    
+    // Evitamos el header("Location: ...") y usamos replace
+    echo '<script>window.location.replace("index.html");</script>';
+    exit;
+}
 }
