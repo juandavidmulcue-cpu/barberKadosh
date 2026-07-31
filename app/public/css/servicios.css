@@ -1,0 +1,442 @@
+/*=========================================
+        SERVICIOS.CSS
+        KADOSH BARBER SHOP
+==========================================*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+
+    background: linear-gradient(135deg,
+            #050505 0%,
+            #14001f 20%,
+            #260040 45%,
+            #3b0066 60%,
+            #14001f 80%,
+            #050505 100%);
+
+    background-attachment: fixed;
+
+    min-height: 100vh;
+
+    color: #fff;
+
+}
+
+/*================ HEADER ================*/
+
+header {
+
+    background: linear-gradient(90deg, #050505, #3d006b, #050505);
+
+    padding: 45px;
+
+    text-align: center;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .7);
+
+    border-bottom: 2px solid #d4af37;
+
+}
+
+header h1 {
+
+    color: #d4af37;
+
+    font-size: 58px;
+
+    letter-spacing: 4px;
+
+    text-transform: uppercase;
+
+    text-shadow: 0px 0px 12px rgba(212, 175, 55, .4);
+
+}
+
+header p {
+
+    margin-top: 15px;
+
+    font-size: 22px;
+
+    color: #fff;
+
+}
+
+/*================ CONTENEDOR ================*/
+
+.contenedor {
+
+    width: 92%;
+
+    max-width: 1500px;
+
+    margin: 50px auto;
+
+}
+
+/*================ TITULO SECCION ================*/
+
+.titulo-seccion {
+
+    width: 430px;
+
+    max-width: 100%;
+
+    margin: 70px auto;
+
+    padding: 16px;
+
+    text-align: center;
+
+    font-size: 28px;
+
+    color: #d4af37;
+
+    background: #0f0f0f;
+
+    border: 2px solid #7d24ff;
+
+    border-radius: 12px;
+
+    letter-spacing: 2px;
+
+    box-shadow:
+        0 0 15px rgba(125, 36, 255, .6);
+
+}
+
+/*================ GRID ================*/
+
+.grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+
+    gap: 35px;
+
+    margin-bottom: 70px;
+
+}
+
+/*================ TARJETAS ================*/
+
+.card {
+
+    background: rgba(12, 12, 12, .92);
+
+    border: 1px solid #7d24ff;
+
+    border-radius: 18px;
+
+    padding: 30px;
+
+    text-align: center;
+
+    transition: .35s;
+
+    box-shadow:
+
+        0 0 15px rgba(125, 36, 255, .25),
+
+        0 12px 25px rgba(0, 0, 0, .6);
+
+    backdrop-filter: blur(8px);
+
+}
+
+.card:hover {
+
+    transform: translateY(-8px);
+
+    border-color: #d4af37;
+
+    box-shadow:
+
+        0 0 20px rgba(212, 175, 55, .45),
+
+        0 0 25px rgba(125, 36, 255, .4);
+
+}
+
+/*================ TITULO CARD ================*/
+
+.card h3 {
+
+    color: #ffffff;
+
+    font-size: 31px;
+
+    margin-bottom: 20px;
+
+    min-height: 70px;
+
+}
+
+/*================ TEXTO ================*/
+
+.card p {
+
+    color: #d9d9d9;
+
+    font-size: 16px;
+
+    line-height: 28px;
+
+    min-height: 140px;
+
+}
+
+/*================ PRECIO ================*/
+
+.card span {
+
+    display: block;
+
+    color: #d4af37;
+
+    font-size: 35px;
+
+    font-weight: bold;
+
+    margin: 25px 0;
+
+}
+
+/*================ BOTON ================*/
+
+button {
+
+    width: 180px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 40px;
+
+    cursor: pointer;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    color: white;
+
+    background: linear-gradient(90deg, #5d00b8, #842dff);
+
+    border: 2px solid #d4af37;
+
+    transition: .35s;
+
+}
+
+button:hover {
+
+    background: #d4af37;
+
+    color: #000;
+
+    transform: scale(1.05);
+
+    box-shadow: 0 0 18px rgba(212, 175, 55, .7);
+
+}
+
+/*================ BOTON VOLVER ================*/
+
+.volver {
+
+    text-align: center;
+
+    margin: 60px 0;
+
+}
+
+.volver a {
+
+    display: inline-block;
+
+    padding: 16px 40px;
+
+    text-decoration: none;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    color: #d4af37;
+
+    background: #0d0d0d;
+
+    border: 2px solid #7d24ff;
+
+    border-radius: 40px;
+
+    transition: .35s;
+
+    box-shadow: 0 0 15px rgba(125, 36, 255, .5);
+
+}
+
+.volver a:hover {
+
+    background: #d4af37;
+
+    color: #000;
+
+    border-color: #d4af37;
+
+}
+
+/*================ LINEA DECORATIVA ================*/
+
+.titulo-seccion::before {
+
+    content: "";
+
+    display: block;
+
+    width: 120px;
+
+    height: 2px;
+
+    background: #d4af37;
+
+    margin: 0 auto 15px;
+
+}
+
+.titulo-seccion::after {
+
+    content: "";
+
+    display: block;
+
+    width: 120px;
+
+    height: 2px;
+
+    background: #d4af37;
+
+    margin: 15px auto 0;
+
+}
+
+/*================ SCROLL ================*/
+
+::-webkit-scrollbar {
+
+    width: 10px;
+
+}
+
+::-webkit-scrollbar-track {
+
+    background: #111;
+
+}
+
+::-webkit-scrollbar-thumb {
+
+    background: #6a0dad;
+
+    border-radius: 20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+
+    background: #d4af37;
+
+}
+
+/*================ RESPONSIVE ================*/
+
+@media(max-width:992px) {
+
+    header h1 {
+
+        font-size: 45px;
+
+    }
+
+    header p {
+
+        font-size: 18px;
+
+    }
+
+}
+
+@media(max-width:768px) {
+
+    header {
+
+        padding: 30px;
+
+    }
+
+    header h1 {
+
+        font-size: 35px;
+
+    }
+
+    header p {
+
+        font-size: 16px;
+
+    }
+
+    .titulo-seccion {
+
+        width: 100%;
+
+        font-size: 22px;
+
+    }
+
+    .grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .card h3 {
+
+        font-size: 25px;
+
+        min-height: auto;
+
+    }
+
+    .card p {
+
+        min-height: auto;
+
+    }
+
+    button {
+
+        width: 100%;
+
+    }
+
+    .volver a {
+
+        width: 100%;
+
+    }
+
+}

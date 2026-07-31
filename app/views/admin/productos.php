@@ -60,7 +60,7 @@
                                         onclick="return confirm('¿Eliminar este producto?')">
                                         Eliminar
                                     </a>
-                                    <a href="index.php?controller=gestionProducto&action=editarProducto&id_producto=<?= $p['id_producto'] ?>">
+                                    <a class="btn-warning" href="index.php?controller=gestionProducto&action=editarProducto&id_producto=<?= $p['id_producto'] ?>">
                                         Editar
                                     </a>
                                 </td>

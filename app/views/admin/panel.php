@@ -35,6 +35,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
         <div class="sidebar-link" onclick="showPanel('barberos')">👤 Barberos</div>
         <div class="sidebar-link" onclick="showPanel('clientes')">👤 Clientes</div>
         <div class="sidebar-link" onclick="showPanel('productos')">📦 Productos</div>
+        <div class="sidebar-link" onclick="showPanel('horarios')">🕒 Horarios</div>
         <div class="sidebar-link" onclick="showPanel('reportes')">📈 Reportes</div>
 
         <div style="flex:1;"></div>
@@ -285,6 +286,110 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
 
         </div>
 
+        <!-- HORARIOS -->
+        <div class="panel" id="panel-horarios">
+
+            <h2 class="section-title">🕒 Horarios de Barberos</h2>
+
+            <div class="admin-card">
+                <p>Asigna los horarios de trabajo de cada barbero.</p>
+            </div>
+
+            <br>
+
+            <div class="section-card">
+
+                <form action="index.php?controller=reservacion&action=guardarHorario" method="POST">
+
+                    <div class="form-group">
+                        <label>Barbero</label>
+
+                        <select name="id_barbero" required>
+                            <option value="">Seleccione...</option>
+
+                            <?php if (!empty($barberos) && is_array($barberos)): ?>
+                                <?php foreach ($barberos as $b): ?>
+                                    <option value="<?= $b['id_usuario']; ?>">
+                                        <?= $b['nombre']; ?> <?= $b['apellido']; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Fecha</label>
+
+                        <input
+                            type="date"
+                            name="fecha"
+                            min="<?= date('Y-m-d'); ?>"
+                            required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Hora Inicio</label>
+
+                        <input
+                            type="time"
+                            name="hora_inicio"
+                            required>
+
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Fin</label>
+                        <input
+                            type="time"
+                            name="hora_fin"
+                            required>
+                    </div>
+                    <br>
+                    <button class="btn btn-primary">
+                        Guardar Horario
+                    </button>
+                </form>
+
+            </div>
+
+            <table class="data-table" id="tablaHorarios">
+
+                <thead>
+                    <tr>
+                        <th>Barbero</th>
+                        <th>Fecha</th>
+                        <th>Hora Inicio</th>
+                        <th>Hora Fin</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <?php if (!empty($horarios)): ?>
+                        <?php foreach ($horarios as $h): ?>
+                            <tr>
+                                <td><?= $h['nombre'] . " " . $h['apellido']; ?></td>
+                                <td><?= $h['fecha']; ?></td>
+                                <td><?= $h['hora_inicio']; ?></td>
+                                <td><?= $h['hora_fin']; ?></td>
+                                <td>
+                                    <a class="btn-warning" href="#">Editar</a>
+                                    <a class="btn-danger" href="#" onclick="return confirm('¿Eliminar este horario?')">Eliminar</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+
+            </table>
+
+        </div>
+
+        </div>
+
         <!-- REPORTES -->
         <div class="panel" id="panel-reportes">
             <h2 class="section-title">📈 Reportes</h2>
@@ -308,7 +413,8 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                 barberos: 1,
                 clientes: 2,
                 productos: 3,
-                reportes: 4
+                horarios: 4,
+                reportes: 5
             };
 
             if (indice[panel] !== undefined) {
@@ -341,6 +447,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
         let tablaBarberos = null;
         let tablaProductos = null;
         let tablaClientes = null;
+        let tablaHorarios = null;
 
         function initTablas(panel) {
 
@@ -450,6 +557,47 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                         url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
                     }
                 });
+            }
+
+            /* =========================
+   HORARIOS
+========================= */
+
+            if (panel === 'horarios' && !tablaHorarios) {
+
+                if (!document.getElementById('tablaHorarios')) return;
+
+                tablaHorarios = $('#tablaHorarios').DataTable({
+
+                    destroy: true,
+
+                    dom: 'Bfrtip',
+
+                    buttons: [
+
+                        {
+                            extend: 'excelHtml5',
+                            title: 'Kadosh - Horarios'
+                        },
+
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'Kadosh - Horarios'
+                        },
+
+                        {
+                            extend: 'print',
+                            title: 'Kadosh - Horarios'
+                        }
+
+                    ],
+
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
+                    }
+
+                });
+
             }
         }
     </script>

@@ -196,7 +196,7 @@ tbody tr:hover{
 /* BOTONES TABLA */
 
 .btn-warning{
-    background:var(--azul);
+    background:var(--dorado);
     color:white;
     text-decoration:none;
     padding:8px 14px;
