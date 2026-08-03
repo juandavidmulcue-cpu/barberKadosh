@@ -35,6 +35,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
         <div class="sidebar-link" onclick="showPanel('barberos')">👤 Barberos</div>
         <div class="sidebar-link" onclick="showPanel('clientes')">👤 Clientes</div>
         <div class="sidebar-link" onclick="showPanel('productos')">📦 Productos</div>
+        <div class="sidebar-link" onclick="showPanel('servicios')">✂️ Servicios</div>
         <div class="sidebar-link" onclick="showPanel('horarios')">🕒 Horarios</div>
         <div class="sidebar-link" onclick="showPanel('reportes')">📈 Reportes</div>
 
@@ -251,9 +252,6 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                     Gestionar Productos
                 </a>
             </div>
-
-            <br>
-
             <div class="section-card">
 
                 <table class="data-table" id="tablaProductos">
@@ -286,6 +284,208 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
 
         </div>
 
+        <!-- SERVICIOS -->
+        <div class="panel" id="panel-servicios">
+
+            <h2 class="section-title">✂️ Servicios</h2>
+
+            <div class="admin-card">
+                <p>Administra los servicios que ofrece Kadosh Barber Shop.</p>
+            </div>
+
+            <?php if (!empty($_SESSION['mensaje_exito'])): ?>
+
+                <div class="success-msg">
+                    <?= $_SESSION['mensaje_exito']; ?>
+                </div>
+
+                <?php unset($_SESSION['mensaje_exito']); ?>
+
+            <?php endif; ?>
+
+
+            <?php if (!empty($_SESSION['mensaje_error'])): ?>
+
+                <div class="error-msg">
+                    <?= $_SESSION['mensaje_error']; ?>
+                </div>
+
+                <?php unset($_SESSION['mensaje_error']); ?>
+
+            <?php endif; ?>
+
+
+            <!-- FORMULARIO CREAR / EDITAR -->
+
+            <div class="section-card">
+
+                <?php if (!empty($servicioEditar)): ?>
+
+                    <h3>Editar servicio</h3>
+
+                    <form
+                        action="index.php?controller=servicio&action=editarServicio&id_servicio=<?= urlencode($servicioEditar['id_servicio']); ?>"
+                        method="POST">
+
+                    <?php else: ?>
+
+                        <h3>Crear nuevo servicio</h3>
+
+                        <form
+                            action="index.php?controller=servicio&action=guardar"
+                            method="POST">
+
+                        <?php endif; ?>
+
+
+                        <div class="form-group">
+
+                            <label>Nombre del servicio</label>
+
+                            <input
+                                type="text"
+                                name="nombre"
+                                maxlength="50"
+                                placeholder="Ej: Corte básico"
+                                value="<?= htmlspecialchars($servicioEditar['nombre'] ?? ''); ?>"
+                                required>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Descripción</label>
+
+                            <textarea
+                                name="descripcion"
+                                rows="4"
+                                placeholder="Descripción del servicio"><?= htmlspecialchars($servicioEditar['descripcion'] ?? ''); ?></textarea>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Precio</label>
+
+                            <input
+                                type="number"
+                                name="precio"
+                                min="0"
+                                step="0.01"
+                                placeholder="Ej: 25000"
+                                value="<?= htmlspecialchars($servicioEditar['precio'] ?? ''); ?>"
+                                required>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Duración</label>
+
+                            <input
+                                type="time"
+                                name="duracion"
+                                value="<?= htmlspecialchars($servicioEditar['duracion'] ?? ''); ?>"
+                                required>
+
+                        </div>
+
+
+                        <?php if (!empty($servicioEditar)): ?>
+
+                            <button type="submit" class="btn btn-primary">
+                                💾 Actualizar servicio
+                            </button>
+
+                            <a
+                                href="index.php?controller=admin&action=panel&panel=servicios"
+                                class="btn-warning">
+                                Cancelar
+                            </a>
+
+                        <?php else: ?>
+
+                            <button type="submit" class="btn btn-primary">
+                                ➕ Crear servicio
+                            </button>
+
+                        <?php endif; ?>
+
+                        </form>
+
+            </div>
+
+            <!-- TABLA -->
+
+            <div class="section-card">
+
+                <table class="data-table" id="tablaServicios">
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Duración</th>
+                            <th>Acción</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <?php if (!empty($servicios)): ?>
+
+                            <?php foreach ($servicios as $s): ?>
+
+                                <tr>
+
+                                    <td><?= htmlspecialchars($s['id_servicio']); ?></td>
+
+                                    <td><?= htmlspecialchars($s['nombre']); ?></td>
+
+                                    <td><?= htmlspecialchars($s['descripcion']); ?></td>
+
+                                    <td>
+                                        $<?= number_format($s['precio'], 2); ?>
+                                    </td>
+
+                                    <td><?= htmlspecialchars($s['duracion']); ?></td>
+
+                                    <td>
+
+                                        <a
+                                            class="btn-warning"
+                                            href="index.php?controller=servicio&action=editarServicio&id_servicio=<?= urlencode($s['id_servicio']); ?>">
+                                            ✏️ Editar
+                                        </a>
+
+                                        <a
+                                            class="btn-danger"
+                                            href="index.php?controller=servicio&action=eliminarServicio&id_servicio=<?= urlencode($s['id_servicio']); ?>"
+                                            onclick="return confirm('¿Está seguro de eliminar este servicio?')">
+                                            🗑️ Eliminar
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            <?php endforeach; ?>
+
+                        <?php endif; ?>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
         <!-- HORARIOS -->
         <div class="panel" id="panel-horarios">
 
@@ -295,68 +495,49 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                 <p>Asigna los horarios de trabajo de cada barbero.</p>
             </div>
 
-            <br>
-
             <div class="section-card">
-
-                <form action="index.php?controller=reservacion&action=guardarHorario" method="POST">
-
+                <form action="index.php?controller=horario&action=guardarHorario" method="POST">
                     <div class="form-group">
                         <label>Barbero</label>
-
                         <select name="id_barbero" required>
                             <option value="">Seleccione...</option>
-
                             <?php if (!empty($barberos) && is_array($barberos)): ?>
                                 <?php foreach ($barberos as $b): ?>
                                     <option value="<?= $b['id_usuario']; ?>">
-                                        <?= $b['nombre']; ?> <?= $b['apellido']; ?>
+                                        <?= $b['nombre'] . ' ' . $b['apellido']; ?>
                                     </option>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </select>
                     </div>
 
-
                     <div class="form-group">
-
-                        <label>Fecha</label>
-
-                        <input
-                            type="date"
-                            name="fecha"
-                            min="<?= date('Y-m-d'); ?>"
-                            required>
-
+                        <label>Desde (Fecha Inicio)</label>
+                        <input type="date" name="fecha_inicio" min="<?= date('Y-m-d'); ?>" required>
                     </div>
 
                     <div class="form-group">
+                        <label>Hasta (Fecha Fin)</label>
+                        <input type="date" name="fecha_fin" min="<?= date('Y-m-d'); ?>" required>
+                    </div>
 
+                    <div class="form-group">
                         <label>Hora Inicio</label>
-
-                        <input
-                            type="time"
-                            name="hora_inicio"
-                            required>
-
+                        <input type="time" name="hora_inicio" required>
                     </div>
+
                     <div class="form-group">
                         <label>Hora Fin</label>
-                        <input
-                            type="time"
-                            name="hora_fin"
-                            required>
+                        <input type="time" name="hora_fin" required>
                     </div>
-                    <br>
-                    <button class="btn btn-primary">
-                        Guardar Horario
-                    </button>
-                </form>
 
+                    <br>
+                    <button type="submit" class="btn btn-primary">Guardar Horario</button>
+                </form>
             </div>
 
+            <!-- TABLA DE HORARIOS -->
             <table class="data-table" id="tablaHorarios">
-
                 <thead>
                     <tr>
                         <th>Barbero</th>
@@ -366,25 +547,27 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                         <th>Acción</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     <?php if (!empty($horarios)): ?>
                         <?php foreach ($horarios as $h): ?>
                             <tr>
                                 <td><?= $h['nombre'] . " " . $h['apellido']; ?></td>
-                                <td><?= $h['fecha']; ?></td>
-                                <td><?= $h['hora_inicio']; ?></td>
-                                <td><?= $h['hora_fin']; ?></td>
+                                <td><?= date('d/m/Y', strtotime($h['fecha'])); ?></td>
+                                <td><?= date('g:i A', strtotime($h['hora_inicio'])); ?></td>
+                                <td><?= date('g:i A', strtotime($h['hora_fin'])); ?></td>
                                 <td>
-                                    <a class="btn-warning" href="#">Editar</a>
-                                    <a class="btn-danger" href="#" onclick="return confirm('¿Eliminar este horario?')">Eliminar</a>
+                                    <a class="btn-danger"
+                                        href="index.php?controller=horario&action=eliminarHorario&id_horario=<?= urlencode($h['id_horario']); ?>"
+                                        onclick="return confirm('¿Desea eliminar este horario?')">
+                                        Eliminar
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </tbody>
-
             </table>
+        </div>
 
         </div>
 
@@ -413,8 +596,9 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                 barberos: 1,
                 clientes: 2,
                 productos: 3,
-                horarios: 4,
-                reportes: 5
+                servicios: 4,
+                horarios: 5,
+                reportes: 6
             };
 
             if (indice[panel] !== undefined) {
@@ -446,6 +630,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
     <script>
         let tablaBarberos = null;
         let tablaProductos = null;
+        let tablaServicios = null;
         let tablaClientes = null;
         let tablaHorarios = null;
 
@@ -557,6 +742,47 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                         url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
                     }
                 });
+            }
+            /* =========================
+               SERVICIOS
+            ========================= */
+
+            if (panel === 'servicios' && !tablaServicios) {
+
+                if (!document.getElementById('tablaServicios')) return;
+
+                tablaServicios = $('#tablaServicios').DataTable({
+
+                    destroy: true,
+
+                    dom: 'Bfrtip',
+
+                    buttons: [
+
+                        {
+                            extend: 'excelHtml5',
+                            title: 'Kadosh - Servicios'
+                        },
+
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'Kadosh - Servicios',
+                            pageSize: 'A4'
+                        },
+
+                        {
+                            extend: 'print',
+                            title: 'Kadosh - Servicios'
+                        }
+
+                    ],
+
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
+                    }
+
+                });
+
             }
 
             /* =========================

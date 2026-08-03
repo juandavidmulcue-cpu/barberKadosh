@@ -3,11 +3,13 @@
 require_once 'app/controllers/Controller.php';
 require_once 'app/models/AdminModel.php';
 require_once 'app/models/GestionProductoModel.php';
+require_once 'app/models/ServicioModel.php';
 
 class AdminController extends Controller
 {
     private $usuarioModel;
     private $productoModel;
+    private $servicioModel;
 
     public function __construct()
     {
@@ -18,6 +20,7 @@ class AdminController extends Controller
 
         $this->usuarioModel = new Usuario();
         $this->productoModel = new GestionProductoModel();
+        $this->servicioModel = new ServicioModel();
     }
 
     /* =========================
@@ -29,6 +32,14 @@ class AdminController extends Controller
         $barberos = $this->usuarioModel->obtenerBarberos();
         $clientes = $this->usuarioModel->obtenerClientes();
         $productos = $this->productoModel->obtenerProductos();
+        $servicios = $this->servicioModel->obtenerServicios();
+
+        $servicioEditar = null;
+
+        if (!empty($_GET['editar_servicio'])) {
+            $id_servicio = $_GET['editar_servicio'];
+            $servicioEditar = $this->servicioModel->obtenerServicioPorId($id_servicio);
+        }
 
         $panelActivo = $_GET['panel'] ?? 'panel-inicio';
 
@@ -36,6 +47,8 @@ class AdminController extends Controller
             'barberos'     => $barberos,
             'clientes'     => $clientes,
             'productos'    => $productos,
+            'servicios'    => $servicios,
+            'servicioEditar' => $servicioEditar,
             'panelActivo'  => $panelActivo
         ]);
     }
