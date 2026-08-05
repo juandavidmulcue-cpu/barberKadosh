@@ -90,7 +90,8 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
 
             <div class="action-row">
                 <h3>Registrar Barbero</h3>
-                <p>Añade a un nuevo integrante al equipo</p>
+                <p>Presiona el botón para añadir a un nuevo integrante al equipo:</p>
+                <br>
                 <br>
                 <a href="index.php?controller=gestionBarbero&action=registrar" class="btn btn-primary">
                     + Registrar Barbero
@@ -150,9 +151,11 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
 
                                         <?php endif; ?>
 
-                                        <a class="btn-warning"
-                                            href="index.php?controller=gestionBarbero&action=editar&id_usuario=<?= $b['id_usuario'] ?>">
-                                            Editar
+                                        <a class="icono-editar"
+                                            href="index.php?controller=gestionBarbero&action=editar&id_usuario=<?= $b['id_usuario'] ?>"
+                                            title="Editar">
+
+                                            <img src="app/public/assets/icons/editar.png" alt="Editar">
                                         </a>
                                     </td>
                                 </tr>
@@ -456,18 +459,18 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                                     <td><?= htmlspecialchars($s['duracion']); ?></td>
 
                                     <td>
+                                        <a class="icono-editar"
+                                            href="index.php?controller=servicio&action=editarServicio&id_servicio=<?= urlencode($s['id_servicio']); ?>"
+                                            title="Editar">
 
-                                        <a
-                                            class="btn-warning"
-                                            href="index.php?controller=servicio&action=editarServicio&id_servicio=<?= urlencode($s['id_servicio']); ?>">
-                                            ✏️ Editar
+                                            <img src="app/public/assets/icons/editar.png" alt="Editar">
                                         </a>
-
-                                        <a
-                                            class="btn-danger"
+                                        <a class="btn-danger"
                                             href="index.php?controller=servicio&action=eliminarServicio&id_servicio=<?= urlencode($s['id_servicio']); ?>"
-                                            onclick="return confirm('¿Está seguro de eliminar este servicio?')">
-                                            🗑️ Eliminar
+                                            onclick="return confirm('¿Está seguro de eliminar este servicio?')"
+                                            title="Eliminar">
+
+                                            <img src="app/public/assets/icons/basura.png" alt="Eliminar">
                                         </a>
 
                                     </td>

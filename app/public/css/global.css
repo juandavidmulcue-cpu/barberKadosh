@@ -5,19 +5,20 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 /* =========================
    VARIABLES DE COLOR
 ========================= */
 :root{
-    --negro: #0a0a0a;
-    --negro-suave: rgba(0,0,0,0.75);
-    --morado: #7b2cbf;
-    --morado-claro: #9d4edd;
-    --dorado: #d4af37;
+    --negro: #0D0D0D;
+    --negro-suave: rgba(13,13,13,0.85);
+    --morado: #4B2A6B;
+    --morado-claro: #6a3d8c;
+    --dorado: #D4AF37;
     --blanco: #ffffff;
+    --blanco-suave: #e8e8e8;
     --gris: #bfbfbf;
 }
 
@@ -25,9 +26,9 @@
    BODY GLOBAL
 ========================= */
 body{
-    background: linear-gradient(135deg, var(--negro) 55%, #240046 100%);
-    color: var(--blanco);
     min-height: 100vh;
+    background: linear-gradient(135deg, #0a0a0a 30%, #551d8a 100%);
+    color: var(--blanco);
 }
 
 /* =========================
@@ -42,18 +43,21 @@ a{
    BOTONES GENERALES
 ========================= */
 .btn-primary{
-    padding: 14px 22px;
+    padding: 14px 24px;
     border-radius: 50px;
     border: none;
     cursor: pointer;
     font-weight: 600;
-    background: linear-gradient(135deg, var(--morado), var(--morado-claro));
+    background: var(--morado);
     color: var(--blanco);
-    transition: 0.3s;
+    box-shadow: 0 0 12px rgba(75,42,107,0.7);
+    transition: 0.3s ease;
 }
 
 .btn-primary:hover{
-    box-shadow: 0 8px 25px rgba(157,78,221,0.6);
+    box-shadow: 
+        0 0 25px rgba(212,175,55,0.6),
+        0 0 40px rgba(75,42,107,0.9);
 }
 
 /* =========================
@@ -61,10 +65,12 @@ a{
 ========================= */
 h1, h2, h3, h4{
     font-weight: 700;
+    color: var(--blanco);
 }
 
 .title-gold{
     color: var(--dorado);
+    text-shadow: 0 0 6px rgba(212,175,55,0.5);
 }
 
 /* =========================
@@ -80,10 +86,21 @@ h1, h2, h3, h4{
    TARJETAS
 ========================= */
 .card{
-    background: rgba(255,255,255,0.05);
-    border-radius: 16px;
-    padding: 25px;
-    border: 1px solid rgba(255,255,255,0.1);
+    background: var(--morado);
+    border-radius: 18px;
+    padding: 28px;
+    border: 1px solid rgba(212,175,55,0.25);
+    box-shadow:
+        inset 0 0 25px rgba(0,0,0,0.7),
+        0 0 18px rgba(75,42,107,0.6);
+    transition: 0.3s ease;
+}
+
+.card:hover{
+    transform: translateY(-4px);
+    box-shadow:
+        0 0 30px rgba(212,175,55,0.5),
+        0 0 45px rgba(75,42,107,0.9);
 }
 
 /* =========================
@@ -91,17 +108,23 @@ h1, h2, h3, h4{
 ========================= */
 input, select, textarea{
     width: 100%;
-    padding: 12px;
-    border-radius: 12px;
+    padding: 13px;
+    border-radius: 14px;
     border: none;
-    background: rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.07);
     color: var(--blanco);
+}
+
+input::placeholder,
+textarea::placeholder{
+    color: rgba(255,255,255,0.4);
 }
 
 input:focus,
 select:focus,
 textarea:focus{
-    outline: 1px solid var(--morado-claro);
+    outline: 1px solid var(--dorado);
+    box-shadow: 0 0 10px rgba(212,175,55,0.4);
 }
 
 /* =========================
@@ -110,13 +133,69 @@ textarea:focus{
 .error-msg{
     background: rgba(255,0,0,0.15);
     color: #ffb3b3;
-    padding: 10px;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 12px;
 }
 
 .success-msg{
     background: rgba(0,255,0,0.15);
     color: #b3ffb3;
-    padding: 10px;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+    margin-top: 60px;
+    background: linear-gradient(135deg,#0d0d0d,#1d102e);
+    border-top: 2px solid var(--dorado);
+    color: var(--blanco-suave);
+}
+
+.footer-container{
+    max-width: 1200px;
+    margin: auto;
+    padding: 45px 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 35px;
+}
+
+.footer-section h3,
+.footer-section h4{
+    color: var(--dorado);
+    margin-bottom: 18px;
+}
+
+.footer-section p{
+    color: #d8d8d8;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+.footer-section a{
+    display: block;
+    color: #d8d8d8;
+    margin-bottom: 10px;
+    transition: .3s;
+}
+
+.footer-section a:hover{
+    color: var(--dorado);
+    padding-left: 6px;
+}
+
+.footer-bottom{
+    border-top: 1px solid rgba(212,175,55,.25);
+    text-align: center;
+    padding: 18px;
+    font-size: 14px;
+    color: #bdbdbd;
+}
+
+.footer-bottom strong{
+    color: var(--dorado);
 }

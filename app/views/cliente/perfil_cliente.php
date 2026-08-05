@@ -9,6 +9,8 @@ if (!isset($_SESSION['id'])) {
 $nombre = $_SESSION['nombre'] ?? 'Cliente';
 $apellido = $_SESSION['apellido'] ?? '';
 $rol    = $_SESSION['nombre_rol'] ?? 'cliente';
+$servicios = $servicios ?? [];
+$barberos = $barberos ?? [];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -75,24 +77,6 @@ $rol    = $_SESSION['nombre_rol'] ?? 'cliente';
 
     </div>
 
-    <div class="resumen">
-
-        <div class="resumen-card">
-            <h4>📅 Próxima cita</h4>
-            <span>15/08/2026</span>
-        </div>
-
-        <div class="resumen-card">
-            <h4>📖 Total de citas</h4>
-            <span>8</span>
-        </div>
-
-        <div class="resumen-card">
-            <h4>📌 Estado</h4>
-            <span>Confirmada</span>
-        </div>
-
-    </div>
     <div class="panel" id="panel-reservas">
 
         <h2 class="section-title">Mis Reservas</h2>
@@ -154,20 +138,25 @@ $rol    = $_SESSION['nombre_rol'] ?? 'cliente';
                                             Cancelar
                                         </a>
 
+                                        <a href="#"
+                                            class="btn-editar-cita"
+                                            onclick="abrirModalEditar(
+                                            '<?= htmlspecialchars($c['id_reservacion']) ?>',
+                                            '<?= htmlspecialchars($c['id_barbero']) ?>',
+                                            '<?= htmlspecialchars($c['id_servicio']) ?>',
+                                            '<?= htmlspecialchars($c['fecha_cita']) ?>',
+                                            '<?= htmlspecialchars($c['hora_cita']) ?>'
+                                            ); return false;">
+                                            Editar
+                                        </a>
+
                                     <?php else: ?>
-
                                         <span style="color:gray;">Sin acciones</span>
-
                                     <?php endif; ?>
-
                                 </td>
-
                             </tr>
-
                         <?php endforeach; ?>
-
                     <?php else: ?>
-
                         <tr>
                             <td colspan="6" style="text-align:center;">
                                 No tienes reservas registradas.
@@ -183,3 +172,162 @@ $rol    = $_SESSION['nombre_rol'] ?? 'cliente';
         </div>
 
     </div>
+
+    <div id="modalEditarCita" class="modal-editar-cita">
+
+        <div class="contenido-modal">
+
+            <button type="button"
+                class="cerrar-modal"
+                onclick="cerrarModalEditar()">
+                &times;
+            </button>
+
+            <h2>Actualizar reservación</h2>
+            <div id="horariosEditar">
+                <p>
+                    Seleccione servicio, barbero y fecha.
+                </p>
+            </div>
+            <br>
+            <p>
+                <strong>Reserva:</strong>
+                <span id="idReservaEditar"></span>
+            </p>
+
+            <form id="formEditarCita"
+                method="POST"
+                action="index.php?controller=gestionCita&action=actualizarCita">
+
+                <input type="hidden"
+                    name="id_reservacion"
+                    id="idReservacionEditar">
+
+
+                <!-- SERVICIO -->
+
+                <label for="servicioEditar">
+                    Servicio:
+                </label>
+
+                <select name="servicio"
+                    id="servicioEditar"
+                    required>
+
+                    <option value="">
+                        Seleccione un servicio
+                    </option>
+
+                    <?php foreach ($servicios as $servicio): ?>
+
+                        <option value="<?= htmlspecialchars($servicio['id_servicio']) ?>">
+                            <?= htmlspecialchars($servicio['nombre']) ?>
+                        </option>
+
+                    <?php endforeach; ?>
+
+                </select>
+
+                <br>
+                <!-- BARBERO -->
+
+                <label for="barberoEditar">
+                    Barbero:
+                </label>
+
+                <select name="barbero"
+                    id="barberoEditar"
+                    required>
+
+                    <option value="">
+                        Seleccione un barbero:
+                    </option>
+
+                    <?php foreach ($barberos as $barbero): ?>
+
+                        <option value="<?= htmlspecialchars($barbero['id_usuario']) ?>">
+                            <?= htmlspecialchars(
+                                $barbero['nombre'] . ' ' . $barbero['apellido']
+                            ) ?>
+                        </option>
+
+                    <?php endforeach; ?>
+
+                </select>
+
+                <br>
+                <!-- FECHA -->
+
+                <label for="fechaEditar">
+                    Fecha:
+                </label>
+
+                <input type="date"
+                    name="fecha"
+                    id="fechaEditar"
+                    required>
+
+
+                <!-- HORARIOS -->
+                <br>
+                <label>
+                    Hora disponible:
+                </label>
+
+
+                <input type="hidden"
+                    name="hora"
+                    id="horaEditar"
+                    required>
+
+                <br>
+                <button type="submit">
+                    Guardar cambios
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script>
+        function abrirModalEditar(
+            idReserva,
+            idBarbero,
+            idServicio,
+            fecha,
+            hora
+        ) {
+
+            // Mostrar datos de la reserva
+            document.getElementById('idReservaEditar').textContent = idReserva;
+
+            document.getElementById('idReservacionEditar').value = idReserva;
+
+            // Seleccionar servicio actual
+            document.getElementById('servicioEditar').value = idServicio;
+
+            // Seleccionar barbero actual
+            document.getElementById('barberoEditar').value = idBarbero;
+
+            // Seleccionar fecha actual
+            document.getElementById('fechaEditar').value = fecha;
+
+            // Guardar hora actual
+            document.getElementById('horaEditar').value = hora;
+
+            // Mostrar modal
+            document.getElementById('modalEditarCita')
+                .classList.add('activo');
+        }
+
+
+        function cerrarModalEditar() {
+
+            document.getElementById('modalEditarCita')
+                .classList.remove('activo');
+
+        }
+    </script>
+</body>

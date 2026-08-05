@@ -1,5 +1,5 @@
 /* ===== RESET ===== */
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -7,7 +7,7 @@
 }
 
 /* ===== BODY ===== */
-body{
+body {
     background: linear-gradient(135deg, #0a0a0a 55%, #240046 100%);
     min-height: 100vh;
     color: #fff;
@@ -15,10 +15,10 @@ body{
 }
 
 /* ===== BARRA SUPERIOR ===== */
-.barra{
+.barra {
     width: 100%;
-    background: rgba(0,0,0,0.75);
-    border: 1px solid rgba(212,175,55,0.3);
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid rgba(212, 175, 55, 0.3);
     padding: 18px;
     border-radius: 18px;
     text-align: center;
@@ -26,11 +26,11 @@ body{
     font-weight: bold;
     color: #d4af37;
     margin-bottom: 30px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 /* ===== CONTENEDOR PRINCIPAL ===== */
-.perfil{
+.perfil {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     gap: 20px;
@@ -38,20 +38,20 @@ body{
 }
 
 /* ===== CARDS ===== */
-.card{
-    background: rgba(0,0,0,0.75);
-    border: 1px solid rgba(212,175,55,0.25);
+.card {
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid rgba(212, 175, 55, 0.25);
     border-radius: 20px;
     padding: 25px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
 /* ===== INFO USUARIO ===== */
-.info-usuario{
+.info-usuario {
     text-align: center;
 }
 
-.avatar{
+.avatar {
     width: 120px;
     height: 120px;
     border-radius: 50%;
@@ -60,26 +60,26 @@ body{
     object-fit: cover;
 }
 
-.info-usuario h2{
+.info-usuario h2 {
     color: #fff;
     margin-bottom: 5px;
 }
 
-.rol{
+.rol {
     color: #d4af37;
     margin-bottom: 20px;
     font-weight: bold;
 }
 
 /* ===== BOTONES ===== */
-.acciones{
+.acciones {
     display: flex;
     flex-direction: column;
     gap: 12px;
     margin-bottom: 20px;
 }
 
-.btn button{
+.btn button {
     width: 100%;
     padding: 12px;
     border-radius: 50px;
@@ -87,46 +87,46 @@ body{
     cursor: pointer;
     font-weight: 600;
     transition: 0.3s ease;
-    background: linear-gradient(135deg, rgba(123,44,191,1), rgba(157,78,221,1));
+    background: linear-gradient(135deg, rgba(123, 44, 191, 1), rgba(157, 78, 221, 1));
     color: white;
 }
 
-.btn button:hover{
+.btn button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(157,78,221,0.5);
+    box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
 }
 
 /* ===== BOTÓN OUTLINE ===== */
-.btn-outline{
+.btn-outline {
     background: transparent !important;
     border: 2px solid #d4af37 !important;
     color: #d4af37 !important;
 }
 
-.btn-outline:hover{
+.btn-outline:hover {
     background: #d4af37 !important;
     color: #000 !important;
 }
 
 /* ===== LINK LOGOUT ===== */
-.info-usuario a{
+.info-usuario a {
     color: #d4af37;
     text-decoration: none;
     font-size: 14px;
 }
 
-.info-usuario a:hover{
+.info-usuario a:hover {
     text-decoration: underline;
 }
 
 /* ===== GALERÍA ===== */
-.galeria{
+.galeria {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.imagen-principal{
+.imagen-principal {
     height: 280px;
     border-radius: 18px;
     background: url('../img/barberia.jpg') center/cover;
@@ -138,14 +138,14 @@ body{
     overflow: hidden;
 }
 
-.imagen-principal::before{
+.imagen-principal::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.35);
+    background: rgba(0, 0, 0, 0.35);
 }
 
-.imagen-principal p{
+.imagen-principal p {
     position: relative;
     z-index: 2;
     font-size: 28px;
@@ -154,122 +154,122 @@ body{
 }
 
 /* ===== PUNTOS ===== */
-.puntos{
+.puntos {
     display: flex;
     justify-content: center;
     margin-top: 15px;
     gap: 10px;
 }
 
-.puntos span{
+.puntos span {
     width: 12px;
     height: 12px;
     border-radius: 50%;
     background: #777;
 }
 
-.puntos span:first-child{
+.puntos span:first-child {
     background: #d4af37;
 }
 
 /* ===== DIRECCIÓN ===== */
-.direccion h3{
+.direccion h3 {
     color: #d4af37;
     margin-bottom: 15px;
 }
 
-.direccion p{
+.direccion p {
     line-height: 1.8;
     color: #ddd;
 }
 
-.direccion a{
+.direccion a {
     display: inline-block;
     margin-top: 15px;
     color: #d4af37;
     text-decoration: none;
 }
 
-.direccion a:hover{
+.direccion a:hover {
     text-decoration: underline;
 }
 
 /* ===== RESERVAS ===== */
-.reservas{
+.reservas {
     width: 100%;
 }
 
-.reservas h3{
+.reservas h3 {
     color: #d4af37;
     margin-bottom: 20px;
 }
 
 /* ===== TABLA ===== */
-table{
+table {
     width: 100%;
     border-collapse: collapse;
     overflow: hidden;
     border-radius: 12px;
 }
 
-thead{
-    background: rgba(123,44,191,0.6);
+thead {
+    background: rgba(123, 44, 191, 0.6);
 }
 
-thead th{
+thead th {
     padding: 15px;
     color: white;
     text-align: left;
 }
 
-tbody tr{
-    background: rgba(255,255,255,0.05);
+tbody tr {
+    background: rgba(255, 255, 255, 0.05);
     transition: 0.3s;
 }
 
-tbody tr:hover{
-    background: rgba(255,255,255,0.1);
+tbody tr:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
-tbody td{
+tbody td {
     padding: 15px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* ===== ACCIONES TABLA ===== */
-.acciones-tabla{
+.acciones-tabla {
     margin-top: 20px;
     display: flex;
     gap: 15px;
 }
 
 /* ===== RESPONSIVE ===== */
-@media(max-width: 992px){
+@media(max-width: 992px) {
 
-    .perfil{
+    .perfil {
         grid-template-columns: 1fr;
     }
 
-    .acciones-tabla{
+    .acciones-tabla {
         flex-direction: column;
     }
 }
 
-@media(max-width: 600px){
+@media(max-width: 600px) {
 
-    body{
+    body {
         padding: 15px;
     }
 
-    .barra{
+    .barra {
         font-size: 18px;
     }
 
-    .imagen-principal{
+    .imagen-principal {
         height: 220px;
     }
 
-    table{
+    table {
         display: block;
         overflow-x: auto;
     }
@@ -278,32 +278,32 @@ tbody td{
 /* =========================
    CARRUSEL
 ========================= */
-.carousel-section{
+.carousel-section {
     position: relative;
 }
 
-.carousel-title{
+.carousel-title {
     margin-bottom: 20px;
     color: var(--dorado);
 }
 
-.carousel{
+.carousel {
     overflow: hidden;
     border-radius: 20px;
-    border: 1px solid rgba(212,175,55,0.4);
+    border: 1px solid rgba(212, 175, 55, 0.4);
     position: relative;
 }
 
-.carousel-track{
+.carousel-track {
     display: flex;
     transition: transform 1s ease;
 }
 
-.carousel-item{
+.carousel-item {
     min-width: 100%;
 }
 
-.carousel-item img{
+.carousel-item img {
     width: 100%;
     height: 345px;
     object-fit: cover;
@@ -313,10 +313,66 @@ tbody td{
 /* =========================
    HERO + CARRUSEL WRAPPER
 ========================= */
-.hero-wrapper{
+.hero-wrapper {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
     gap: 50px;
     padding: 80px 60px;
     align-items: center;
+}
+
+/* =========================================
+   MODAL EDITAR CITA
+========================================= */
+
+#modalEditarCita {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.80);
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+}
+
+#modalEditarCita.activo {
+    display: flex;
+}
+
+#modalEditarCita .contenido-modal {
+    width: 500px;
+    max-width: 90%;
+
+    background: rgba(6, 6, 6, 0.423);
+    color: var(--blanco-suave);
+
+    padding: 30px;
+    border-radius: 15px;
+
+    border: 1px solid #d4af37;
+
+    position: relative;
+}
+
+#modalEditarCita .cerrar-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+
+    background: none;
+    border: none;
+
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+#modalEditarCita .cerrar-modal:hover {
+    color: #ff0000;
 }

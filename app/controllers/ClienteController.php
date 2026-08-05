@@ -23,7 +23,8 @@ class ClienteController
        =============================== */
     public function perfil()
     {
-        require 'app/views/cliente/perfil_cliente.php';
+        header("Location: index.php?controller=gestionCita&action=misCitas");
+        exit;
     }
 
     /* ===============================
