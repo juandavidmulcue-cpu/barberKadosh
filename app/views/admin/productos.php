@@ -54,14 +54,18 @@
                                 <td><?= $p['id_producto'] ?></td>
                                 <td><?= htmlspecialchars($p['nombre']) ?></td>
                                 <td>$<?= number_format($p['precio'], 2) ?></td>
-                                <td>
-                                    <a class="btn-danger"
+                                <td class="acciones">
+                                    <a class="icono-eliminar"
                                         href="index.php?controller=gestionProducto&action=eliminarProducto&id_producto=<?= $p['id_producto'] ?>"
-                                        onclick="return confirm('¿Eliminar este producto?')">
-                                        Eliminar
+                                        onclick="return confirm('¿Eliminar este producto?')"
+                                        title="Eliminar">
+                                        <img src="app/public/assets/icons/eliminar.png" alt="Eliminar">
                                     </a>
-                                    <a class="btn-warning" href="index.php?controller=gestionProducto&action=editarProducto&id_producto=<?= $p['id_producto'] ?>">
-                                        Editar
+                                    <a class="boton-editar"
+                                        href="index.php?controller=gestionProducto&action=editarProducto&id_producto=<?= $p['id_producto'] ?>"
+                                        title="Editar">
+
+                                        <img src="app/public/assets/icons/editar.png" alt="Editar">
                                     </a>
                                 </td>
                             </tr>

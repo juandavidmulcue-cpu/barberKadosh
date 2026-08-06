@@ -55,6 +55,25 @@
     color: var(--dorado);
 }
 
+.btn-outline:hover{
+    background: var(--dorado);
+    color: var(--negro);
+}
+
+.btn-outline{
+    position: relative;
+    left: 820px;
+    border: 1px solid var(--dorado);
+}
+
+.btn{
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 1px solid var(--dorado);
+    color: var(--blanco);
+    transition: 0.3s;
+}
+
 /* ===== SIDEBAR ===== */
 .sidebar {
     position: absolute;
@@ -291,7 +310,8 @@
 /* =========================
    BOTÓN ICONO EDITAR
 ========================= */
-
+.btn-danger,
+.btn-success,
 .icono-editar {
     display: inline-flex !important;
     align-items: center !important;
@@ -303,7 +323,7 @@
     padding: 5px !important;
     margin: 2px;
 
-    border: 2px solid var(--negro) !important;
+    border: 2px solid var(--dorado) !important;
     border-radius: 8px;
 
     background: transparent !important;
@@ -315,45 +335,9 @@
     overflow: hidden !important;
 }
 
+.btn-danger img,
+.btn-success img,
 .icono-editar img {
-    display: block !important;
-
-    width: 35px !important;
-    height: 35px !important;
-
-    max-width: 35px !important;
-    max-height: 35px !important;
-
-    min-width: 35px !important;
-    min-height: 35px !important;
-
-    object-fit: contain !important;
-}
-
-.btn-danger {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    width: 35px !important;
-    height: 35px !important;
-
-    padding: 5px !important;
-    margin: 2px;
-
-    border: 2px solid var(--negro) !important;
-    border-radius: 8px;
-
-    background: transparent !important;
-
-    text-decoration: none !important;
-
-    box-sizing: border-box !important;
-
-    overflow: hidden !important;
-}
-
-.btn-danger img {
     display: block !important;
 
     width: 35px !important;

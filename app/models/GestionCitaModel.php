@@ -40,6 +40,33 @@ class GestionCitaModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function obtenerReservasBarbero($idBarbero)
+    {
+        $sql = "SELECT
+                r.id_reservacion,
+                r.id_cliente,
+                CONCAT(c.nombre,' ',c.apellido) AS cliente,
+                s.nombre AS servicio,
+                r.fecha_cita,
+                r.hora_cita,
+                r.estado
+            FROM reservacion r
+            INNER JOIN usuarios c
+                ON r.id_cliente = c.id_usuario
+            INNER JOIN servicios s
+                ON r.id_servicio = s.id_servicio
+            WHERE r.id_barbero = :barbero
+            ORDER BY r.fecha_cita DESC, r.hora_cita DESC";
+
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->execute([
+            ':barbero' => $idBarbero
+        ]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function obtenerReservaPorId($idReservacion)
     {
         $sql = "SELECT

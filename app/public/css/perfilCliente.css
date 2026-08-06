@@ -376,3 +376,33 @@ tbody td {
 #modalEditarCita .cerrar-modal:hover {
     color: #ff0000;
 }
+.cancelar-cita,
+.btn-editar-cita {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 36px !important;
+    height: 36px !important;
+
+    padding: 4px !important;
+    margin: 0 !important;
+
+    border: 2px solid var(--dorado) !important;
+    border-radius: 8px;
+
+    background: transparent !important;
+    text-decoration: none !important;
+
+    box-sizing: border-box !important;
+}
+
+.cancelar-cita img,
+.btn-editar-cita img {
+    display: block !important;
+
+    width: 25px !important;
+    height: 25px !important;
+
+    object-fit: contain !important;
+}

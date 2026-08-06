@@ -132,10 +132,11 @@ $barberos = $barberos ?? [];
 
                                     <?php if ($c['estado'] != 'Cancelada'): ?>
 
-                                        <a class="btn-danger"
+                                        <a class="cancelar-cita"
                                             href="index.php?controller=gestionCita&action=cancelar&id=<?= $c['id_reservacion'] ?>"
-                                            onclick="return confirm('¿Desea cancelar esta reserva?')">
-                                            Cancelar
+                                            onclick="return confirm('¿Desea cancelar esta reserva?')"
+                                            title="Cancelar">
+                                            <img src="app/public/assets/icons/cancelarcita.png" alt="Cancelar">
                                         </a>
 
                                         <a href="#"
@@ -146,8 +147,9 @@ $barberos = $barberos ?? [];
                                             '<?= htmlspecialchars($c['id_servicio']) ?>',
                                             '<?= htmlspecialchars($c['fecha_cita']) ?>',
                                             '<?= htmlspecialchars($c['hora_cita']) ?>'
-                                            ); return false;">
-                                            Editar
+                                            ); return false;"
+                                            title="Editar">
+                                            <img src="app/public/assets/icons/editar.png" alt="Editar">
                                         </a>
 
                                     <?php else: ?>

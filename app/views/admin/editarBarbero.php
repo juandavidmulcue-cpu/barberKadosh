@@ -16,7 +16,7 @@
 
     <header class="admin-header">
         <h1>Editar Barbero</h1>
-        <a href="index.php?controller=admin&action=panel" class="logout-btn">← Volver</a>
+        <a href="index.php?controller=admin&action=panel&panel=barberos" class="logout-btn">← Volver</a>
     </header>
 
     <main class="admin-panel">

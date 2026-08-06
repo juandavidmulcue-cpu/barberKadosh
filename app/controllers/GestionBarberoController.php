@@ -84,7 +84,7 @@ class GestionBarberoController extends Controller
         $barbero = $this->usuarioModel->getUsuarioById($id);
 
         if (!$barbero) {
-            $this->redirect("index.php?controller=admin&action=panel");
+            $this->redirect("index.php?controller=admin&action=panel&panel=barberos");
         }
 
         $this->view('app/views/admin/editarBarbero.php', [

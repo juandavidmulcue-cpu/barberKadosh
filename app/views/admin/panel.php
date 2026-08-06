@@ -24,6 +24,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
         <div class="logo">
             <img src="app/public/assets/img/logo1.jpeg" alt="Kadosh Barber Shop" class="logo-img-circle">
             <span class="logo-text">PANEL ADMINISTRADOR</span>
+            <a href="index.php?controller=auth&action=logout" class="btn btn-outline">Cerrar sesión</a>
         </div>
     </header>
 
@@ -41,7 +42,6 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
 
         <div style="flex:1;"></div>
 
-        <a href="index.php?controller=auth&action=logout">Cerrar sesión</a>
     </aside>
 
     <main class="main-content">
@@ -137,16 +137,20 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
 
                                             <a class="btn-danger"
                                                 href="index.php?controller=gestionBarbero&action=desactivar&id=<?= $b['id_usuario'] ?>&panel=barberos"
-                                                onclick="return confirm('¿Desea desactivar este barbero?')">
-                                                Desactivar
+                                                onclick="return confirm('¿Desea desactivar este barbero?')"
+                                                title="Desactivar">
+
+                                                <img src="app/public/assets/icons/desactivar.png" alt="Desactivar">
                                             </a>
 
                                         <?php else: ?>
 
                                             <a class="btn-success"
                                                 href="index.php?controller=gestionBarbero&action=activar&id=<?= $b['id_usuario'] ?>&panel=barberos"
-                                                onclick="return confirm('¿Desea activar este barbero?')">
-                                                Activar
+                                                onclick="return confirm('¿Desea activar este barbero?')"
+                                                title="Activar">
+
+                                                <img src="app/public/assets/icons/activar.png" alt="Activar">
                                             </a>
 
                                         <?php endif; ?>
@@ -217,16 +221,18 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
 
                                             <a class="btn-danger"
                                                 href="index.php?controller=gestionCliente&action=desactivar&id=<?= $c['id_usuario'] ?>&panel=clientes"
-                                                onclick="return confirm('¿Desea desactivar este cliente?')">
-                                                Desactivar
+                                                onclick="return confirm('¿Desea desactivar este cliente?')"
+                                                title="Desactivar">
+                                                <img src="app/public/assets/icons/desactivar.png" alt="Desactivar">
                                             </a>
 
                                         <?php else: ?>
 
                                             <a class="btn-success"
                                                 href="index.php?controller=gestionCliente&action=activar&id=<?= $c['id_usuario'] ?>&panel=clientes"
-                                                onclick="return confirm('¿Desea activar este cliente?')">
-                                                Activar
+                                                onclick="return confirm('¿Desea activar este cliente?')"
+                                                title="Activar">
+                                                <img src="app/public/assets/icons/activar.png" alt="Activar">
                                             </a>
 
                                         <?php endif; ?>
@@ -470,7 +476,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                                             onclick="return confirm('¿Está seguro de eliminar este servicio?')"
                                             title="Eliminar">
 
-                                            <img src="app/public/assets/icons/basura.png" alt="Eliminar">
+                                            <img src="app/public/assets/icons/eliminar.png" alt="Eliminar">
                                         </a>
 
                                     </td>
