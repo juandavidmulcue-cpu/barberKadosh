@@ -12,6 +12,7 @@ $rol    = $_SESSION['nombre_rol'] ?? 'cliente';
 $servicios = $servicios ?? [];
 $barberos = $barberos ?? [];
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -115,30 +116,50 @@ $barberos = $barberos ?? [];
                                 <td><?= htmlspecialchars($c['hora_cita']) ?></td>
 
                                 <td>
-                                    <?php
-                                    if ($c['estado'] == 'Pendiente') {
-                                        echo "<span style='color:orange;font-weight:bold;'>🟡 Pendiente</span>";
-                                    } elseif ($c['estado'] == 'Confirmada') {
-                                        echo "<span style='color:green;font-weight:bold;'>🟢 Confirmada</span>";
-                                    } elseif ($c['estado'] == 'Cancelada') {
-                                        echo "<span style='color:red;font-weight:bold;'>🔴 Cancelada</span>";
-                                    } else {
-                                        echo htmlspecialchars($c['estado']);
-                                    }
-                                    ?>
+
+                                    <?php if ($c['estado'] == 'Pendiente'): ?>
+
+                                        <span style="color:orange;font-weight:bold;">
+                                            🟡 Pendiente
+                                        </span>
+
+                                    <?php elseif ($c['estado'] == 'Cancelada'): ?>
+
+                                        <span style="color:red;font-weight:bold;">
+                                            🔴 Cancelada
+                                        </span>
+
+                                    <?php elseif ($c['estado'] == 'Completada'): ?>
+
+                                        <span style="color:green;font-weight:bold;">
+                                            🟢 Completada
+                                        </span>
+
+                                    <?php else: ?>
+
+                                        <?= htmlspecialchars($c['estado']) ?>
+
+                                    <?php endif; ?>
+
                                 </td>
 
                                 <td>
 
-                                    <?php if ($c['estado'] != 'Cancelada'): ?>
+                                    <?php if ($c['estado'] == 'Pendiente'): ?>
 
+                                        <!-- CANCELAR -->
                                         <a class="cancelar-cita"
-                                            href="index.php?controller=gestionCita&action=cancelar&id=<?= $c['id_reservacion'] ?>"
+                                            href="index.php?controller=gestionCita&action=cancelar&id=<?= htmlspecialchars($c['id_reservacion']) ?>"
                                             onclick="return confirm('¿Desea cancelar esta reserva?')"
                                             title="Cancelar">
-                                            <img src="app/public/assets/icons/cancelarcita.png" alt="Cancelar">
+
+                                            <img src="app/public/assets/icons/cancelarcita.png"
+                                                alt="Cancelar">
+
                                         </a>
 
+
+                                        <!-- EDITAR -->
                                         <a href="#"
                                             class="btn-editar-cita"
                                             onclick="abrirModalEditar(
@@ -149,12 +170,39 @@ $barberos = $barberos ?? [];
                                             '<?= htmlspecialchars($c['hora_cita']) ?>'
                                             ); return false;"
                                             title="Editar">
+
                                             <img src="app/public/assets/icons/editar.png" alt="Editar">
                                         </a>
 
-                                    <?php else: ?>
-                                        <span style="color:gray;">Sin acciones</span>
+
+                                        <!-- FINALIZAR -->
+                                        <button
+                                            type="button"
+                                            class="btn-finalizar"
+                                            onclick="abrirModalFinalizar(
+                                            '<?= htmlspecialchars($c['id_reservacion']) ?>',
+                                            '<?= htmlspecialchars($c['id_barbero']) ?>')">
+
+                                            Finalizar
+                                        </button>
+
+
+                                    <?php elseif ($c['estado'] == 'Cancelada'): ?>
+
+                                        <span style="color:gray;">
+                                            Sin acciones
+                                        </span>
+
+
+                                    <?php elseif ($c['estado'] == 'Completada'): ?>
+
+                                        <span style="color:green;">
+                                            ✓ Finalizada
+                                        </span>
+
+
                                     <?php endif; ?>
+
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -292,6 +340,205 @@ $barberos = $barberos ?? [];
         </div>
 
     </div>
+
+    <!-- =========================================
+     MODAL FINALIZAR CITA
+========================================= -->
+
+    <div id="modalFinalizar" class="modal-finalizar">
+
+        <div class="contenido-modal-finalizar">
+
+            <button
+                type="button"
+                class="cerrar-modal-finalizar"
+                onclick="cerrarModalFinalizar()">
+
+                &times;
+
+            </button>
+
+
+            <h2>¡Cita finalizada! 🎉</h2>
+
+            <p>
+                ¿Te gustaría calificar nuestro servicio?
+            </p>
+
+
+            <div class="botones-finalizar">
+
+                <!-- SI -->
+                <button
+                    type="button"
+                    onclick="mostrarModalResena()">
+
+                    ⭐ Sí
+
+                </button>
+
+
+                <!-- NO -->
+                <form
+                    method="POST"
+                    action="index.php?controller=gestionCita&action=finalizar">
+
+                    <input
+                        type="hidden"
+                        name="id_reservacion"
+                        id="idReservaFinalizar">
+
+                    <button type="submit">
+
+                        No
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================================
+     MODAL RESEÑA
+========================================= -->
+
+    <div id="modalResena" class="modal-resena">
+
+        <div class="contenido-modal-resena">
+
+            <button
+                type="button"
+                class="cerrar-modal-resena"
+                onclick="cerrarModalResena()">
+
+                &times;
+
+            </button>
+
+
+            <h2>Califica nuestro servicio ⭐</h2>
+
+            <p>
+                ¿Cómo fue tu experiencia?
+            </p>
+
+
+            <form
+                method="POST"
+                action="index.php?controller=gestionCita&action=guardarResena">
+
+
+                <input
+                    type="hidden"
+                    name="id_reservacion"
+                    id="idReservaResena">
+
+
+                <input
+                    type="hidden"
+                    name="id_barbero"
+                    id="idBarberoResena">
+
+
+                <label>
+                    Calificación
+                </label>
+
+
+                <select
+                    name="calificacion"
+                    required>
+
+                    <option value="">
+                        Selecciona una calificación
+                    </option>
+
+                    <option value="5">
+                        ⭐⭐⭐⭐⭐ Excelente
+                    </option>
+
+                    <option value="4">
+                        ⭐⭐⭐⭐ Muy bueno
+                    </option>
+
+                    <option value="3">
+                        ⭐⭐⭐ Bueno
+                    </option>
+
+                    <option value="2">
+                        ⭐⭐ Regular
+                    </option>
+
+                    <option value="1">
+                        ⭐ Malo
+                    </option>
+
+                </select>
+
+
+                <label>
+                    Comentario
+                </label>
+
+
+                <textarea
+                    name="comentario"
+                    placeholder="Cuéntanos tu experiencia..."
+                    rows="4"></textarea>
+
+
+                <button type="submit">
+
+                    Publicar reseña
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script>
+        function abrirModalFinalizar(idReserva, idBarbero) {
+            document.getElementById('idReservaFinalizar').value = idReserva;
+
+            document.getElementById('idReservaResena').value = idReserva;
+
+            document.getElementById('idBarberoResena').value = idBarbero;
+
+
+            document.getElementById('modalFinalizar')
+                .classList.add('activo');
+        }
+
+
+        function cerrarModalFinalizar() {
+            document.getElementById('modalFinalizar')
+                .classList.remove('activo');
+        }
+
+
+        function mostrarModalResena() {
+            document.getElementById('modalFinalizar')
+                .classList.remove('activo');
+
+
+            document.getElementById('modalResena')
+                .classList.add('activo');
+        }
+
+
+        function cerrarModalResena() {
+            document.getElementById('modalResena')
+                .classList.remove('activo');
+        }
+    </script>
 
     <script>
         function abrirModalEditar(

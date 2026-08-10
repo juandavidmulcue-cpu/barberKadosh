@@ -376,6 +376,7 @@ tbody td {
 #modalEditarCita .cerrar-modal:hover {
     color: #ff0000;
 }
+
 .cancelar-cita,
 .btn-editar-cita {
     display: inline-flex !important;
@@ -405,4 +406,198 @@ tbody td {
     height: 25px !important;
 
     object-fit: contain !important;
+}
+
+/* =========================================
+   MODAL FINALIZAR
+========================================= */
+
+.modal-finalizar,
+.modal-resena {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.75);
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 9999;
+}
+
+
+.modal-finalizar.activo,
+.modal-resena.activo {
+
+    display: flex;
+
+}
+
+
+.contenido-modal-finalizar,
+.contenido-modal-resena {
+    background: rgba(10, 10, 10, 0.97);
+
+    color: #fff;
+
+    padding: 30px;
+
+    border-radius: 18px;
+
+    width: 90%;
+
+    max-width: 450px;
+
+    text-align: center;
+
+    position: relative;
+
+    border: 1px solid #d4af37;
+
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+}
+
+
+.contenido-modal-finalizar h2,
+.contenido-modal-resena h2 {
+
+    margin-bottom: 15px;
+
+}
+
+
+.contenido-modal-finalizar p,
+.contenido-modal-resena p {
+
+    margin-bottom: 25px;
+
+}
+
+
+/* BOTONES */
+
+.botones-finalizar {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+}
+
+
+.botones-finalizar button {
+    padding: 12px 28px;
+
+    border: none;
+
+    border-radius: 50px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    color: white;
+
+    background: linear-gradient(135deg,
+            #7b2cbf,
+            #9d4edd);
+
+    transition: 0.3s ease;
+}
+
+.botones-finalizar button:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
+}
+
+
+/* CERRAR */
+
+.cerrar-modal-finalizar,
+.cerrar-modal-resena {
+
+    position: absolute;
+
+    top: 10px;
+
+    right: 15px;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+}
+
+
+/* FORMULARIO RESEÑA */
+
+.contenido-modal-resena form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    text-align: left;
+
+}
+
+
+.contenido-modal-resena select,
+.contenido-modal-resena textarea {
+
+    width: 100%;
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    border: 1px solid #ccc;
+
+}
+
+
+.contenido-modal-resena textarea {
+
+    resize: vertical;
+
+}
+
+
+.contenido-modal-resena form button {
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+}
+.btn-no {
+    background: transparent !important;
+
+    border: 2px solid #d4af37 !important;
+
+    color: #d4af37 !important;
+}
+
+.btn-no:hover {
+    background: #d4af37 !important;
+
+    color: #000 !important;
 }

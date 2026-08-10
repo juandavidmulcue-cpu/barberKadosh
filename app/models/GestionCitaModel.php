@@ -330,4 +330,166 @@ class GestionCitaModel
             ':cliente'        => $idCliente
         ]);
     }
+
+    /* =========================================
+   FINALIZAR RESERVA
+========================================= */
+
+    public function finalizarReserva($idReserva, $idCliente)
+    {
+        $sql = "UPDATE reservacion
+            SET estado = 'Completada'
+            WHERE id_reservacion = :id
+            AND id_cliente = :cliente
+            AND estado = 'Pendiente'";
+
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            ':id' => $idReserva,
+            ':cliente' => $idCliente
+        ]);
+    }
+
+    /* =========================================
+   GUARDAR RESEÑA
+========================================= */
+
+    public function guardarResena(
+        $idReservacion,
+        $idCliente,
+        $calificacion,
+        $comentario
+    ) {
+        try {
+
+            $sql = "SELECT
+                    id_reservacion,
+                    id_barbero,
+                    estado
+                FROM reservacion
+                WHERE id_reservacion = :reservacion
+                AND id_cliente = :cliente
+                LIMIT 1";
+
+            $stmt = $this->db->prepare($sql);
+
+            $stmt->execute([
+                ':reservacion' => $idReservacion,
+                ':cliente' => $idCliente
+            ]);
+
+            $reserva = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$reserva) {
+                return false;
+            }
+
+            if ($reserva['estado'] === 'Cancelada') {
+                return false;
+            }
+
+            $sql = "SELECT COUNT(*)
+                FROM resenas
+                WHERE id_reservacion = :reservacion";
+
+            $stmt = $this->db->prepare($sql);
+
+            $stmt->execute([
+                ':reservacion' => $idReservacion
+            ]);
+
+            if ($stmt->fetchColumn() > 0) {
+                return false;
+            }
+
+            $sql = "SELECT id_resena
+                FROM resenas
+                WHERE id_resena LIKE 'RESEN%'
+                ORDER BY id_resena DESC
+                LIMIT 1";
+
+            $stmt = $this->db->prepare($sql);
+
+            $stmt->execute();
+
+            $ultima = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($ultima) {
+                $numero = intval(
+                    substr($ultima['id_resena'], 5)
+                );
+                $numero++;
+            } else {
+                $numero = 1;
+            }
+
+            $idResena =
+                'RESEN' .
+                str_pad($numero, 3, '0', STR_PAD_LEFT);
+
+            $this->db->beginTransaction();
+
+            $sql = "UPDATE reservacion
+                SET estado = 'Completada'
+                WHERE id_reservacion = :id
+                AND id_cliente = :cliente
+                AND estado = 'Pendiente'";
+
+            $stmt = $this->db->prepare($sql);
+
+            $stmt->execute([
+                ':id' => $idReservacion,
+                ':cliente' => $idCliente
+            ]);
+
+            $sql = "INSERT INTO resenas
+                (
+                    id_resena,
+                    id_reservacion,
+                    id_cliente,
+                    id_barbero,
+                    calificacion,
+                    comentario,
+                    fecha
+                )
+                VALUES
+                (
+                    :id_resena,
+                    :reservacion,
+                    :cliente,
+                    :barbero,
+                    :calificacion,
+                    :comentario,
+                    NOW()
+                )";
+
+            $stmt = $this->db->prepare($sql);
+
+            $resultado = $stmt->execute([
+                ':id_resena' => $idResena,
+                ':reservacion' => $idReservacion,
+                ':cliente' => $idCliente,
+                ':barbero' => $reserva['id_barbero'],
+                ':calificacion' => $calificacion,
+                ':comentario' => $comentario
+            ]);
+            if ($resultado) {
+
+                $this->db->commit();
+
+                return true;
+            }
+
+            $this->db->rollBack();
+
+            return false;
+        } catch (PDOException $e) {
+
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            return false;
+        }
+    }
 }

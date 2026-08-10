@@ -1,283 +1,120 @@
 <?php
-// Datos de ejemplo (luego vendrán de la base de datos)
 
-$barbero = [
-    "nombre" => "Laura",
-    "especialidad" => "Cortes clásicos y degradados",
-    "telefono" => "3001234567",
-    "foto" => "img/barbero.jpg"
-];
+// Seguridad básica
+if (!isset($_SESSION['id'])) {
+    header("Location: ../index.php?controller=auth&action=loginBarbero");
+    exit;
+}
 
-
-$reservaciones = [
-
-    [
-        "id" => 1,
-        "cliente" => "Juan Pérez",
-        "fecha" => "2026-07-30",
-        "hora" => "09:00 AM",
-        "estado" => "confirmada"
-    ],
-
-    [
-        "id" => 2,
-        "cliente" => "Andrés López",
-        "fecha" => "2026-07-30",
-        "hora" => "11:00 AM",
-        "estado" => "pendiente"
-    ],
-
-    [
-        "id" => 3,
-        "cliente" => "Camilo Díaz",
-        "fecha" => "2026-07-31",
-        "hora" => "03:00 PM",
-        "estado" => "cancelada"
-    ]
-
-];
-$horarios = [
-    "Lunes | 8:00 AM - 6:00 PM",
-    "Martes | 8:00 AM - 6:00 PM",
-    "Miércoles | 8:00 AM - 6:00 PM",
-    "Jueves | 8:00 AM - 6:00 PM",
-    "Viernes | 8:00 AM - 7:00 PM",
-    "Sábado | 9:00 AM - 5:00 PM"
-];
-
-$reseñas = [
-    [
-        "usuario" => "Juan",
-        "calificacion" => 5,
-        "comentario" => "Excelente atención y muy buen corte."
-    ],
-    [
-        "usuario" => "Laura",
-        "calificacion" => 4,
-        "comentario" => "Muy recomendado."
-    ]
-];
-
-$totalReservas = count($reservaciones);
-$totalResenas = count($reseñas);
-$promedio = 4.8;
+$barbero = $barbero ?? [];
+$totalReservas = $totalReservas ?? 0;
+$totalResenas = $totalResenas ?? 0;
+$promedio = $promedio ?? 0;
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Perfil del Barbero</title>
-
     <link rel="stylesheet" href="app/public/css/perfilBarbero.css">
-
-
-
 </head>
-<script>
-    function mostrarSeccion(opcion) {
-
-        const reservas = document.getElementById("reservas");
-        const resenas = document.getElementById("resenas");
-        const formulario = document.getElementById("formResena");
-
-        const btnReservas = document.getElementById("btnReservas");
-        const btnResenas = document.getElementById("btnResenas");
-
-        reservas.style.display = "none";
-        resenas.style.display = "none";
-        formulario.style.display = "none";
-
-        btnReservas.classList.remove("activo");
-        btnResenas.classList.remove("activo");
-
-        if (opcion === "reservas") {
-
-            reservas.style.display = "block";
-
-            btnReservas.classList.add("activo");
-
-        }
-
-        if (opcion === "resenas") {
-
-            resenas.style.display = "block";
-
-            formulario.style.display = "block";
-
-            btnResenas.classList.add("activo");
-
-        }
-
-    }
-
-    window.onload = function() {
-
-        mostrarSeccion("reservas");
-
-    }
-</script>
 
 <body>
+    <div class="contenedorPerfil">
+        <section class="perfil">
+            <div class="imagen">
+                <img src="app/public/assets/img/foto5.avif" class="avatar" alt="Foto del barbero">
+            </div>
+            <div class="informacion">
+                <h1>
+                    <?php echo htmlspecialchars($barbero['nombre'] . ' ' . $barbero['apellido']); ?>
+                </h1>
 
-    <section class="perfil">
 
-        <div class="imagen">
-            <img src="../../public/assets/img/foto5.avif" class="avatar" alt="Foto del barbero">
-        </div>
+                <p>
+                    <strong>Teléfono:</strong>
+                    <?php echo htmlspecialchars($barbero['telefono']); ?>
+                </p>
+                <p>
+                    <strong>Correo:</strong>
+                    <?php echo htmlspecialchars($barbero['correo']); ?>
+                </p>
 
-        <div class="informacion">
-            <h1><?php echo $barbero['nombre']; ?></h1>
-
-            <p><strong>Especialidad:</strong> <?php echo $barbero['especialidad']; ?></p>
-
-            <p><strong>Teléfono:</strong> <?php echo $barbero['telefono']; ?></p>
-        </div>
-
-        <div class="estadisticas">
-
-            <button class="stat activo" id="btnReservas" onclick="mostrarSeccion('reservas')">
-                <h3><?php echo $totalReservas; ?></h3>
-                <span>Reservas</span>
-            </button>
-
-            <button class="stat" id="btnResenas" onclick="mostrarSeccion('resenas')">
-                <h3><?php echo $totalResenas; ?></h3>
-                <span>Reseñas</span>
-            </button>
-
-            <div class="stat">
-                <h3>⭐ <?php echo $promedio; ?></h3>
-                <span>Calificación</span>
+                <a href="index.php?controller=auth&action=logout" class="btn btn-outline">Cerrar sesión</a>
             </div>
 
-        </div>
 
-    </section>
+            <!-- =========================
+             ESTADÍSTICAS
+        ========================== -->
 
-    <section class="card">
+            <div class="estadisticas">
 
-        <h2>Horarios de Trabajo</h2>
+                <button
+                    class="stat activo"
+                    id="btnReservas"
+                    onclick="mostrarSeccion('reservas')">
 
-        <div class="horarios">
+                    <h3>
+                        <?php echo $totalReservas; ?>
+                    </h3>
 
-            <?php foreach ($horarios as $hora) { ?>
+                    <span>Reservas</span>
 
-                <div class="horario">
-
-                    <span>🕒</span>
-
-                    <p><?php echo $hora; ?></p>
-
-                </div>
-
-            <?php } ?>
-
-        </div>
-
-    </section>
-
-    <section class="card" id="reservas">
-
-        <h2>Reservaciones</h2>
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>Cliente</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Estado</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                <?php foreach ($reservaciones as $r) { ?>
-
-                    <tr>
-
-                        <td><?php echo $r['cliente']; ?></td>
-
-                        <td><?php echo $r['fecha']; ?></td>
-
-                        <td><?php echo $r['hora']; ?></td>
-
-                        <td>
-
-                            <form action="../../controllers/BarberoController.php" method="POST">
+                </button>
 
 
-                                <input type="hidden" name="id_reservacion" value="<?php echo $r['id_reservacion']; ?>">
+                <button
+                    class="stat"
+                    id="btnResenas"
+                    onclick="mostrarSeccion('resenas')">
+
+                    <h3>
+                        <?php echo $totalResenas; ?>
+                    </h3>
+
+                    <span>Reseñas</span>
+
+                </button>
 
 
-                                <select name="estado_reserva" onchange="this.form.submit()">
+                <!-- CALIFICACIÓN -->
+
+                <div class="stat">
+
+                    <h3>
+
+                        <?php
+                        echo number_format(
+                            (float)$promedio,
+                            1
+                        );
+                        ?>
+
+                        / 5
+
+                    </h3>
 
 
-                                    <option value="pendiente" <?php echo ($r['estado'] == "pendiente") ? "selected" : ""; ?>>
-                                        🟡 Pendiente
-                                    </option>
-
-
-
-                                    <option value="cancelada" <?php echo ($r['estado'] == "cancelada") ? "selected" : ""; ?>>
-                                        🔴 Cancelada
-                                    </option>
-
-
-                                    <option value="completada" <?php echo ($r['estado'] == "completada") ? "selected" : ""; ?>>
-                                        🟢 Completada
-                                    </option>
-
-
-                                </select>
-
-
-                            </form>
-
-
-                        </td>
-
-                    </tr>
-
-                <?php } ?>
-
-            </tbody>
-
-        </table>
-
-    </section>
-
-    <section class="card" id="resenas" style="display:none;">
-
-        <h2>Reseñas</h2>
-
-        <div class="contenedorResenas">
-
-            <?php foreach ($reseñas as $r) { ?>
-
-                <div class="review">
-
-                    <h3><?php echo $r['usuario']; ?></h3>
-
-                    <div class="estrellas">
+                    <div class="estrellasPromedio">
 
                         <?php
 
+                        $promedioRedondeado = round(
+                            (float)$promedio
+                        );
+
                         for ($i = 1; $i <= 5; $i++) {
 
-                            if ($i <= $r['calificacion']) {
+                            if ($i <= $promedioRedondeado) {
 
-                                echo "⭐";
+                                echo '<span>⭐</span>';
+                            } else {
+
+                                echo '<span>☆</span>';
                             }
                         }
 
@@ -285,51 +122,419 @@ $promedio = 4.8;
 
                     </div>
 
+
+                    <span>Calificación</span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+         HORARIOS
+    ========================== -->
+
+        <section class="card">
+
+            <h2>Horarios de Trabajo</h2>
+
+
+            <div class="horarios">
+
+                <?php if (!empty($horarios)) { ?>
+
+
+                    <?php foreach ($horarios as $hora) { ?>
+
+                        <div class="horario">
+
+                            <span>🕒</span>
+
+                            <p>
+
+                                <strong>
+
+                                    <?php
+                                    echo date(
+                                        'd/m/Y',
+                                        strtotime($hora['fecha'])
+                                    );
+                                    ?>
+
+                                </strong>
+
+                                <br>
+
+                                <?php
+
+                                echo date(
+                                    'h:i A',
+                                    strtotime($hora['hora_inicio'])
+                                );
+
+                                ?>
+
+                                -
+
+                                <?php
+
+                                echo date(
+                                    'h:i A',
+                                    strtotime($hora['hora_fin'])
+                                );
+
+                                ?>
+
+                            </p>
+
+                        </div>
+
+                    <?php } ?>
+
+
+                <?php } else { ?>
+
+                    <p class="sinDatos">
+                        No tienes horarios registrados.
+                    </p>
+
+                <?php } ?>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+         RESERVACIONES
+    ========================== -->
+
+        <section
+            class="card"
+            id="reservas">
+
+            <h2>Reservaciones</h2>
+
+
+            <?php if (!empty($reservaciones)) { ?>
+
+
+                <div class="tablaResponsive">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Cliente</th>
+
+                                <th>Fecha</th>
+
+                                <th>Hora</th>
+
+                                <th>Estado</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+
+                            <?php foreach ($reservaciones as $r) { ?>
+
+                                <tr>
+
+                                    <!-- CLIENTE -->
+
+                                    <td>
+
+                                        <?php
+
+                                        echo htmlspecialchars(
+                                            $r['cliente']
+                                        );
+
+                                        ?>
+
+                                    </td>
+
+
+                                    <!-- FECHA -->
+
+                                    <td>
+
+                                        <?php
+
+                                        echo date(
+                                            'd/m/Y',
+                                            strtotime($r['fecha'])
+                                        );
+
+                                        ?>
+
+                                    </td>
+
+
+                                    <!-- HORA -->
+
+                                    <td>
+
+                                        <?php
+
+                                        echo date(
+                                            'h:i A',
+                                            strtotime($r['hora'])
+                                        );
+
+                                        ?>
+
+                                    </td>
+
+
+                                    <!-- ESTADO -->
+
+                                    <td>
+
+                                        <?php if ($r['estado'] === 'Pendiente') { ?>
+
+                                            <span class="estado pendiente">
+                                                🟡 Pendiente
+                                            </span>
+
+                                        <?php } elseif ($r['estado'] === 'Cancelada') { ?>
+
+                                            <span class="estado cancelada">
+                                                🔴 Cancelada
+                                            </span>
+
+                                        <?php } elseif ($r['estado'] === 'Completada') { ?>
+
+                                            <span class="estado completada">
+                                                🟢 Completada
+                                            </span>
+
+                                        <?php } else { ?>
+
+                                            <span class="estado">
+                                                <?php echo htmlspecialchars($r['estado']); ?>
+                                            </span>
+
+                                        <?php } ?>
+
+                                    </td>
+
+                                </tr>
+
+                            <?php } ?>
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            <?php } else { ?>
+
+                <div class="sinDatos">
+
                     <p>
-
-                        <?php echo $r['comentario']; ?>
-
+                        No tienes reservaciones actualmente.
                     </p>
 
                 </div>
 
             <?php } ?>
 
-        </div>
+        </section>
 
-    </section>
 
-    <section class="card" id="formResena" style="display:none;">
 
-        <h2>Agregar Reseña</h2>
+        <!-- =========================
+         RESEÑAS
+    ========================== -->
 
-        <form>
+        <section
+            class="card"
+            id="resenas"
+            style="display:none;">
 
-            <input type="text" placeholder="Nombre">
+            <h2>Reseñas de Clientes</h2>
 
-            <select>
 
-                <option>⭐⭐⭐⭐⭐ Excelente</option>
-                <option>⭐⭐⭐⭐ Muy Bueno</option>
-                <option>⭐⭐⭐ Bueno</option>
-                <option>⭐⭐ Regular</option>
-                <option>⭐ Malo</option>
+            <?php if (!empty($reseñas)) { ?>
 
-            </select>
 
-            <textarea placeholder="Escribe tu reseña..."></textarea>
+                <div class="contenedorResenas">
 
-            <button>
 
-                Publicar Reseña
+                    <?php foreach ($reseñas as $r) { ?>
 
-            </button>
+                        <div class="review">
 
-        </form>
 
-    </section>
+                            <h3>
+
+                                <?php
+
+                                echo htmlspecialchars(
+                                    $r['usuario']
+                                );
+
+                                ?>
+
+                            </h3>
+
+
+                            <!-- ESTRELLAS -->
+
+                            <div class="estrellas">
+
+                                <?php
+
+                                $calificacion = (int)$r['calificacion'];
+
+                                for ($i = 1; $i <= 5; $i++) {
+
+                                    if ($i <= $calificacion) {
+
+                                        echo '<span>⭐</span>';
+                                    } else {
+
+                                        echo '<span>☆</span>';
+                                    }
+                                }
+
+                                ?>
+
+                            </div>
+
+
+                            <!-- COMENTARIO -->
+
+                            <p>
+
+                                <?php
+
+                                echo htmlspecialchars(
+                                    $r['comentario']
+                                );
+
+                                ?>
+
+                            </p>
+
+
+                            <!-- FECHA -->
+
+                            <?php if (!empty($r['fecha'])) { ?>
+
+                                <small>
+
+                                    <?php
+
+                                    echo date(
+                                        'd/m/Y',
+                                        strtotime($r['fecha'])
+                                    );
+
+                                    ?>
+
+                                </small>
+
+                            <?php } ?>
+
+
+                        </div>
+
+                    <?php } ?>
+
+
+                </div>
+
+
+            <?php } else { ?>
+
+
+                <div class="sinDatos">
+
+                    <p>
+                        Este barbero todavía no tiene reseñas.
+                    </p>
+
+                </div>
+
+
+            <?php } ?>
+
+        </section>
+
 
     </div>
+
+
+
+    <script>
+        function mostrarSeccion(opcion) {
+
+            const reservas = document.getElementById("reservas");
+            const resenas = document.getElementById("resenas");
+
+            const btnReservas = document.getElementById("btnReservas");
+            const btnResenas = document.getElementById("btnResenas");
+
+
+            // Ocultar secciones
+
+            reservas.style.display = "none";
+            resenas.style.display = "none";
+
+
+            // Quitar estado activo
+
+            btnReservas.classList.remove("activo");
+            btnResenas.classList.remove("activo");
+
+
+            // Mostrar reservas
+
+            if (opcion === "reservas") {
+
+                reservas.style.display = "block";
+
+                btnReservas.classList.add("activo");
+
+            }
+
+
+            // Mostrar reseñas
+
+            if (opcion === "resenas") {
+
+                resenas.style.display = "block";
+
+                btnResenas.classList.add("activo");
+
+            }
+
+        }
+
+
+        window.onload = function() {
+
+            mostrarSeccion("reservas");
+
+        };
+    </script>
+
 
 </body>
 

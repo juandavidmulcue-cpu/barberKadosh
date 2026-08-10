@@ -1,38 +1,133 @@
 <?php
 
 require_once 'app/controllers/Controller.php';
+require_once 'app/models/GestionPerfilBarberoModel.php';
 
-/**
- * BarberoController
- * -------------------------------------------------
- * Refactor: existían DOS versiones de esta clase
- * (una aquí sin seguridad, otra dentro de
- * ClienteController.php). Se consolidaron en una sola
- * con la verificación de rol correspondiente.
- */
+
 class BarberoController extends Controller
 {
+    private $perfilModel;
+
+
     public function __construct()
     {
         parent::__construct();
 
-        // 🔐 SOLO BARBEROS
+        // SOLO BARBEROS
         $this->requireRole('barbero');
+
+        // Modelo del perfil
+        $this->perfilModel = new GestionPerfilBarberoModel();
     }
+
 
     /* ===============================
        PERFIL DEL BARBERO
-       =============================== */
+    =============================== */
+
     public function perfil()
     {
-        $this->view('app/views/barbero/perfil_barbero.php');
+        // Documento del barbero logueado
+        $idBarbero = $_SESSION['id'];
+
+
+        // Datos del barbero
+        $barbero = $this->perfilModel->obtenerBarbero(
+            $idBarbero
+        );
+
+
+        // Reservaciones
+        $reservaciones = $this->perfilModel
+            ->obtenerReservacionesBarbero($idBarbero);
+
+
+        // Horarios
+        $horarios = $this->perfilModel
+            ->obtenerHorariosBarbero($idBarbero);
+
+
+        // Reseñas
+        $reseñas = $this->perfilModel
+            ->obtenerResenasBarbero($idBarbero);
+
+
+        // Promedio de calificación
+        $promedio = $this->perfilModel
+            ->obtenerPromedioCalificacion($idBarbero);
+
+
+        // Total de reservas
+        $totalReservas = $this->perfilModel
+            ->obtenerTotalReservas($idBarbero);
+
+
+        // Total de reseñas
+        $totalResenas = $this->perfilModel
+            ->obtenerTotalResenas($idBarbero);
+
+
+        // Cargar perfil
+        $this->view(
+            'app/views/barbero/perfil_barbero.php',
+            [
+                'barbero' => $barbero,
+                'reservaciones' => $reservaciones,
+                'horarios' => $horarios,
+                'reseñas' => $reseñas,
+                'promedio' => $promedio,
+                'totalReservas' => $totalReservas,
+                'totalResenas' => $totalResenas,
+            ]
+        );
     }
 
+
     /* ===============================
-       VER SUS CITAS
-       =============================== */
-    public function citas()
+       ACTUALIZAR ESTADO RESERVACIÓN
+    =============================== */
+
+    public function actualizarEstado()
     {
-        $this->redirect("index.php?controller=agendaBarbero&action=citas");
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return;
+        }
+
+
+        $idReservacion = $_POST['id_reservacion'] ?? null;
+
+        $estado = $_POST['estado_reserva'] ?? null;
+
+
+        // Validar datos
+        if (!$idReservacion || !$estado) {
+            return;
+        }
+
+
+        // Estados permitidos
+        $estadosPermitidos = [
+            'Pendiente',
+            'Completada',
+            'Cancelada'
+        ];
+
+
+        if (!in_array($estado, $estadosPermitidos)) {
+            return;
+        }
+
+
+        // Actualizar
+        $this->perfilModel->actualizarEstadoReservacion(
+            $idReservacion,
+            $estado
+        );
+
+
+        // Regresar al perfil
+        $this->redirect(
+            'index.php?controller=barbero&action=perfil'
+        );
     }
 }

@@ -268,4 +268,117 @@ class GestionCitaController extends Controller
 
         $this->redirect("index.php?controller=gestionCita&action=misCitas");
     }
+
+    /* =========================================
+   FINALIZAR RESERVA
+========================================= */
+
+    public function finalizar()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+
+            $this->redirect(
+                "index.php?controller=gestionCita&action=misCitas"
+            );
+
+            return;
+        }
+
+        $idReserva = $_POST['id_reservacion'] ?? null;
+
+        if (!$idReserva) {
+
+            $this->redirect(
+                "index.php?controller=gestionCita&action=misCitas"
+            );
+
+            return;
+        }
+
+
+        // Finalizar solamente si pertenece al cliente
+        $resultado = $this->citaModel->finalizarReserva(
+            $idReserva,
+            $_SESSION['id']
+        );
+
+
+        if ($resultado) {
+
+            $_SESSION['mensaje_cita'] =
+                '✅ La cita ha sido finalizada correctamente.';
+        }
+
+
+        // Volver al perfil
+        $this->redirect(
+            "index.php?controller=gestionCita&action=misCitas"
+        );
+    }
+
+    /* =========================================
+   GUARDAR RESEÑA Y CALIFICACIÓN
+========================================= */
+
+    public function guardarResena()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect(
+                "index.php?controller=gestionCita&action=misCitas"
+            );
+            return;
+        }
+
+        $idReservacion = $_POST['id_reservacion'] ?? null;
+        $calificacion = $_POST['calificacion'] ?? null;
+        $comentario = trim($_POST['comentario'] ?? '');
+
+        // Validar datos
+        if (!$idReservacion || !$calificacion) {
+
+            $_SESSION['error_cita'] =
+                '❌ Debes seleccionar una calificación.';
+
+            $this->redirect(
+                "index.php?controller=gestionCita&action=misCitas"
+            );
+
+            return;
+        }
+
+        // La calificación debe estar entre 1 y 5
+        if ($calificacion < 1 || $calificacion > 5) {
+
+            $_SESSION['error_cita'] =
+                '❌ La calificación debe estar entre 1 y 5.';
+
+            $this->redirect(
+                "index.php?controller=gestionCita&action=misCitas"
+            );
+
+            return;
+        }
+
+        // Guardar reseña
+        $resultado = $this->citaModel->guardarResena(
+            $idReservacion,
+            $_SESSION['id'],
+            $calificacion,
+            $comentario
+        );
+
+        if ($resultado) {
+
+            $_SESSION['mensaje_cita'] =
+                '✅ ¡Gracias por calificar nuestro servicio!';
+        } else {
+
+            $_SESSION['error_cita'] =
+                '❌ No fue posible guardar la reseña.';
+        }
+
+        $this->redirect(
+            "index.php?controller=gestionCita&action=misCitas"
+        );
+    }
 }
