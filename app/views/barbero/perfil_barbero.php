@@ -27,7 +27,7 @@ $historial = $historial ?? [];
     <div class="contenedorPerfil">
         <section class="perfil">
             <div class="imagen">
-                <img src="app/public/assets/img/foto5.avif" class="avatar" alt="Foto del barbero">
+                <img src="app/public/assets/img/fotobarbero.jpg" class="avatar" alt="Foto del barbero">
             </div>
             <div class="informacion">
                 <h1>
@@ -644,22 +644,24 @@ $historial = $historial ?? [];
             // Mostrar reseñas
             if (opcion === "resenas") {
 
-                    resenas.style.display = "block";
+                resenas.style.display = "block";
 
-                    btnResenas.classList.add("activo");
-
-                }
+                btnResenas.classList.add("activo");
 
             }
 
+        }
 
-            window.onload = function() {
 
-                mostrarSeccion("reservas");
+        window.onload = function() {
 
-            };
+            mostrarSeccion("reservas");
+
+        };
     </script>
 
+    <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2026/05/14/17/20260514174101-A2E9JALD.js" defer></script>
 
 </body>
 

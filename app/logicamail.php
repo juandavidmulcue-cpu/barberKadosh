@@ -14,7 +14,7 @@ if (isset($_POST['send'])) {
 
     if (empty($_POST['correo'])) {
         $_SESSION['response'] = 'Ingrese su correo';
-        header("Location: ../index.php?controller=auth&action=resetPassword");
+        header("Location: ../index.php?controller=password&action=resetPassword");
         exit;
     }
 
@@ -22,7 +22,7 @@ if (isset($_POST['send'])) {
 
     if (!$usuario) {
         $_SESSION['response'] = 'Correo no registrado';
-        header("Location: ../index.php?controller=auth&action=resetPassword");
+        header("Location: ../index.php?controller=password&action=resetPassword");
         exit;
     }
 
@@ -49,7 +49,7 @@ if (isset($_POST['save'])) {
 
     if ($_POST['password'] !== $_POST['new_password']) {
         $_SESSION['error'] = 'Las contraseñas no coinciden';
-        header("Location: ../index.php?controller=auth&action=cambiarPassword&id=" . $_POST['id_usuario'] . "&token=" . $_POST['token']);
+        header("Location: ../index.php?controller=password&action=cambiarPassword&id=" . $_POST['id_usuario'] . "&token=" . $_POST['token']);
         exit;
     }
 

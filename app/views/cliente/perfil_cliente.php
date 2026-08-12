@@ -41,7 +41,7 @@ $historial = $historial ?? [];
 
             <div class="acciones">
                 <a href="index.php?controller=gestionCita&action=agendarCita" class="btn btn-primary"><button>AGENDAR</button></a>
-                <a href="index.php?controller=auth&action=resetPassword" class="btn"><button class="btn-outline">Cambiar contraseña</button></a>
+                <a href="index.php?controller=password&action=resetPassword" class="btn"><button class="btn-outline">Cambiar contraseña</button></a>
             </div>
 
             <a href="index.php?controller=auth&action=logout">Cerrar sesión</a>
@@ -703,4 +703,8 @@ $historial = $historial ?? [];
 
         }
     </script>
+
+    <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2026/05/14/17/20260514174101-A2E9JALD.js" defer></script>
+    
 </body>

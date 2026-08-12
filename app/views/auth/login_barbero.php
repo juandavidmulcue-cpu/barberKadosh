@@ -37,7 +37,7 @@
                 <label>Contraseña</label>
                 <input type="password" name="password" required>
             </div>
-            <a href="index.php?controller=auth&action=resetPassword">¿Olvidaste la contraseña?</a>
+            <a href="index.php?controller=password&action=resetPassword">¿Olvidaste la contraseña?</a>
             </p>
             <a href="index.php?controller=auth&action=logout" class="back-home">← Volver al inicio</a>
             <button type="submit" class="btn-primary">Ingresar</button>

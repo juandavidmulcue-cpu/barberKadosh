@@ -20,7 +20,7 @@
             <div class="error-msg"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="index.php?controller=admin&action=registerBarbero">
+        <form method="POST" action="index.php?controller=gestionbarbero&action=registrar">
 
             <div class="form-group">
                 <label>Documento de identidad</label>

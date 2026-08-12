@@ -16,7 +16,7 @@
   <div class="auth-card">
 
     <!-- LOGO -->
-    <img src="app/public/assets/img/logo.jpeg" class="auth-logo" alt="Kadosh">
+    <img src="app/public/assets/img/logo1.jpeg" class="auth-logo" alt="Kadosh">
 
     <h2>Recuperar contraseña</h2>
     <p class="auth-sub">Ingresa tu correo</p>
