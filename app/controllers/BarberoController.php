@@ -37,10 +37,13 @@ class BarberoController extends Controller
         );
 
 
-        // Reservaciones
+        // Reservaciones pendientes del barbero
         $reservaciones = $this->perfilModel
             ->obtenerReservacionesBarbero($idBarbero);
-
+        
+        // Reservaciones completadas del barbero
+        $historial = $this->perfilModel
+            ->obtenerHistorialBarbero($idBarbero);
 
         // Horarios
         $horarios = $this->perfilModel
@@ -78,6 +81,7 @@ class BarberoController extends Controller
                 'promedio' => $promedio,
                 'totalReservas' => $totalReservas,
                 'totalResenas' => $totalResenas,
+                'historial' => $historial,
             ]
         );
     }

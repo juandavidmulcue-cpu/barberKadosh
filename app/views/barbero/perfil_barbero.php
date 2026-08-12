@@ -10,6 +10,7 @@ $barbero = $barbero ?? [];
 $totalReservas = $totalReservas ?? 0;
 $totalResenas = $totalResenas ?? 0;
 $promedio = $promedio ?? 0;
+$historial = $historial ?? [];
 ?>
 
 <!DOCTYPE html>
@@ -66,6 +67,18 @@ $promedio = $promedio ?? 0;
 
                 </button>
 
+                <button
+                    class="stat"
+                    id="btnHistorial"
+                    onclick="mostrarSeccion('historial')">
+
+                    <h3>
+                        <?php echo count($historial ?? []); ?>
+                    </h3>
+
+                    <span>Historial</span>
+
+                </button>
 
                 <button
                     class="stat"
@@ -274,7 +287,7 @@ $promedio = $promedio ?? 0;
 
                                         echo date(
                                             'd/m/Y',
-                                            strtotime($r['fecha'])
+                                            strtotime($r['fecha_cita'])
                                         );
 
                                         ?>
@@ -290,7 +303,7 @@ $promedio = $promedio ?? 0;
 
                                         echo date(
                                             'h:i A',
-                                            strtotime($r['hora'])
+                                            strtotime($r['hora_cita'])
                                         );
 
                                         ?>
@@ -356,7 +369,111 @@ $promedio = $promedio ?? 0;
 
         </section>
 
+        <!-- =========================
+     HISTORIAL
+========================== -->
 
+        <section
+            class="card"
+            id="historial"
+            style="display:none;">
+
+            <h2>Historial de Reservaciones</h2>
+
+            <?php if (!empty($historial)) { ?>
+
+                <div class="tablaResponsive">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Servicio</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <?php foreach ($historial as $h) { ?>
+
+                                <tr>
+
+                                    <!-- CLIENTE -->
+                                    <td>
+                                        <?php echo htmlspecialchars($h['cliente']); ?>
+                                    </td>
+
+                                    <!-- SERVICIO -->
+                                    <td>
+                                        <?php echo htmlspecialchars($h['servicio']); ?>
+                                    </td>
+
+                                    <!-- FECHA -->
+                                    <td>
+                                        <?php
+                                        echo date(
+                                            'd/m/Y',
+                                            strtotime($h['fecha_cita'])
+                                        );
+                                        ?>
+                                    </td>
+
+                                    <!-- HORA -->
+                                    <td>
+                                        <?php
+                                        echo date(
+                                            'h:i A',
+                                            strtotime($h['hora_cita'])
+                                        );
+                                        ?>
+                                    </td>
+
+                                    <!-- ESTADO -->
+                                    <td>
+
+                                        <?php if ($h['estado'] === 'Completada') { ?>
+
+                                            <span class="estado completada">
+                                                🟢 Completada
+                                            </span>
+
+                                        <?php } elseif ($h['estado'] === 'Cancelada') { ?>
+
+                                            <span class="estado cancelada">
+                                                🔴 Cancelada
+                                            </span>
+
+                                        <?php } ?>
+
+                                    </td>
+
+                                </tr>
+
+                            <?php } ?>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            <?php } else { ?>
+
+                <div class="sinDatos">
+
+                    <p>
+                        No tienes reservaciones en tu historial.
+                    </p>
+
+                </div>
+
+            <?php } ?>
+
+        </section>
 
         <!-- =========================
          RESEÑAS
@@ -486,21 +603,25 @@ $promedio = $promedio ?? 0;
         function mostrarSeccion(opcion) {
 
             const reservas = document.getElementById("reservas");
+            const historial = document.getElementById("historial");
             const resenas = document.getElementById("resenas");
 
             const btnReservas = document.getElementById("btnReservas");
+            const btnHistorial = document.getElementById("btnHistorial");
             const btnResenas = document.getElementById("btnResenas");
 
 
             // Ocultar secciones
 
             reservas.style.display = "none";
+            historial.style.display = "none";
             resenas.style.display = "none";
 
 
             // Quitar estado activo
 
             btnReservas.classList.remove("activo");
+            btnHistorial.classList.remove("activo");
             btnResenas.classList.remove("activo");
 
 
@@ -514,25 +635,29 @@ $promedio = $promedio ?? 0;
 
             }
 
+            // Mostrar historial
+            if (opcion === "historial") {
+                historial.style.display = "block";
+                btnHistorial.classList.add("activo");
+            }
 
             // Mostrar reseñas
-
             if (opcion === "resenas") {
 
-                resenas.style.display = "block";
+                    resenas.style.display = "block";
 
-                btnResenas.classList.add("activo");
+                    btnResenas.classList.add("activo");
+
+                }
 
             }
 
-        }
 
+            window.onload = function() {
 
-        window.onload = function() {
+                mostrarSeccion("reservas");
 
-            mostrarSeccion("reservas");
-
-        };
+            };
     </script>
 
 

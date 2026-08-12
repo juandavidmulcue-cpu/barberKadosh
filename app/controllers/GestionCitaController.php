@@ -33,12 +33,17 @@ class GestionCitaController extends Controller
             $_SESSION['id']
         );
 
+        $historial = $this->citaModel->obtenerHistorialCliente(
+            $_SESSION['id']
+        );
+
         $servicios = $this->servicioModel->obtenerServicios();
 
         $barberos = $this->barberoModel->obtenerBarberosDisponibles();
 
         $this->view('app/views/cliente/perfil_cliente.php', [
             'citas' => $citas,
+            'historial' => $historial,
             'servicios' => $servicios,
             'barberos' => $barberos
         ]);
@@ -199,11 +204,16 @@ class GestionCitaController extends Controller
             $_SESSION['id']
         );
 
+        $historial = $this->citaModel->obtenerHistorialCliente(
+            $_SESSION['id']
+        );
+
         // Cargar el perfil con las reservas y la cita a editar
         $this->view(
             'app/views/cliente/perfil_cliente.php',
             [
                 'citas' => $citas,
+                'historial' => $historial,
                 'citaEditar' => $cita
             ]
         );

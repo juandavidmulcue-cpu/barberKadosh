@@ -11,6 +11,7 @@ $apellido = $_SESSION['apellido'] ?? '';
 $rol    = $_SESSION['nombre_rol'] ?? 'cliente';
 $servicios = $servicios ?? [];
 $barberos = $barberos ?? [];
+$historial = $historial ?? [];
 ?>
 
 <!DOCTYPE html>
@@ -72,8 +73,20 @@ $barberos = $barberos ?? [];
         <!-- Dirección -->
         <div class="card direccion">
             <h3>DIRECCIÓN</h3>
-            <p>Cra 99 #999-99<br>2do piso – Soacha</p>
+
+            <p>
+                Cra 99 #999-99<br>
+                2do piso – Soacha
+            </p>
+
             <a href="#">Ver en el mapa</a>
+
+            <button
+                type="button"
+                class="btn-historial"
+                onclick="abrirModalHistorial()">
+                📋 Ver historial
+            </button>
         </div>
 
     </div>
@@ -179,11 +192,10 @@ $barberos = $barberos ?? [];
                                         <button
                                             type="button"
                                             class="btn-finalizar"
-                                            onclick="abrirModalFinalizar(
-                                            '<?= htmlspecialchars($c['id_reservacion']) ?>',
-                                            '<?= htmlspecialchars($c['id_barbero']) ?>')">
+                                            onclick="abrirModalFinalizar('<?= htmlspecialchars($c['id_reservacion']) ?>','<?= htmlspecialchars($c['id_barbero']) ?>')"
+                                            title="Finalizar">
 
-                                            Finalizar
+                                            <img src="app/public/assets/icons/finalizarReservacion.png" alt="Finalizar">
                                         </button>
 
 
@@ -336,6 +348,108 @@ $barberos = $barberos ?? [];
                 </button>
 
             </form>
+
+        </div>
+
+    </div>
+
+    <!-- =========================================
+     MODAL HISTORIAL DE RESERVAS
+========================================= -->
+
+    <div id="modalHistorial" class="modal-historial">
+
+        <div class="contenido-modal-historial">
+
+            <!-- CERRAR -->
+            <button
+                type="button"
+                class="cerrar-modal-historial"
+                onclick="cerrarModalHistorial()">
+                &times;
+            </button>
+
+            <h2>Historial de reservas 📋</h2>
+
+            <p class="subtitulo-historial">
+                Aquí puedes consultar tus reservas anteriores.
+            </p>
+
+            <div class="tabla-historial">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Barbero</th>
+                            <th>Servicio</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <?php if (!empty($historial)): ?>
+
+                            <?php foreach ($historial as $h): ?>
+
+                                <tr>
+
+                                    <td>
+                                        <?= htmlspecialchars($h['barbero']) ?>
+                                    </td>
+
+                                    <td>
+                                        <?= htmlspecialchars($h['servicio']) ?>
+                                    </td>
+
+                                    <td>
+                                        <?= htmlspecialchars($h['fecha_cita']) ?>
+                                    </td>
+
+                                    <td>
+                                        <?= htmlspecialchars($h['hora_cita']) ?>
+                                    </td>
+
+                                    <td>
+
+                                        <?php if ($h['estado'] == 'Completada'): ?>
+
+                                            <span class="estado-completada">
+                                                🟢 Completada
+                                            </span>
+
+                                        <?php elseif ($h['estado'] == 'Cancelada'): ?>
+
+                                            <span class="estado-cancelada">
+                                                🔴 Cancelada
+                                            </span>
+
+                                        <?php endif; ?>
+
+                                    </td>
+
+                                </tr>
+
+                            <?php endforeach; ?>
+
+                        <?php else: ?>
+
+                            <tr>
+                                <td colspan="5" class="sin-historial">
+                                    No tienes reservas en tu historial.
+                                </td>
+                            </tr>
+
+                        <?php endif; ?>
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </div>
 
@@ -539,7 +653,17 @@ $barberos = $barberos ?? [];
                 .classList.remove('activo');
         }
     </script>
+    <script>
+        function abrirModalHistorial() {
+            document.getElementById('modalHistorial')
+                .classList.add('activo');
+        }
 
+        function cerrarModalHistorial() {
+            document.getElementById('modalHistorial')
+                .classList.remove('activo');
+        }
+    </script>
     <script>
         function abrirModalEditar(
             idReserva,

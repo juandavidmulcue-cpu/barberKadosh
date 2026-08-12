@@ -18,7 +18,7 @@ class GestionCitaModel
                 r.id_reservacion,
                 r.id_barbero,
                 r.id_servicio,
-                CONCAT(b.nombre,' ',b.apellido) AS barbero,
+                CONCAT(b.nombre, ' ', b.apellido) AS barbero,
                 s.nombre AS servicio,
                 r.fecha_cita,
                 r.hora_cita,
@@ -29,6 +29,7 @@ class GestionCitaModel
             INNER JOIN servicios s
                 ON r.id_servicio = s.id_servicio
             WHERE r.id_cliente = :cliente
+            AND r.estado IN ('Pendiente')
             ORDER BY r.fecha_cita DESC, r.hora_cita DESC";
 
         $stmt = $this->db->prepare($sql);
@@ -40,28 +41,31 @@ class GestionCitaModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function obtenerReservasBarbero($idBarbero)
+
+    public function obtenerHistorialCliente($idCliente)
     {
         $sql = "SELECT
                 r.id_reservacion,
-                r.id_cliente,
-                CONCAT(c.nombre,' ',c.apellido) AS cliente,
+                r.id_barbero,
+                r.id_servicio,
+                CONCAT(b.nombre, ' ', b.apellido) AS barbero,
                 s.nombre AS servicio,
                 r.fecha_cita,
                 r.hora_cita,
                 r.estado
             FROM reservacion r
-            INNER JOIN usuarios c
-                ON r.id_cliente = c.id_usuario
+            INNER JOIN usuarios b
+                ON r.id_barbero = b.id_usuario
             INNER JOIN servicios s
                 ON r.id_servicio = s.id_servicio
-            WHERE r.id_barbero = :barbero
+            WHERE r.id_cliente = :cliente
+            AND r.estado IN ('Completada', 'Cancelada')
             ORDER BY r.fecha_cita DESC, r.hora_cita DESC";
 
         $stmt = $this->db->prepare($sql);
 
         $stmt->execute([
-            ':barbero' => $idBarbero
+            ':cliente' => $idCliente
         ]);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

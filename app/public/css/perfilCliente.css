@@ -322,22 +322,16 @@ tbody td {
 }
 
 /* =========================================
-   MODAL EDITAR CITA
+MODAL EDITAR CITA
 ========================================= */
 
 #modalEditarCita {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-
-    background: rgba(0, 0, 0, 0.80);
-
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
     justify-content: center;
     align-items: center;
-
     z-index: 9999;
 }
 
@@ -345,31 +339,37 @@ tbody td {
     display: flex;
 }
 
+/* CONTENIDO */
+
 #modalEditarCita .contenido-modal {
-    width: 500px;
-    max-width: 90%;
-
-    background: rgba(6, 6, 6, 0.423);
-    color: var(--blanco-suave);
-
+    background: rgba(10, 10, 10, 0.97);
+    color: var(--morado);
     padding: 30px;
-    border-radius: 15px;
-
-    border: 1px solid #d4af37;
-
+    border-radius: 18px;
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
     position: relative;
+    border: 1px solid #d4af37;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
 }
+
+/* TITULO */
+
+#modalEditarCita .contenido-modal h2 {
+    margin-bottom: 15px;
+}
+
+/* CERRAR */
 
 #modalEditarCita .cerrar-modal {
     position: absolute;
     top: 10px;
     right: 15px;
-
-    background: none;
     border: none;
-
+    background: transparent;
     color: white;
-    font-size: 30px;
+    font-size: 28px;
     cursor: pointer;
 }
 
@@ -377,6 +377,68 @@ tbody td {
     color: #ff0000;
 }
 
+/* FORMULARIO */
+
+#modalEditarCita form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+}
+
+/* INPUTS Y SELECT */
+
+#modalEditarCita input,
+#modalEditarCita select,
+#modalEditarCita textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid var(--dorado);
+    background: #fff;
+    color: #000;
+}
+
+/* BOTONES DEL MODAL */
+
+#modalEditarCita .botones-finalizar {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+#modalEditarCita .botones-finalizar button {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--dorado);
+    background: linear-gradient(135deg,
+            #7b2cbf,
+            #9d4edd);
+    transition: 0.3s ease;
+}
+
+#modalEditarCita .botones-finalizar button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
+}
+
+/* BOTÓN CANCELAR */
+#modalEditarCita .btn-no {
+    background: transparent !important;
+    border: 2px solid #d4af37 !important;
+    color: #d4af37 !important;
+}
+
+#modalEditarCita .btn-no:hover {
+    background: #d4af37 !important;
+    color: #000 !important;
+}
+
+.btn-finalizar,
 .cancelar-cita,
 .btn-editar-cita {
     display: inline-flex !important;
@@ -398,6 +460,7 @@ tbody td {
     box-sizing: border-box !important;
 }
 
+.btn-finalizar img,
 .cancelar-cita img,
 .btn-editar-cita img {
     display: block !important;
@@ -411,110 +474,72 @@ tbody td {
 /* =========================================
    MODAL FINALIZAR
 ========================================= */
-
+#modalEditarCita,
 .modal-finalizar,
 .modal-resena {
-
     display: none;
-
     position: fixed;
-
     inset: 0;
-
     background: rgba(0, 0, 0, 0.75);
-
     justify-content: center;
-
     align-items: center;
-
     z-index: 9999;
 }
 
-
 .modal-finalizar.activo,
 .modal-resena.activo {
-
     display: flex;
-
 }
-
 
 .contenido-modal-finalizar,
 .contenido-modal-resena {
     background: rgba(10, 10, 10, 0.97);
-
     color: #fff;
-
     padding: 30px;
-
     border-radius: 18px;
-
     width: 90%;
-
     max-width: 450px;
-
     text-align: center;
-
     position: relative;
-
     border: 1px solid #d4af37;
-
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
 }
 
-
 .contenido-modal-finalizar h2,
 .contenido-modal-resena h2 {
-
     margin-bottom: 15px;
-
 }
 
 
 .contenido-modal-finalizar p,
 .contenido-modal-resena p {
-
     margin-bottom: 25px;
-
 }
-
 
 /* BOTONES */
 
 .botones-finalizar {
-
     display: flex;
-
     justify-content: center;
-
     gap: 15px;
-
 }
 
 
 .botones-finalizar button {
     padding: 12px 28px;
-
     border: none;
-
     border-radius: 50px;
-
     cursor: pointer;
-
     font-weight: bold;
-
     color: white;
-
     background: linear-gradient(135deg,
             #7b2cbf,
             #9d4edd);
-
     transition: 0.3s ease;
 }
 
 .botones-finalizar button:hover {
     transform: translateY(-2px);
-
     box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
 }
 
@@ -523,34 +548,22 @@ tbody td {
 
 .cerrar-modal-finalizar,
 .cerrar-modal-resena {
-
     position: absolute;
-
     top: 10px;
-
     right: 15px;
-
     border: none;
-
     background: transparent;
-
     font-size: 28px;
-
     cursor: pointer;
-
 }
 
 
 /* FORMULARIO RESEÑA */
 
 .contenido-modal-resena form {
-
     display: flex;
-
     flex-direction: column;
-
     gap: 12px;
-
     text-align: left;
 
 }
@@ -558,46 +571,171 @@ tbody td {
 
 .contenido-modal-resena select,
 .contenido-modal-resena textarea {
-
     width: 100%;
-
     padding: 10px;
-
     border-radius: 8px;
-
     border: 1px solid #ccc;
-
 }
 
 
 .contenido-modal-resena textarea {
-
     resize: vertical;
-
 }
-
 
 .contenido-modal-resena form button {
-
     padding: 12px;
-
     border: none;
-
     border-radius: 8px;
-
     cursor: pointer;
-
 }
+
 .btn-no {
     background: transparent !important;
-
     border: 2px solid #d4af37 !important;
-
     color: #d4af37 !important;
 }
 
 .btn-no:hover {
     background: #d4af37 !important;
-
     color: #000 !important;
+}
+
+/* =========================================
+   BOTÓN HISTORIAL
+========================================= */
+
+.btn-historial {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px 20px;
+    border: 2px solid #d4af37;
+    border-radius: 50px;
+    background: transparent;
+    color: #d4af37;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn-historial:hover {
+    background: #d4af37;
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+}
+
+/* =========================================
+   MODAL HISTORIAL
+========================================= */
+
+.modal-historial {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.modal-historial.activo {
+    display: flex;
+}
+
+/* =========================================
+   CONTENIDO
+========================================= */
+
+.contenido-modal-historial {
+    background: rgba(10, 10, 10, 0.97);
+    color: #fff;
+    padding: 30px;
+    border-radius: 18px;
+    width: 95%;
+    max-width: 900px;
+    position: relative;
+    border: 1px solid #d4af37;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+}
+
+.contenido-modal-historial h2 {
+    color: #d4af37;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.subtitulo-historial {
+    text-align: center;
+    color: #ccc;
+    margin-bottom: 25px;
+}
+
+
+/* =========================================
+   CERRAR
+========================================= */
+
+.cerrar-modal-historial {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.cerrar-modal-historial:hover {
+    color: #ff0000;
+}
+
+/* =========================================
+   TABLA HISTORIAL
+========================================= */
+
+.tabla-historial {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabla-historial table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-historial thead {
+    background: rgba(123, 44, 191, 0.6);
+}
+
+.tabla-historial th {
+    padding: 14px;
+    text-align: left;
+}
+
+.tabla-historial td {
+    padding: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tabla-historial tbody tr {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.estado-completada {
+    color: #00c853;
+    font-weight: bold;
+}
+
+.estado-cancelada {
+    color: #ff4444;
+    font-weight: bold;
+}
+
+.sin-historial {
+    text-align: center;
+    color: #aaa;
+    padding: 30px !important;
 }

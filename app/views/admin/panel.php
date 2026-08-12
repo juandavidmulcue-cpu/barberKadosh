@@ -567,8 +567,9 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                                 <td>
                                     <a class="btn-danger"
                                         href="index.php?controller=horario&action=eliminarHorario&id_horario=<?= urlencode($h['id_horario']); ?>"
-                                        onclick="return confirm('¿Desea eliminar este horario?')">
-                                        Eliminar
+                                        onclick="return confirm('¿Desea eliminar este horario?')"
+                                        title="Eliminar">
+                                        <img src="app/public/assets/icons/eliminar.png" alt="Eliminar">
                                     </a>
                                 </td>
                             </tr>
