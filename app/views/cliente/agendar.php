@@ -15,7 +15,7 @@ $barberos = $barberos ?? [];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendar cita - KADOSH Barber</title>
     <link rel="stylesheet" href="app/public/css/global.css">
-    <link rel="stylesheet" href="app/public/css/perfilCliente.css">
+    <link rel="stylesheet" href="app/public/css/agendar.css">
 </head>
 
 <body>

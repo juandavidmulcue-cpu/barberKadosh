@@ -78,9 +78,9 @@
 .sidebar {
     position: absolute;
     top: 106px;
+    bottom: -500px;
     left: 0;
     width: 240px;
-    height: calc(122vh - 106px);
     background: var(--negro);
     padding: 20px;
     display: flex;

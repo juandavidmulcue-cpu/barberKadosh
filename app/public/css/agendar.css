@@ -1,0 +1,314 @@
+
+/* CONTENEDOR PRINCIPAL */
+.container {
+    max-width: 700px;
+    margin: 60px auto;
+    padding: 40px;
+    background: rgba(13, 13, 13, 0.88);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 24px;
+    box-shadow:
+        0 0 25px rgba(0, 0, 0, 0.7),
+        0 0 35px rgba(75, 42, 107, 0.45);
+    backdrop-filter: blur(10px);
+}
+
+/* =========================================
+   TITULO
+========================================= */
+
+.container h1 {
+    text-align: center;
+    color: var(--dorado);
+    font-size: 32px;
+    margin-bottom: 35px;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.35);
+}
+
+/* =========================================
+   FORMULARIO
+========================================= */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* =========================================
+   GRUPOS
+========================================= */
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+/* =========================================
+   LABELS
+========================================= */
+
+.form-group label {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--dorado);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* =========================================
+   SELECT E INPUT DATE
+========================================= */
+
+.form-group select,
+.form-group input[type="date"] {
+    width: 100%;
+    height: 50px;
+    padding: 0 16px;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--blanco);
+    font-size: 15px;
+    transition: 0.3s ease;
+}
+
+/* SELECT */
+.form-group select {
+    cursor: pointer;
+}
+
+/* OPCIONES DEL SELECT */
+.form-group select option {
+    background: #1a1022;
+    color: white;
+}
+
+/* HOVER */
+.form-group select:hover,
+.form-group input[type="date"]:hover {
+    border-color: rgba(212, 175, 55, 0.6);
+}
+
+/* FOCUS */
+.form-group select:focus,
+.form-group input[type="date"]:focus {
+    outline: none;
+    border-color: var(--dorado);
+    box-shadow:
+        0 0 10px rgba(212, 175, 55, 0.25);
+}
+
+/* =========================================
+   FECHA
+========================================= */
+
+input[type="date"] {
+    color-scheme: dark;
+}
+
+/* =========================================
+   HORARIOS DISPONIBLES
+========================================= */
+
+#horariosDisponibles {
+    margin-top: 10px;
+    padding: 20px;
+    min-height: 80px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 15px;
+}
+
+/* TEXTO INICIAL */
+#horariosDisponibles > p {
+    margin: 0;
+    color: var(--gris);
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* =========================================
+   HORARIO DEL BARBERO
+========================================= */
+
+#horariosDisponibles p strong {
+    color: var(--dorado);
+}
+
+/* =========================================
+   LISTA DE HORAS
+========================================= */
+
+#listaHoras {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+}
+
+/* =========================================
+   BOTONES DE HORARIOS
+========================================= */
+
+#listaHoras button {
+    width: 100%;
+    padding: 12px 10px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 10px;
+    background: rgba(75, 42, 107, 0.55);
+    color: var(--blanco);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+/* HOVER HORAS */
+#listaHoras button:hover {
+    background: var(--dorado);
+    color: var(--negro);
+    border-color: var(--dorado);
+    transform: translateY(-2px);
+    box-shadow:
+        0 5px 15px rgba(212, 175, 55, 0.25);
+}
+
+/* =========================================
+   HORA SELECCIONADA
+========================================= */
+
+#listaHoras button.selected {
+    background: var(--dorado) !important;
+    color: var(--negro) !important;
+    border-color: var(--dorado);
+    box-shadow:
+        0 0 15px rgba(212, 175, 55, 0.45);
+}
+
+/* =========================================
+   MENSAJES DE HORARIO
+========================================= */
+
+#horariosDisponibles p[style*="color:red"] {
+    padding: 12px;
+    background: rgba(255, 0, 0, 0.08);
+    border-radius: 10px;
+    color: #ff8d8d !important;
+    border: 1px solid rgba(255, 80, 80, 0.2);
+}
+
+
+/* =========================================
+   BOTÓN AGENDAR
+========================================= */
+
+form > button[type="submit"] {
+    width: 100%;
+    margin-top: 10px;
+    padding: 15px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient( 135deg, var(--morado), var(--morado-claro));
+    color: var(--blanco);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow:
+        0 0 15px rgba(75, 42, 107, 0.5);
+}
+
+/* HOVER BOTÓN */
+form > button[type="submit"]:hover {
+    background: linear-gradient(135deg, var(--dorado), #b8941f);
+    color: var(--negro);
+    transform: translateY(-2px);
+    box-shadow:
+        0 0 20px rgba(212, 175, 55, 0.45);
+}
+
+/* =========================================
+   MENSAJE DE ERROR DE SESIÓN
+========================================= */
+
+.container > div[style*="background"] {
+    background: rgba(255, 0, 0, 0.12) !important;
+    color: #ffaaaa !important;
+    border: 1px solid rgba(255, 80, 80, 0.25);
+    box-shadow:
+        0 0 10px rgba(255, 0, 0, 0.08);
+}
+
+/* =========================================
+   VOLVER A MIS CITAS
+========================================= */
+
+.container > a {
+    display: block;
+    width: fit-content;
+    margin: 25px auto 0;
+    color: var(--gris);
+    font-size: 14px;
+    transition: 0.3s ease;
+}
+
+.container > a:hover {
+    color: var(--dorado);
+    transform: translateX(-4px);
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .container {
+        width: 92%;
+        margin: 30px auto;
+        padding: 25px 20px;
+        border-radius: 20px;
+    }
+
+    .container h1 {
+        font-size: 26px;
+    }
+
+    #listaHoras {
+        grid-template-columns:
+            repeat(3, 1fr);
+        gap: 9px;
+    }
+
+    #listaHoras button {
+        padding: 11px 5px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .container {
+        width: 94%;
+        padding: 22px 16px;
+    }
+
+    .container h1 {
+        font-size: 23px;
+    }
+
+
+    #listaHoras {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .form-group select,
+    .form-group input[type="date"] {
+        height: 47px;
+    }
+
+}
+
