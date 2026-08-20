@@ -1,42 +1,202 @@
-/*==============================
-  CONFIGURACIÓN GENERAL
-==============================*/
+/* =========================================================
+   VARIABLES GLOBALES (DORADO Y MORADO)
+========================================================= */
+:root {
+    --dorado: #d4af37;
+    --morado: #7b2cbf;
+    --morado-claro: #9d4edd;
+    --fondo-oscuro: #18181b;
+    --fondo-tarjeta: rgba(0, 0, 0, 0.75);
+    --fondo-elemento: rgba(255, 255, 255, 0.05);
+    --borde-dorado: rgba(212, 175, 55, 0.25);
+}
 
+/* =========================================================
+   RESET Y ESTILOS GENERALES
+========================================================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background: linear-gradient(135deg, #0d0d12, #161622, #1d1035);
+    background: linear-gradient(135deg, #0a0a0a 55%, #240046 100%);
     color: #fff;
     min-height: 100vh;
-    padding: 40px;
 }
 
-.contenedor {
-    width: 900%;
-    max-width: 1100px;
-    margin: auto;
+/* Contenedor principal ajustado al 95% para pantalla amplia */
+.contenedorPerfil {
+    width: 95%;
+    max-width: 1400px;
+    margin: 30px auto;
+    padding: 0 10px;
 }
 
-/*==============================
-  PERFIL
-==============================*/
+/* =========================================================
+   HEADER DE NAVEGACIÓN Y LOGO
+========================================================= */
+.header-barberia {
+    width: 100%;
+    background: rgba(10, 10, 10, 0.95);
+    border-bottom: 1px solid var(--borde-dorado);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
 
-.perfil{
-    display:flex;
-    align-items:center;
-    justify-content:flex-start;
-    gap:25px;
-    background:#181820;
-    border-radius:20px;
-    padding:35px;
-    margin-bottom:35px;
-    border:1px solid rgba(138,43,226,.25);
-    box-shadow:0 15px 35px rgba(0,0,0,.45);
+.contenedor-header {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.logo h2 {
+    color: #fff;
+    font-size: 22px;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.logo h2 span {
+    color: var(--dorado);
+}
+
+.nav-barberia {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-barberia a {
+    color: #ddd;
+    text-decoration: none;
+    font-size: 15px;
+    transition: 0.3s ease;
+}
+
+.nav-barberia a:hover,
+.nav-barberia a.active {
+    color: var(--dorado);
+}
+
+.btn-logout {
+    padding: 8px 16px;
+    border: 1px solid var(--dorado);
+    border-radius: 20px;
+    color: var(--dorado) !important;
+    transition: 0.3s ease;
+}
+
+.btn-logout:hover {
+    background: var(--dorado);
+    color: #000 !important;
+}
+
+/* =========================================================
+   CARRUSEL DE CORTES Y ESTILOS
+========================================================= */
+.carrusel-seccion h2 {
+    margin-bottom: 20px;
+}
+
+.carrusel-contenedor {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.carrusel-track-container {
+    overflow: hidden;
+    width: 100%;
+    border-radius: 12px;
+}
+
+.carrusel-track {
+    display: flex;
+    transition: transform 0.4s ease-in-out;
+}
+
+.carrusel-slide {
+    min-width: 25%; /* Muestra 4 fotografías en pantallas grandes */
+    padding: 0 8px;
+    box-sizing: border-box;
+}
+
+.carrusel-slide img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--borde-dorado);
+    transition: 0.3s ease;
+}
+
+.carrusel-slide img:hover {
+    transform: scale(1.03);
+    border-color: var(--dorado);
+}
+
+.carrusel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: var(--dorado);
+    border: 1px solid var(--dorado);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s ease;
+}
+
+.carrusel-btn:hover {
+    background: var(--dorado);
+    color: #000;
+}
+
+.carrusel-btn.prev { left: -15px; }
+.carrusel-btn.next { right: -15px; }
+
+/* =========================================================
+   TARJETA DE PERFIL E INFORMACIÓN DEL BARBERO
+========================================================= */
+.perfil {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    background: var(--fondo-tarjeta);
+    border-radius: 20px;
+    padding: 35px;
+    margin-bottom: 35px;
+    border: 1px solid var(--borde-dorado);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
 .imagen {
@@ -46,13 +206,13 @@ body {
 }
 
 .avatar {
-    width: 180px;
-    height: 180px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     object-fit: cover;
-    border: 6px solid #8a2be2;
-    box-shadow: 0 0 25px rgba(138, 43, 226, .55);
-    transition: .35s;
+    border: 3px solid var(--dorado);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+    transition: .35s ease;
 }
 
 .avatar:hover {
@@ -63,384 +223,289 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width:350px;
-
+    flex: 1;
+    padding: 0 10px;
 }
 
-.informacion h1 {
-    color: #f1c40f;
-    font-size: 46px;
-    margin-bottom: 18px;
+.mensaje-bienvenida h2 {
+    color: var(--dorado);
+    font-size: 28px;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
 }
 
-.informacion p {
-    font-size: 19px;
-    margin: 8px 0;
-    line-height: 30px;
+.subtitulo-motivador {
+    color: #e4e4e7;
+    font-size: 15px;
+    font-style: italic;
+    line-height: 20px;
 }
 
-.informacion strong {
+.divisor-perfil {
+    border: 0;
+    height: 1px;
+    background: var(--borde-dorado);
+    margin: 15px 0;
+}
+
+.detalles-contacto p {
+    font-size: 15px;
+    margin: 6px 0;
+    color: #ddd;
+}
+
+.detalles-contacto strong {
     color: #fff;
 }
 
-/*==============================
- ESTADÍSTICAS
-==============================*/
+.btn-logout-card {
+    display: inline-block;
+    margin-top: 15px;
+    color: #ff4d4d;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
 
+.btn-logout-card:hover {
+    color: #ff8080;
+    text-decoration: underline;
+}
+
+/* =========================================================
+   ESTADÍSTICAS
+========================================================= */
 .estadisticas {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 12px;
+    min-width: 200px;
 }
 
 .stat {
     width: 100%;
-    background: #252533;
-    border: none;
-    border-left: 5px solid #8a2be2;
-    border-radius: 15px;
-    padding: 18px;
+    background: var(--fondo-elemento);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 5px solid var(--dorado);
+    border-radius: 12px;
+    padding: 12px 18px;
     text-align: center;
     cursor: pointer;
-    transition: .3s;
+    transition: .3s ease;
 }
 
 .stat:hover {
-    transform: translateY(-5px);
-    background: #303044;
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .stat.activo {
-    background: linear-gradient(135deg, #8a2be2, #5f1db8);
+    background: linear-gradient(135deg, var(--morado), var(--morado-claro));
+    border-left-color: var(--dorado);
 }
 
 .stat h3 {
-    font-size: 34px;
-    color: #f1c40f;
+    font-size: 26px;
+    color: var(--dorado);
+}
+
+.stat.activo h3 {
+    color: #fff;
 }
 
 .stat span {
     color: #fff;
-    font-size: 17px;
+    font-size: 14px;
 }
 
-/*==============================
- TARJETAS
-==============================*/
+.estrellasPromedio {
+    margin: 2px 0;
+    font-size: 14px;
+}
 
+/* =========================================================
+   TARJETAS CONTENEDORAS (HORARIOS, RESERVAS, RESEÑAS)
+========================================================= */
 .card {
-    background: #181820;
+    background: var(--fondo-tarjeta);
     padding: 30px;
     border-radius: 20px;
     margin-bottom: 30px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, .35);
+    border: 1px solid var(--borde-dorado);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
 .card h2 {
     margin-bottom: 25px;
-    color: #f1c40f;
-    font-size: 30px;
-    border-bottom: 2px solid #8a2be2;
+    color: var(--dorado);
+    font-size: 24px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
     padding-bottom: 12px;
 }
 
-/*==============================
- HORARIOS
-==============================*/
-
+/* =========================================================
+   SECCIÓN DE HORARIOS
+========================================================= */
 .horarios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 15px;
+}
+
+.horario {
+    background: var(--fondo-elemento);
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: .3s ease;
+    border-left: 4px solid var(--dorado);
+}
+
+.horario:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.horario span { font-size: 22px; }
+.horario p { font-size: 15px; color: #ddd; }
+
+/* =========================================================
+   TABLAS DE RESERVACIONES E HISTORIAL
+========================================================= */
+.tablaResponsive {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+thead {
+    background: rgba(123, 44, 191, 0.6);
+}
+
+th, td {
+    padding: 14px 18px;
+    text-align: left;
+}
+
+th {
+    color: #fff;
+    font-size: 16px;
+}
+
+td {
+    background: var(--fondo-elemento);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: #e4e4e7;
+}
+
+tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* ESTADOS DE RESERVA */
+.estado {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.estado.pendiente { color: #f1c40f; }
+.estado.completada { color: #2ecc71; }
+.estado.cancelada { color: #e74c3c; }
+
+/* =========================================================
+   SECCIÓN DE RESEÑAS
+========================================================= */
+.contenedorResenas {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
 }
 
-.horario {
-    background: #252533;
-    padding: 18px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    transition: .3s;
-    border-left: 5px solid #8a2be2;
-}
-
-.horario:hover {
-    transform: translateY(-5px);
-    background: #313145;
-}
-
-.horario span {
-    font-size: 25px;
-}
-
-.horario p {
-    font-size: 17px;
-}
-
-/*==============================
- TABLA
-==============================*/
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    overflow: hidden;
-    border-radius: 15px;
-}
-
-thead {
-    background: linear-gradient(90deg, #6a11cb, #8e2de2);
-}
-
-th {
-    padding: 18px;
-    color: #fff;
-    font-size: 18px;
-}
-
-td {
-    padding: 18px;
-    text-align: center;
-    background: #232330;
-    border-bottom: 1px solid #333;
-}
-
-tbody tr {
-    transition: .3s;
-}
-
-tbody tr:hover {
-    background: #303040;
-}
-
-/*==============================
- RESEÑAS
-==============================*/
-
-.contenedorResenas {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-
 .review {
-    background: #252533;
-    border-radius: 18px;
+    background: var(--fondo-elemento);
+    border-radius: 15px;
     padding: 20px;
-    border-left: 6px solid #8a2be2;
-    transition: .3s;
-}
-
-.review:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, .4);
+    border-left: 4px solid var(--dorado);
 }
 
 .review h3 {
-    color: #f1c40f;
-    margin-bottom: 10px;
+    color: var(--dorado);
+    margin-bottom: 8px;
 }
 
 .estrellas {
-    color: #FFD700;
-    font-size: 22px;
-    margin-bottom: 12px;
+    color: var(--dorado);
+    font-size: 18px;
+    margin-bottom: 10px;
 }
 
 .review p {
     color: #ddd;
-    line-height: 25px;
+    line-height: 22px;
 }
 
-/*==============================
- FORMULARIO
-==============================*/
-
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
+.review small {
+    display: block;
+    margin-top: 10px;
+    color: #aaa;
+    font-size: 12px;
 }
 
-input,
-select,
-textarea {
-    width: 100%;
-    background: #252533;
-    border: 2px solid transparent;
-    color: #fff;
-    padding: 15px;
-    border-radius: 12px;
-    font-size: 16px;
-    transition: .3s;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-    outline: none;
-    border-color: #8a2be2;
-    box-shadow: 0 0 10px rgba(138, 43, 226, .35);
-}
-
-textarea {
-    min-height: 140px;
-    resize: none;
-}
-
-button {
-    padding: 15px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    background: linear-gradient(90deg, #6a11cb, #8e2de2);
-    color: #fff;
-    font-size: 18px;
-    font-weight: bold;
-    transition: .3s;
-}
-
-button:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(138, 43, 226, .45);
-}
-
-/*==============================
- SELECT ESTADO
-==============================*/
-
-.estado-select {
-    width: 180px;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    background: #252533;
-    color: #fff;
-    font-size: 15px;
-    cursor: pointer;
+.sinDatos {
     text-align: center;
+    color: #aaa;
+    font-style: italic;
+    padding: 20px 0;
 }
 
-.estado-select:focus {
-    outline: none;
-    border: 2px solid #8a2be2;
-}
-
-/*==============================
- SCROLL
-==============================*/
-
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #8a2be2;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: #181820;
-}
-
-/*==============================
- ANIMACIONES
-==============================*/
-
-#reservas,
-#resenas,
-#formResena {
-    animation: fade .4s;
-}
-
-@keyframes fade {
-
-    from {
-        opacity: 0;
-        transform: translateY(15px);
+/* =========================================================
+   DISEÑO ADAPTABLE (MEDIA QUERIES)
+========================================================= */
+@media (max-width: 1024px) {
+    .carrusel-slide {
+        min-width: 50%; /* Muestra 2 fotografías */
     }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
 }
 
-/*==============================
- RESPONSIVE
-==============================*/
-
-@media(max-width:1000px) {
+@media (max-width: 768px) {
+    .contenedor-header {
+        flex-direction: column;
+        gap: 15px;
+    }
 
     .perfil {
-        grid-template-columns: 1fr;
+        flex-direction: column;
         text-align: center;
-        justify-items: center;
+    }
+
+    .informacion {
+        padding: 0;
     }
 
     .estadisticas {
         width: 100%;
         flex-direction: row;
-        justify-content: center;
         flex-wrap: wrap;
     }
 
     .stat {
-        width: 200px;
+        flex: 1;
+        min-width: 130px;
     }
 
-    .informacion {
-        align-items: center;
-    }
-
-}
-
-@media(max-width:768px) {
-
-    body {
-        padding: 20px;
-    }
-
-    .contenedor {
-        width: 95%;
+    .carrusel-slide {
+        min-width: 100%; /* Muestra 1 fotografía */
     }
 
     .avatar {
-        width: 150px;
-        height: 150px;
+        width: 130px;
+        height: 130px;
     }
-
-    .informacion h1 {
-        font-size: 34px;
-    }
-
-    .informacion p {
-        font-size: 17px;
-        text-align: center;
-    }
-
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    .stat {
-        width: 100%;
-    }
-
-}
-
-@media(max-width:480px) {
-
-    .card {
-        padding: 20px;
-    }
-
-    .card h2 {
-        font-size: 24px;
-    }
-
 }

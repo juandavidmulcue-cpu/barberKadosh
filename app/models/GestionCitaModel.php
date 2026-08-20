@@ -200,7 +200,7 @@ class GestionCitaModel
 
         $stmt = $this->db->prepare($sql);
 
-        return $stmt->execute([
+        $resultado = $stmt->execute([
             ':id_reservacion' => $idReservacion,
             ':cliente'        => $cliente,
             ':barbero'        => $barbero,
@@ -208,6 +208,12 @@ class GestionCitaModel
             ':fecha'          => $fecha,
             ':hora'           => $hora
         ]);
+
+        if ($resultado) {
+            return $idReservacion;
+        }
+
+        return false;
     }
 
 

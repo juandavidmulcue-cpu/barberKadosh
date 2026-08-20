@@ -4,12 +4,14 @@ require_once 'app/controllers/Controller.php';
 require_once 'app/models/GestionCitaModel.php';
 require_once 'app/models/ServicioModel.php';
 require_once 'app/models/BarberoModel.php';
+require_once 'app/models/ClienteProductoModel.php';
 
 class GestionCitaController extends Controller
 {
     private $citaModel;
     private $servicioModel;
     private $barberoModel;
+    private $clienteProductoModel;
 
     public function __construct()
     {
@@ -21,6 +23,7 @@ class GestionCitaController extends Controller
         $this->citaModel = new GestionCitaModel();
         $this->servicioModel = new ServicioModel();
         $this->barberoModel = new BarberoModel();
+        $this->clienteProductoModel = new ClienteProductoModel();
     }
 
     /* =========================================
@@ -117,43 +120,100 @@ class GestionCitaController extends Controller
 
     public function guardar()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-            $resultado = $this->citaModel->crearReserva(
-                $_SESSION['id'],
-                $_POST['barbero'],
-                $_POST['servicio'],
-                $_POST['fecha'],
-                $_POST['hora']
-            );
-
-            // Si la hora ya está ocupada
-            if ($resultado === false) {
-
-                $_SESSION['error_cita'] =
-                    '❌ Esta hora no está disponible. Selecciona otra hora.';
-
-                $this->redirect(
-                    "index.php?controller=gestionCita&action=agendarCita"
-                );
-
-                return;
-            }
-
-            // Si la reserva se guardó correctamente
-            $_SESSION['mensaje_cita'] =
-                '✅ ¡Cita agendada correctamente!';
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
             $this->redirect(
-                "index.php?controller=gestionCita&action=misCitas"
+                "index.php?controller=gestionCita&action=agendarCita"
             );
 
             return;
         }
 
-        $this->redirect(
-            "index.php?controller=gestionCita&action=agendarCita"
+        // ==========================================
+        // 1. CREAR LA RESERVACIÓN
+        // ==========================================
+
+        $idReservacion = $this->citaModel->crearReserva(
+            $_SESSION['id'],
+            $_POST['barbero'],
+            $_POST['servicio'],
+            $_POST['fecha'],
+            $_POST['hora']
         );
+
+
+        // ==========================================
+        // 2. VERIFICAR SI LA RESERVACIÓN SE CREÓ
+        // ==========================================
+
+        if ($idReservacion === false) {
+
+            $_SESSION['error_cita'] =
+                '❌ Esta hora no está disponible. Selecciona otra hora.';
+
+            $this->redirect(
+                "index.php?controller=gestionCita&action=agendarCita"
+            );
+
+            return;
+        }
+
+
+        // ==========================================
+        // 3. OBTENER PRODUCTO SELECCIONADO
+        // ==========================================
+
+        $idProducto = $_POST['id_producto'] ?? null;
+
+
+        // ==========================================
+        // 4. SI HAY PRODUCTO, GUARDARLO
+        // ==========================================
+
+        if (!empty($idProducto)) {
+
+            $productoGuardado =
+                $this->clienteProductoModel->agregarProducto(
+                    $idReservacion,
+                    $idProducto,
+                    1
+                );
+
+            if (!$productoGuardado) {
+
+                $_SESSION['error_cita'] =
+                    '⚠️ La cita fue creada, pero no fue posible agregar el producto.';
+            }
+        }
+
+
+        // ==========================================
+        // 5. MENSAJE DE ÉXITO
+        // ==========================================
+
+        if (!isset($_SESSION['error_cita'])) {
+
+            if (!empty($idProducto)) {
+
+                $_SESSION['mensaje_cita'] =
+                    '✅ ¡Cita agendada y producto agregado correctamente!';
+            } else {
+
+                $_SESSION['mensaje_cita'] =
+                    '✅ ¡Cita agendada correctamente!';
+            }
+        }
+
+
+        // ==========================================
+        // 6. VOLVER AL PERFIL
+        // ==========================================
+
+        $this->redirect(
+            "index.php?controller=gestionCita&action=misCitas"
+        );
+
+        return;
     }
 
 

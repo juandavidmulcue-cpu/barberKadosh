@@ -12,6 +12,14 @@ $rol    = $_SESSION['nombre_rol'] ?? 'cliente';
 $servicios = $servicios ?? [];
 $barberos = $barberos ?? [];
 $historial = $historial ?? [];
+
+// Rutas de fotos para el carrusel
+$fotosCortes = [
+    ["src" => "app/public/assets/img/foto1.png", "alt" => "Corte clásico"],
+    ["src" => "app/public/assets/img/foto2.png", "alt" => "Fade moderno"],
+    ["src" => "app/public/assets/img/foto3.png", "alt" => "Barba profesional"],
+    ["src" => "app/public/assets/img/foto4.png", "alt" => "Estilo premium"]
+];
 ?>
 
 <!DOCTYPE html>
@@ -40,8 +48,8 @@ $historial = $historial ?? [];
             <p class="rol"><?php echo strtoupper(htmlspecialchars($rol)); ?></p>
 
             <div class="acciones">
-                <a href="index.php?controller=gestionCita&action=agendarCita" class="btn btn-primary"><button>AGENDAR</button></a>
-                <a href="index.php?controller=password&action=resetPassword" class="btn"><button class="btn-outline">Cambiar contraseña</button></a>
+                <a href="index.php?controller=gestionCita&action=agendarCita" class="btn btn-primary"><button type="button">AGENDAR</button></a>
+                <a href="index.php?controller=password&action=resetPassword" class="btn"><button type="button"class="btn-outline">Cambiar contraseña</button></a>
             </div>
 
             <a href="index.php?controller=auth&action=logout">Cerrar sesión</a>
@@ -53,20 +61,19 @@ $historial = $historial ?? [];
             <h2 class="carousel-title">Nuestro Estilo</h2>
 
             <div class="carousel">
-                <div class="carousel-track">
-                    <div class="carousel-item">
-                        <img src="app/public/assets/img/foto1.png" alt="Corte clásico">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="app/public/assets/img/foto2.png" alt="Fade moderno">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="app/public/assets/img/foto3.png" alt="Barba profesional">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="app/public/assets/img/foto4.png" alt="Estilo premium">
+                <button class="carousel-btn prev" onclick="moverCarruselCliente(-1)">&#10094;</button>
+
+                <div class="carousel-track-container">
+                    <div class="carousel-track" id="carouselTrackCliente">
+                        <?php foreach ($fotosCortes as $foto): ?>
+                            <div class="carousel-item">
+                                <img src="<?php echo htmlspecialchars($foto['src']); ?>" alt="<?php echo htmlspecialchars($foto['alt']); ?>">
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
+
+                <button class="carousel-btn next" onclick="moverCarruselCliente(1)">&#10095;</button>
             </div>
         </section>
 
@@ -702,9 +709,33 @@ $historial = $historial ?? [];
                 .classList.remove('activo');
 
         }
+
+        /* LÓGICA DE MOVIMIENTO DEL CARRUSEL */
+        let posCliente = 0;
+        function moverCarruselCliente(direccion) {
+            const track = document.getElementById('carouselTrackCliente');
+            const items = track.querySelectorAll('.carousel-item');
+            const total = items.length;
+            
+            // Determina la cantidad visible según el ancho de pantalla
+            const visibles = window.innerWidth <= 600 ? 1 : 2;
+            const maxPos = total - visibles;
+
+            posCliente += direccion;
+
+            if (posCliente < 0) {
+                posCliente = maxPos > 0 ? maxPos : 0;
+            } else if (posCliente > maxPos) {
+                posCliente = 0;
+            }
+
+            const desplazamiento = -(posCliente * (100 / visibles));
+            track.style.transform = `translateX(${desplazamiento}%)`;
+        }
     </script>
 
     <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
     <script src="https://files.bpcontent.cloud/2026/05/14/17/20260514174101-A2E9JALD.js" defer></script>
-    
+
 </body>
+</html>

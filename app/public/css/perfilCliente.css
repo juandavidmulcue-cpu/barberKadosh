@@ -1,3 +1,12 @@
+/* ===== VARIABLES GLOBALES ===== */
+:root {
+    --dorado: #d4af37;
+    --morado: #7b2cbf;
+    --morado-claro: #9d4edd;
+    --fondo-oscuro: #18181b;
+    --fondo-modal: rgba(10, 10, 10, 0.97);
+}
+
 /* ===== RESET ===== */
 * {
     margin: 0;
@@ -24,7 +33,7 @@ body {
     text-align: center;
     font-size: 22px;
     font-weight: bold;
-    color: #d4af37;
+    color: var(--dorado);
     margin-bottom: 30px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
@@ -55,7 +64,7 @@ body {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    border: 3px solid #d4af37;
+    border: 3px solid var(--dorado);
     margin-bottom: 15px;
     object-fit: cover;
 }
@@ -66,51 +75,13 @@ body {
 }
 
 .rol {
-    color: #d4af37;
+    color: var(--dorado);
     margin-bottom: 20px;
     font-weight: bold;
 }
 
-/* ===== BOTONES ===== */
-.acciones {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.btn button {
-    width: 100%;
-    padding: 12px;
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.3s ease;
-    background: linear-gradient(135deg, rgba(123, 44, 191, 1), rgba(157, 78, 221, 1));
-    color: white;
-}
-
-.btn button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
-}
-
-/* ===== BOTÓN OUTLINE ===== */
-.btn-outline {
-    background: transparent !important;
-    border: 2px solid #d4af37 !important;
-    color: #d4af37 !important;
-}
-
-.btn-outline:hover {
-    background: #d4af37 !important;
-    color: #000 !important;
-}
-
-/* ===== LINK LOGOUT ===== */
 .info-usuario a {
-    color: #d4af37;
+    color: var(--dorado);
     text-decoration: none;
     font-size: 14px;
 }
@@ -119,7 +90,85 @@ body {
     text-decoration: underline;
 }
 
-/* ===== GALERÍA ===== */
+/* ===== BOTONES GENERALES ===== */
+.acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.acciones .btn,
+.acciones a {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0;
+    text-decoration: none;
+}
+
+.acciones button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s ease;
+    background: linear-gradient(135deg, var(--morado), var(--morado-claro));
+    color: white;
+}
+
+.acciones button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
+}
+
+.btn-outline {
+    background: transparent !important;
+    border: 2px solid var(--dorado) !important;
+    color: var(--dorado) !important;
+}
+
+.btn-outline:hover {
+    background: var(--dorado) !important;
+    color: #000 !important;
+}
+
+.btn-no {
+    background: transparent !important;
+    border: 2px solid var(--dorado) !important;
+    color: var(--dorado) !important;
+}
+
+.btn-outline:hover,
+.btn-no:hover {
+    background: var(--dorado) !important;
+    color: #000 !important;
+}
+
+.btn-historial {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px 20px;
+    border: 2px solid var(--dorado);
+    border-radius: 50px;
+    background: transparent;
+    color: var(--dorado);
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn-historial:hover {
+    background: var(--dorado);
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+}
+
+/* ===== GALERÍA Y SECCIONES ===== */
 .galeria {
     display: flex;
     flex-direction: column;
@@ -131,7 +180,7 @@ body {
     border-radius: 18px;
     background: url('../img/barberia.jpg') center/cover;
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     justify-content: center;
     padding: 20px;
     position: relative;
@@ -153,7 +202,6 @@ body {
     color: #fff;
 }
 
-/* ===== PUNTOS ===== */
 .puntos {
     display: flex;
     justify-content: center;
@@ -169,12 +217,12 @@ body {
 }
 
 .puntos span:first-child {
-    background: #d4af37;
+    background: var(--dorado);
 }
 
 /* ===== DIRECCIÓN ===== */
 .direccion h3 {
-    color: #d4af37;
+    color: var(--dorado);
     margin-bottom: 15px;
 }
 
@@ -186,7 +234,7 @@ body {
 .direccion a {
     display: inline-block;
     margin-top: 15px;
-    color: #d4af37;
+    color: var(--dorado);
     text-decoration: none;
 }
 
@@ -194,17 +242,16 @@ body {
     text-decoration: underline;
 }
 
-/* ===== RESERVAS ===== */
+/* ===== TABLA PRINCIPAL ===== */
 .reservas {
     width: 100%;
 }
 
 .reservas h3 {
-    color: #d4af37;
+    color: var(--dorado);
     margin-bottom: 20px;
 }
 
-/* ===== TABLA ===== */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -236,55 +283,48 @@ tbody td {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* ===== ACCIONES TABLA ===== */
 .acciones-tabla {
     margin-top: 20px;
     display: flex;
     gap: 15px;
 }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width: 992px) {
-
-    .perfil {
-        grid-template-columns: 1fr;
-    }
-
-    .acciones-tabla {
-        flex-direction: column;
-    }
+.btn-finalizar,
+.cancelar-cita,
+.btn-editar-cita {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 4px;
+    margin: 0;
+    border: 2px solid var(--dorado);
+    border-radius: 8px;
+    background: transparent;
+    text-decoration: none;
+    box-sizing: border-box;
 }
 
-@media(max-width: 600px) {
-
-    body {
-        padding: 15px;
-    }
-
-    .barra {
-        font-size: 18px;
-    }
-
-    .imagen-principal {
-        height: 220px;
-    }
-
-    table {
-        display: block;
-        overflow-x: auto;
-    }
+.btn-finalizar img,
+.cancelar-cita img,
+.btn-editar-cita img {
+    display: block;
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
 }
 
-/* =========================
-   CARRUSEL
-========================= */
+/* ===== CARRUSEL Y HERO ===== */
 .carousel-section {
     position: relative;
+    width: 100%;
 }
 
 .carousel-title {
     margin-bottom: 20px;
     color: var(--dorado);
+    text-align: center;
 }
 
 .carousel {
@@ -292,15 +332,24 @@ tbody td {
     border-radius: 20px;
     border: 1px solid rgba(212, 175, 55, 0.4);
     position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.carousel-track-container {
+    overflow: hidden;
+    width: 100%;
 }
 
 .carousel-track {
     display: flex;
-    transition: transform 1s ease;
+    transition: transform 0.5s ease-in-out;
 }
 
 .carousel-item {
-    min-width: 100%;
+    min-width: 50%;
+    padding: 0 5px;
+    box-sizing: border-box;
 }
 
 .carousel-item img {
@@ -308,11 +357,42 @@ tbody td {
     height: 345px;
     object-fit: cover;
     display: block;
+    border-radius: 12px;
 }
 
-/* =========================
-   HERO + CARRUSEL WRAPPER
-========================= */
+/* Flechas de navegación del carrusel */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: var(--dorado);
+    border: 1px solid var(--dorado);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s ease;
+}
+
+.carousel-btn:hover {
+    background: var(--dorado);
+    color: #000;
+}
+
+.carousel-btn.prev {
+    left: 10px;
+}
+
+.carousel-btn.next {
+    right: 10px;
+}
+
 .hero-wrapper {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
@@ -322,178 +402,43 @@ tbody td {
 }
 
 /* =========================================
-MODAL EDITAR CITA
-========================================= */
-
-#modalEditarCita {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.75);
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-
-#modalEditarCita.activo {
-    display: flex;
-}
-
-/* CONTENIDO */
-
-#modalEditarCita .contenido-modal {
-    background: rgba(10, 10, 10, 0.97);
-    color: var(--morado);
-    padding: 30px;
-    border-radius: 18px;
-    width: 90%;
-    max-width: 450px;
-    text-align: center;
-    position: relative;
-    border: 1px solid #d4af37;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
-}
-
-/* TITULO */
-
-#modalEditarCita .contenido-modal h2 {
-    margin-bottom: 15px;
-}
-
-/* CERRAR */
-
-#modalEditarCita .cerrar-modal {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    border: none;
-    background: transparent;
-    color: white;
-    font-size: 28px;
-    cursor: pointer;
-}
-
-#modalEditarCita .cerrar-modal:hover {
-    color: #ff0000;
-}
-
-/* FORMULARIO */
-
-#modalEditarCita form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    text-align: left;
-}
-
-/* INPUTS Y SELECT */
-
-#modalEditarCita input,
-#modalEditarCita select,
-#modalEditarCita textarea {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 2px solid var(--dorado);
-    background: #fff;
-    color: #000;
-}
-
-/* BOTONES DEL MODAL */
-
-#modalEditarCita .botones-finalizar {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-#modalEditarCita .botones-finalizar button {
-    padding: 12px 28px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: bold;
-    color: var(--dorado);
-    background: linear-gradient(135deg,
-            #7b2cbf,
-            #9d4edd);
-    transition: 0.3s ease;
-}
-
-#modalEditarCita .botones-finalizar button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
-}
-
-/* BOTÓN CANCELAR */
-#modalEditarCita .btn-no {
-    background: transparent !important;
-    border: 2px solid #d4af37 !important;
-    color: #d4af37 !important;
-}
-
-#modalEditarCita .btn-no:hover {
-    background: #d4af37 !important;
-    color: #000 !important;
-}
-
-.btn-finalizar,
-.cancelar-cita,
-.btn-editar-cita {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    width: 36px !important;
-    height: 36px !important;
-
-    padding: 4px !important;
-    margin: 0 !important;
-
-    border: 2px solid var(--dorado) !important;
-    border-radius: 8px;
-
-    background: transparent !important;
-    text-decoration: none !important;
-
-    box-sizing: border-box !important;
-}
-
-.btn-finalizar img,
-.cancelar-cita img,
-.btn-editar-cita img {
-    display: block !important;
-
-    width: 25px !important;
-    height: 25px !important;
-
-    object-fit: contain !important;
-}
-
-/* =========================================
-   MODAL FINALIZAR
+   SISTEMA DE MODALES UNIFICADO
 ========================================= */
 #modalEditarCita,
 .modal-finalizar,
-.modal-resena {
+.modal-resena,
+.modal-producto,
+.modal-historial {
     display: none;
     position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.75);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
     justify-content: center;
     align-items: center;
-    z-index: 9999;
+    z-index: 99999;
+    padding: 20px;
 }
 
+#modalEditarCita.activo,
 .modal-finalizar.activo,
-.modal-resena.activo {
-    display: flex;
+.modal-resena.activo,
+.modal-historial.activo,
+.modal-producto[style*="display: flex"],
+.modal-producto[style*="display:flex"] {
+    display: flex !important;
 }
 
+/* CAJAS DE CONTENIDO DE MODALES */
+.contenido-modal,
 .contenido-modal-finalizar,
-.contenido-modal-resena {
-    background: rgba(10, 10, 10, 0.97);
+.contenido-modal-resena,
+.contenido-modal-historial,
+.modal-producto-content {
+    background: var(--fondo-modal);
     color: #fff;
     padding: 30px;
     border-radius: 18px;
@@ -501,182 +446,40 @@ MODAL EDITAR CITA
     max-width: 450px;
     text-align: center;
     position: relative;
-    border: 1px solid #d4af37;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--dorado);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    margin: auto;
 }
-
-.contenido-modal-finalizar h2,
-.contenido-modal-resena h2 {
-    margin-bottom: 15px;
-}
-
-
-.contenido-modal-finalizar p,
-.contenido-modal-resena p {
-    margin-bottom: 25px;
-}
-
-/* BOTONES */
-
-.botones-finalizar {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-
-.botones-finalizar button {
-    padding: 12px 28px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: bold;
-    color: white;
-    background: linear-gradient(135deg,
-            #7b2cbf,
-            #9d4edd);
-    transition: 0.3s ease;
-}
-
-.botones-finalizar button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
-}
-
-
-/* CERRAR */
-
-.cerrar-modal-finalizar,
-.cerrar-modal-resena {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    border: none;
-    background: transparent;
-    font-size: 28px;
-    cursor: pointer;
-}
-
-
-/* FORMULARIO RESEÑA */
-
-.contenido-modal-resena form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    text-align: left;
-
-}
-
-
-.contenido-modal-resena select,
-.contenido-modal-resena textarea {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
-
-
-.contenido-modal-resena textarea {
-    resize: vertical;
-}
-
-.contenido-modal-resena form button {
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.btn-no {
-    background: transparent !important;
-    border: 2px solid #d4af37 !important;
-    color: #d4af37 !important;
-}
-
-.btn-no:hover {
-    background: #d4af37 !important;
-    color: #000 !important;
-}
-
-/* =========================================
-   BOTÓN HISTORIAL
-========================================= */
-
-.btn-historial {
-    display: block;
-    width: 100%;
-    margin-top: 20px;
-    padding: 12px 20px;
-    border: 2px solid #d4af37;
-    border-radius: 50px;
-    background: transparent;
-    color: #d4af37;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s ease;
-}
-
-.btn-historial:hover {
-    background: #d4af37;
-    color: #000;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
-}
-
-/* =========================================
-   MODAL HISTORIAL
-========================================= */
-
-.modal-historial {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.75);
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    padding: 20px;
-}
-
-.modal-historial.activo {
-    display: flex;
-}
-
-/* =========================================
-   CONTENIDO
-========================================= */
 
 .contenido-modal-historial {
-    background: rgba(10, 10, 10, 0.97);
-    color: #fff;
-    padding: 30px;
-    border-radius: 18px;
-    width: 95%;
     max-width: 900px;
-    position: relative;
-    border: 1px solid #d4af37;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+    width: 95%;
 }
 
-.contenido-modal-historial h2 {
-    color: #d4af37;
-    margin-bottom: 8px;
-    text-align: center;
+/* TÍTULOS Y TEXTOS EN MODALES */
+.contenido-modal h2,
+.contenido-modal-finalizar h2,
+.contenido-modal-resena h2,
+.contenido-modal-historial h2,
+.modal-producto-content h2 {
+    color: var(--dorado);
+    margin-bottom: 12px;
+    font-size: 1.3rem;
 }
 
-.subtitulo-historial {
-    text-align: center;
-    color: #ccc;
-    margin-bottom: 25px;
+.subtitulo-historial,
+.modal-producto-content p,
+.contenido-modal-finalizar p,
+.contenido-modal-resena p {
+    color: #e4e4e7;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
 }
 
-
-/* =========================================
-   CERRAR
-========================================= */
-
+/* BOTONES DE CERRAR (X) */
+.cerrar-modal,
+.cerrar-modal-finalizar,
+.cerrar-modal-resena,
 .cerrar-modal-historial {
     position: absolute;
     top: 10px;
@@ -684,18 +487,86 @@ MODAL EDITAR CITA
     border: none;
     background: transparent;
     color: white;
-    font-size: 30px;
+    font-size: 28px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.cerrar-modal:hover,
+.cerrar-modal-finalizar:hover,
+.cerrar-modal-resena:hover,
+.cerrar-modal-historial:hover {
+    color: #ff4444;
+}
+
+/* BOTONES INTERNOS DE MODAL */
+.botones-finalizar,
+.modal-producto-botones {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.botones-finalizar button,
+.btn-producto-si {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--morado), var(--morado-claro));
+    transition: 0.3s ease;
+}
+
+.btn-producto-si {
+    border-radius: 6px;
+    padding: 10px 18px;
+}
+
+.botones-finalizar button:hover,
+.btn-producto-si:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
+}
+
+.btn-producto-no {
+    background-color: transparent;
+    color: #a1a1aa;
+    border: 1px solid #3f3f46;
+    padding: 10px 18px;
+    border-radius: 6px;
     cursor: pointer;
 }
 
-.cerrar-modal-historial:hover {
-    color: #ff0000;
+/* FORMULARIO DENTRO DE MODALES */
+#modalEditarCita form,
+.contenido-modal-resena form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
 }
 
-/* =========================================
-   TABLA HISTORIAL
-========================================= */
+#modalEditarCita input,
+#modalEditarCita select,
+#modalEditarCita textarea,
+.contenido-modal-resena select,
+.contenido-modal-resena textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--dorado);
+    background: #ffffff;
+    color: #000000;
+}
 
+.contenido-modal-resena textarea {
+    resize: vertical;
+}
+
+/* ===== TABLA HISTORIAL ===== */
 .tabla-historial {
     width: 100%;
     overflow-x: auto;
@@ -710,13 +581,13 @@ MODAL EDITAR CITA
     background: rgba(123, 44, 191, 0.6);
 }
 
-.tabla-historial th {
+.tabla-historial th,
+.tabla-historial td {
     padding: 14px;
     text-align: left;
 }
 
 .tabla-historial td {
-    padding: 14px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -738,4 +609,43 @@ MODAL EDITAR CITA
     text-align: center;
     color: #aaa;
     padding: 30px !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+    .perfil {
+        grid-template-columns: 1fr;
+    }
+
+    .acciones-tabla {
+        flex-direction: column;
+    }
+
+    .hero-wrapper {
+        grid-template-columns: 1fr;
+        padding: 40px 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 15px;
+    }
+
+    .barra {
+        font-size: 18px;
+    }
+
+    .imagen-principal {
+        height: 220px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .carousel-item {
+        min-width: 100%;
+    }
 }
