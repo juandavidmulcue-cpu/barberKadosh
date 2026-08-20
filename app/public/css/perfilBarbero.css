@@ -137,7 +137,8 @@ body {
 }
 
 .carrusel-slide {
-    min-width: 25%; /* Muestra 4 fotografías en pantallas grandes */
+    min-width: 25%;
+    /* Muestra 4 fotografías en pantallas grandes */
     padding: 0 8px;
     box-sizing: border-box;
 }
@@ -180,8 +181,13 @@ body {
     color: #000;
 }
 
-.carrusel-btn.prev { left: -15px; }
-.carrusel-btn.next { right: -15px; }
+.carrusel-btn.prev {
+    left: -15px;
+}
+
+.carrusel-btn.next {
+    right: -15px;
+}
 
 /* =========================================================
    TARJETA DE PERFIL E INFORMACIÓN DEL BARBERO
@@ -368,8 +374,14 @@ body {
     background: rgba(255, 255, 255, 0.1);
 }
 
-.horario span { font-size: 22px; }
-.horario p { font-size: 15px; color: #ddd; }
+.horario span {
+    font-size: 22px;
+}
+
+.horario p {
+    font-size: 15px;
+    color: #ddd;
+}
 
 /* =========================================================
    TABLAS DE RESERVACIONES E HISTORIAL
@@ -389,7 +401,8 @@ thead {
     background: rgba(123, 44, 191, 0.6);
 }
 
-th, td {
+th,
+td {
     padding: 14px 18px;
     text-align: left;
 }
@@ -415,9 +428,17 @@ tbody tr:hover td {
     font-size: 14px;
 }
 
-.estado.pendiente { color: #f1c40f; }
-.estado.completada { color: #2ecc71; }
-.estado.cancelada { color: #e74c3c; }
+.estado.pendiente {
+    color: #f1c40f;
+}
+
+.estado.completada {
+    color: #2ecc71;
+}
+
+.estado.cancelada {
+    color: #e74c3c;
+}
 
 /* =========================================================
    SECCIÓN DE RESEÑAS
@@ -465,12 +486,69 @@ tbody tr:hover td {
     padding: 20px 0;
 }
 
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+    margin-top: 60px;
+    background: linear-gradient(135deg, #0d0d0d, #1d102e);
+    border-top: 2px solid var(--dorado);
+    color: var(--blanco-suave);
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 45px 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 35px;
+}
+
+.footer-section h3,
+.footer-section h4 {
+    color: var(--dorado);
+    margin-bottom: 18px;
+}
+
+.footer-section p {
+    color: #d8d8d8;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+.footer-section a {
+    display: block;
+    color: #d8d8d8;
+    margin-bottom: 10px;
+    transition: .3s;
+}
+
+.footer-section a:hover {
+    color: var(--dorado);
+    padding-left: 6px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(212, 175, 55, .25);
+    text-align: center;
+    padding: 18px;
+    font-size: 14px;
+    color: #bdbdbd;
+}
+
+.footer-bottom strong {
+    color: var(--dorado);
+}
+
 /* =========================================================
    DISEÑO ADAPTABLE (MEDIA QUERIES)
 ========================================================= */
 @media (max-width: 1024px) {
     .carrusel-slide {
-        min-width: 50%; /* Muestra 2 fotografías */
+        min-width: 50%;
+        /* Muestra 2 fotografías */
     }
 }
 
@@ -501,7 +579,8 @@ tbody tr:hover td {
     }
 
     .carrusel-slide {
-        min-width: 100%; /* Muestra 1 fotografía */
+        min-width: 100%;
+        /* Muestra 1 fotografía */
     }
 
     .avatar {

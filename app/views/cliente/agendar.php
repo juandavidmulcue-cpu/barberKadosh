@@ -129,6 +129,48 @@ $productos = $productos ?? [];
         </div>
     </div>
 
+    <footer class="footer">
+
+        <div class="footer-container">
+
+            <div class="footer-section">
+                <h4>Enlaces</h4>
+
+                <a href="index.php">Inicio</a>
+                <a href="#">Servicios</a>
+                <a href="#">Contacto</a>
+                <a href="#">Política de Privacidad</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Contacto</h4>
+
+                <p>📍 Bogotá - Colombia</p>
+                <p>📞 +57 300 359 3276</p>
+                <p>✉️ kadosh1234@gmail.com</p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Desarrollado por:</h4>
+
+                <p>Daniela Yara, Laura Buitrago, Juan Acuña, Juan Mulcue, Jose Cuastumal</p>
+
+                <br>
+
+                <p><strong>SENA - ADSO</strong></p>
+                <p>Ficha: 3171693</p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                © 2026 <strong>KADOSH Barber Shop</strong>. Todos los derechos reservados.
+                | Versión 1.0
+            </p>
+        </div>
+
+    </footer>
 
     <!-- ========================================== -->
     <!-- SCRIPTS                                    -->

@@ -289,6 +289,7 @@ tbody td {
     gap: 15px;
 }
 
+.btn-descargar-pdf
 .btn-finalizar,
 .cancelar-cita,
 .btn-editar-cita {
@@ -306,6 +307,7 @@ tbody td {
     box-sizing: border-box;
 }
 
+.btn-descargar-pdf img,
 .btn-finalizar img,
 .cancelar-cita img,
 .btn-editar-cita img {
@@ -609,6 +611,62 @@ tbody td {
     text-align: center;
     color: #aaa;
     padding: 30px !important;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+    margin-top: 60px;
+    background: linear-gradient(135deg, #0d0d0d, #1d102e);
+    border-top: 2px solid var(--dorado);
+    color: var(--blanco-suave);
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 45px 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 35px;
+}
+
+.footer-section h3,
+.footer-section h4 {
+    color: var(--dorado);
+    margin-bottom: 18px;
+}
+
+.footer-section p {
+    color: #d8d8d8;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+.footer-section a {
+    display: block;
+    color: #d8d8d8;
+    margin-bottom: 10px;
+    transition: .3s;
+}
+
+.footer-section a:hover {
+    color: var(--dorado);
+    padding-left: 6px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(212, 175, 55, .25);
+    text-align: center;
+    padding: 18px;
+    font-size: 14px;
+    color: #bdbdbd;
+}
+
+.footer-bottom strong {
+    color: var(--dorado);
 }
 
 /* ===== RESPONSIVE ===== */

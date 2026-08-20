@@ -30,6 +30,9 @@ $fotosCortes = [
     <title>Perfil Cliente - Kadosh Barber</title>
     <link rel="stylesheet" href="app/public/css/perfilCliente.css">
     <link rel="stylesheet" href="app/public/css/index.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 </head>
 
 <body>
@@ -49,7 +52,7 @@ $fotosCortes = [
 
             <div class="acciones">
                 <a href="index.php?controller=gestionCita&action=agendarCita" class="btn btn-primary"><button type="button">AGENDAR</button></a>
-                <a href="index.php?controller=password&action=resetPassword" class="btn"><button type="button"class="btn-outline">Cambiar contraseña</button></a>
+                <a href="index.php?controller=password&action=resetPassword" class="btn"><button type="button" class="btn-outline">Cambiar contraseña</button></a>
             </div>
 
             <a href="index.php?controller=auth&action=logout">Cerrar sesión</a>
@@ -375,83 +378,72 @@ $fotosCortes = [
                 onclick="cerrarModalHistorial()">
                 &times;
             </button>
-
             <h2>Historial de reservas 📋</h2>
-
             <p class="subtitulo-historial">
                 Aquí puedes consultar tus reservas anteriores.
             </p>
-
             <div class="tabla-historial">
-
                 <table>
-
+                    <!-- TABLA EN EL MODAL HISTORIAL -->
                     <thead>
                         <tr>
                             <th>Barbero</th>
                             <th>Servicio</th>
+                            <th>Producto</th>
                             <th>Fecha</th>
                             <th>Hora</th>
+                            <th>Total</th>
                             <th>Estado</th>
+                            <th>Acción</th> <!-- Columna añadida -->
                         </tr>
                     </thead>
-
                     <tbody>
-
                         <?php if (!empty($historial)): ?>
+                            <?php if (!empty($historial)): ?>
+                                <?php foreach ($historial as $h): ?>
+                                    <?php
+                                    // Formateamos el total que calculó directamente la consulta SQL
+                                    $totalFormateado = '$' . number_format($h['total'], 0, ',', '.');
+                                    ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($h['barbero']) ?></td>
+                                        <td><?= htmlspecialchars($h['servicio']) ?></td>
+                                        <td><?= htmlspecialchars($h['producto']) ?></td>
+                                        <td><?= htmlspecialchars($h['fecha_cita']) ?></td>
+                                        <td><?= htmlspecialchars($h['hora_cita']) ?></td>
+                                        <td><strong><?= htmlspecialchars($totalFormateado) ?></strong></td>
+                                        <td>
+                                            <?php if ($h['estado'] == 'Completada'): ?>
+                                                <span class="estado-completada">🟢 Completada</span>
+                                            <?php else: ?>
+                                                <span class="estado-cancelada">🔴 Cancelada</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <button type="button"
+                                                class="btn-descargar-pdf"
+                                                onclick="generarPDFReserva(
+                            '<?= htmlspecialchars($h['barbero'], ENT_QUOTES) ?>', 
+                            '<?= htmlspecialchars($h['servicio'], ENT_QUOTES) ?>', 
+                            '<?= htmlspecialchars($h['producto'], ENT_QUOTES) ?>', 
+                            '<?= htmlspecialchars($h['fecha_cita'], ENT_QUOTES) ?>', 
+                            '<?= htmlspecialchars($h['hora_cita'], ENT_QUOTES) ?>', 
+                            '<?= htmlspecialchars($totalFormateado, ENT_QUOTES) ?>', 
+                            '<?= htmlspecialchars($h['estado'], ENT_QUOTES) ?>'
+                        )"
+                                                title="Descargar Comprobante PDF">
 
-                            <?php foreach ($historial as $h): ?>
-
-                                <tr>
-
-                                    <td>
-                                        <?= htmlspecialchars($h['barbero']) ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars($h['servicio']) ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars($h['fecha_cita']) ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars($h['hora_cita']) ?>
-                                    </td>
-
-                                    <td>
-
-                                        <?php if ($h['estado'] == 'Completada'): ?>
-
-                                            <span class="estado-completada">
-                                                🟢 Completada
-                                            </span>
-
-                                        <?php elseif ($h['estado'] == 'Cancelada'): ?>
-
-                                            <span class="estado-cancelada">
-                                                🔴 Cancelada
-                                            </span>
-
-                                        <?php endif; ?>
-
-                                    </td>
-
-                                </tr>
-
-                            <?php endforeach; ?>
-
+                                                <img src="app/public/assets/icons/descargar.png" alt="Descargar">
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         <?php else: ?>
-
                             <tr>
-                                <td colspan="5" class="sin-historial">
-                                    No tienes reservas en tu historial.
-                                </td>
+                                <td colspan="8" class="sin-historial">No tienes reservas en tu historial.</td>
                             </tr>
-
                         <?php endif; ?>
-
                     </tbody>
 
                 </table>
@@ -625,7 +617,227 @@ $fotosCortes = [
     </div>
 
 
+    <footer class="footer">
+
+        <div class="footer-container">
+
+            <div class="footer-section">
+                <h4>Enlaces</h4>
+
+                <a href="index.php">Inicio</a>
+                <a href="#">Servicios</a>
+                <a href="#">Contacto</a>
+                <a href="#">Política de Privacidad</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Contacto</h4>
+
+                <p>📍 Bogotá - Colombia</p>
+                <p>📞 +57 300 359 3276</p>
+                <p>✉️ kadosh1234@gmail.com</p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Desarrollado por:</h4>
+
+                <p>Daniela Yara, Laura Buitrago, Juan Acuña, Juan Mulcue, Jose Cuastumal</p>
+
+                <br>
+
+                <p><strong>SENA - ADSO</strong></p>
+                <p>Ficha: 3171693</p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                © 2026 <strong>KADOSH Barber Shop</strong>. Todos los derechos reservados.
+                | Versión 1.0
+            </p>
+        </div>
+
+    </footer>
+
     <script>
+        // Paleta de colores corporativos
+        const coloresKadosh = {
+            morado: '#4A154B',
+            dorado: '#D4AF37',
+            negro: '#1A1A1A'
+        };
+
+        // Carga previa de la imagen en Base64 para el reporte
+        const logoBase64 = 'data:image/jpeg;base64,<?= base64_encode(file_get_contents("app/public/assets/img/logo1.jpeg")); ?>';
+        const nombreCliente = '<?= htmlspecialchars($nombre . " " . $apellido, ENT_QUOTES); ?>';
+
+        function generarPDFReserva(barbero, servicio, producto, fecha, hora, total, estado) {
+            // Si la variable llega vacía o indefinida, mostramos 'Ninguno'
+            const productoTexto = (producto && producto.trim() !== '') ? producto : 'Ninguno';
+
+            const docDefinition = {
+                pageSize: 'A4',
+                pageOrientation: 'landscape',
+                pageMargins: [35, 40, 35, 50],
+                content: [
+                    /* LOGO KADOSH */
+                    {
+                        image: logoBase64,
+                        width: 70,
+                        height: 70,
+                        alignment: 'center',
+                        margin: [0, 0, 0, 8]
+                    },
+                    {
+                        text: 'KADOSH',
+                        fontSize: 23,
+                        bold: true,
+                        color: coloresKadosh.morado,
+                        alignment: 'center',
+                        margin: [0, 0, 0, 2]
+                    },
+                    {
+                        text: 'BARBER SHOP',
+                        fontSize: 10,
+                        bold: true,
+                        color: coloresKadosh.dorado,
+                        alignment: 'center',
+                        characterSpacing: 3,
+                        margin: [0, 0, 0, 5]
+                    },
+                    {
+                        text: 'Comprobante de Reserva - ' + nombreCliente,
+                        fontSize: 11,
+                        bold: true,
+                        color: coloresKadosh.negro,
+                        alignment: 'center',
+                        margin: [0, 3, 0, 10]
+                    },
+                    {
+                        canvas: [{
+                            type: 'line',
+                            x1: 0,
+                            y1: 0,
+                            x2: 770,
+                            y2: 0,
+                            lineWidth: 2,
+                            lineColor: coloresKadosh.dorado
+                        }],
+                        margin: [0, 0, 0, 15]
+                    },
+
+                    /* TABLA DE DETALLES */
+                    {
+                        alignment: 'center',
+                        margin: [0, 10, 0, 10],
+                        table: {
+                            widths: ['*', '*', '*', '*', '*', '*'],
+                            body: [
+                                [{
+                                        text: 'Barbero',
+                                        bold: true,
+                                        color: '#ffffff',
+                                        fillColor: coloresKadosh.morado,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: 'Servicio',
+                                        bold: true,
+                                        color: '#ffffff',
+                                        fillColor: coloresKadosh.morado,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: 'Producto',
+                                        bold: true,
+                                        color: '#ffffff',
+                                        fillColor: coloresKadosh.morado,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: 'Fecha',
+                                        bold: true,
+                                        color: '#ffffff',
+                                        fillColor: coloresKadosh.morado,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: 'Hora',
+                                        bold: true,
+                                        color: '#ffffff',
+                                        fillColor: coloresKadosh.morado,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: 'Estado',
+                                        bold: true,
+                                        color: '#ffffff',
+                                        fillColor: coloresKadosh.morado,
+                                        alignment: 'center'
+                                    }
+                                ],
+                                [{
+                                        text: barbero,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: servicio,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: productoTexto,
+                                        alignment: 'center'
+                                    }, // Se muestra el producto o "Ninguno"
+                                    {
+                                        text: fecha,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: hora,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: estado,
+                                        alignment: 'center'
+                                    }
+                                ],
+                                /* TOTAL DE LA COMPRA (SUMA DE SERVICIO + PRODUCTO SI LO HAY) */
+                                [{
+                                        text: 'TOTAL A PAGAR',
+                                        colSpan: 5,
+                                        bold: true,
+                                        alignment: 'right',
+                                        fillColor: '#F5F5F5'
+                                    },
+                                    {}, {}, {}, {},
+                                    {
+                                        text: total,
+                                        bold: true,
+                                        color: coloresKadosh.morado,
+                                        alignment: 'center',
+                                        fillColor: '#F5F5F5'
+                                    }
+                                ]
+                            ]
+                        },
+                        layout: {
+                            hLineWidth: () => 1,
+                            vLineWidth: () => 1,
+                            hLineColor: () => coloresKadosh.dorado,
+                            vLineColor: () => coloresKadosh.dorado,
+                            paddingLeft: () => 8,
+                            paddingRight: () => 8,
+                            paddingTop: () => 7,
+                            paddingBottom: () => 7
+                        }
+                    }
+                ]
+            };
+
+            pdfMake.createPdf(docDefinition).download('Kadosh_' + nombreCliente.replace(/\s+/g, '_') + '_Reserva.pdf');
+        }
+
         function abrirModalFinalizar(idReserva, idBarbero) {
             document.getElementById('idReservaFinalizar').value = idReserva;
 
@@ -712,11 +924,12 @@ $fotosCortes = [
 
         /* LÓGICA DE MOVIMIENTO DEL CARRUSEL */
         let posCliente = 0;
+
         function moverCarruselCliente(direccion) {
             const track = document.getElementById('carouselTrackCliente');
             const items = track.querySelectorAll('.carousel-item');
             const total = items.length;
-            
+
             // Determina la cantidad visible según el ancho de pantalla
             const visibles = window.innerWidth <= 600 ? 1 : 2;
             const maxPos = total - visibles;
@@ -738,4 +951,5 @@ $fotosCortes = [
     <script src="https://files.bpcontent.cloud/2026/05/14/17/20260514174101-A2E9JALD.js" defer></script>
 
 </body>
+
 </html>

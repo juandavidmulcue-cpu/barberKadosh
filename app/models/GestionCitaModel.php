@@ -41,26 +41,34 @@ class GestionCitaModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
     public function obtenerHistorialCliente($idCliente)
     {
         $sql = "SELECT
-                r.id_reservacion,
-                r.id_barbero,
-                r.id_servicio,
-                CONCAT(b.nombre, ' ', b.apellido) AS barbero,
-                s.nombre AS servicio,
-                r.fecha_cita,
-                r.hora_cita,
-                r.estado
-            FROM reservacion r
-            INNER JOIN usuarios b
-                ON r.id_barbero = b.id_usuario
-            INNER JOIN servicios s
-                ON r.id_servicio = s.id_servicio
-            WHERE r.id_cliente = :cliente
-            AND r.estado IN ('Completada', 'Cancelada')
-            ORDER BY r.fecha_cita DESC, r.hora_cita DESC";
+            r.id_reservacion,
+            r.id_barbero,
+            r.id_servicio,
+            CONCAT(b.nombre, ' ', b.apellido) AS barbero,
+            s.nombre AS servicio,
+            s.precio AS precio_servicio,
+            COALESCE(p.nombre, 'Ninguno') AS producto,
+            COALESCE(p.precio, 0) AS precio_producto,
+            COALESCE(dr.cantidad, 0) AS cantidad_producto,
+            (s.precio + (COALESCE(p.precio, 0) * COALESCE(dr.cantidad, 0))) AS total,
+            r.fecha_cita,
+            r.hora_cita,
+            r.estado
+        FROM reservacion r
+        INNER JOIN usuarios b
+            ON r.id_barbero = b.id_usuario
+        INNER JOIN servicios s
+            ON r.id_servicio = s.id_servicio
+        LEFT JOIN detalle_reservacion dr 
+            ON r.id_reservacion = dr.id_reservacion
+        LEFT JOIN productos p 
+            ON dr.id_producto = p.id_producto
+        WHERE r.id_cliente = :cliente
+        AND r.estado IN ('Completada', 'Cancelada')
+        ORDER BY r.fecha_cita DESC, r.hora_cita DESC";
 
         $stmt = $this->db->prepare($sql);
 
