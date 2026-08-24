@@ -199,7 +199,7 @@ $productos = $productos ?? [];
                 .then(response => response.json())
                 .then(data => {
                     if (!data.horario) {
-                        horariosDisponibles.innerHTML = `<p style="color:red;">❌ Este barbero no tiene horario disponible para este día.</p>`;
+                        horariosDisponibles.innerHTML = `<p style="color:red;">Este barbero no tiene horario disponible para este día.</p>`;
                         return;
                     }
 
@@ -216,7 +216,7 @@ $productos = $productos ?? [];
                 })
                 .catch(error => {
                     console.error(error);
-                    horariosDisponibles.innerHTML = `<p style="color:red;">❌ Error al consultar el horario.</p>`;
+                    horariosDisponibles.innerHTML = `<p style="color:red;">Error al consultar el horario.</p>`;
                 });
         }
 
