@@ -28,15 +28,32 @@ class AuthController extends Controller
     {
         $error = null;
 
+        // Inicializar contador de intentos
+        if (!isset($_SESSION['login_intentos'])) {
+            $_SESSION['login_intentos'] = 0;
+        }
+
+        // Inicializar tiempo de bloqueo
+        if (!isset($_SESSION['login_bloqueado_hasta'])) {
+            $_SESSION['login_bloqueado_hasta'] = 0;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            // Verificar si el usuario está temporalmente bloqueado
+            if (time() < $_SESSION['login_bloqueado_hasta']) {
+
+                http_response_code(429);
+                $codigoError = 429;
+                require_once __DIR__ . '/../views/errors/error.php';
+                exit;
+            }
 
             $correo = trim($_POST['correo'] ?? '');
             $password = $_POST['password'] ?? '';
 
             if ($correo === '' || $password === '') {
-
                 $error = "Correo o contraseña vacíos";
-
             } else {
 
                 $user = $this->authModel->getUserByEmailAndRole($correo, $rol);
@@ -49,24 +66,38 @@ class AuthController extends Controller
                         if ($user['estado'] === 'inactivo') {
 
                             $error = "Lo sentimos, tu cuenta se encuentra inactiva. Comunícate con el administrador.";
-
                         } else {
+
+                            // Login correcto: reiniciar contador
+                            $_SESSION['login_intentos'] = 0;
+                            $_SESSION['login_bloqueado_hasta'] = 0;
 
                             $this->loginUser($user, $rol);
                             $this->redirect($destino);
                             exit;
                         }
-
                     } else {
 
+                        // Contraseña incorrecta
+                        $_SESSION['login_intentos']++;
                         $error = "Credenciales incorrectas.";
-
                     }
-
                 } else {
 
+                    // Usuario inexistente o correo incorrecto
+                    $_SESSION['login_intentos']++;
                     $error = "Credenciales incorrectas.";
+                }
 
+                // Si llega a 5 intentos fallidos
+                if ($_SESSION['login_intentos'] >= 5) {
+
+                    $_SESSION['login_bloqueado_hasta'] = time() + 5;
+                    http_response_code(429);
+                    $codigoError = 429;
+
+                    require_once __DIR__ . '/../views/errors/error.php';
+                    exit;
                 }
             }
         }
@@ -102,11 +133,11 @@ class AuthController extends Controller
     }
 
     public function logout()
-{
-    $this->destroySession();
-    
-    // Evitamos el header("Location: ...") y usamos replace
-    echo '<script>window.location.replace("index.html");</script>';
-    exit;
-}
+    {
+        $this->destroySession();
+
+        // Evitamos el header("Location: ...") y usamos replace
+        echo '<script>window.location.replace("index.html");</script>';
+        exit;
+    }
 }

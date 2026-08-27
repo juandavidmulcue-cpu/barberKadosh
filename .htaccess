@@ -4,6 +4,15 @@ Options -Indexes
 # 2. Definir codificación de caracteres por defecto
 AddDefaultCharset UTF-8
 
+# Páginas personalizadas de errores
+ErrorDocument 403 /barberKadosh/app/views/errors/error.php?codigo=403
+ErrorDocument 404 /barberKadosh/app/views/errors/error.php?codigo=404
+ErrorDocument 429 /barberKadosh/app/views/errors/error.php?codigo=429
+ErrorDocument 500 /barberKadosh/app/views/errors/error.php?codigo=500
+ErrorDocument 502 /barberKadosh/app/views/errors/error.php?codigo=502
+ErrorDocument 504 /barberKadosh/app/views/errors/error.php?codigo=504
+
+
 # 3. Configuración de URLs Amigables
 <IfModule mod_rewrite.c>
 # Activar el motor de reescritura de URLS
@@ -22,5 +31,5 @@ RewriteCond %{REQUEST_FILENAME} !-d
 # Reescribir cualquier ruta al archivo index.php pasando la dirección como parámetro "url"
 # [QSA] = Mantiene parámetros GET adicionales (ej: ?orden=asc)
 # [L] = Última regla a procesar si esta condición se cumple
-RewriteRule ^(.*)$ index.php?ur1=$1 [QSA,L]
+RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule> 
