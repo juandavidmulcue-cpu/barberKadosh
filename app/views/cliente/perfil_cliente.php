@@ -83,7 +83,6 @@ $fotosCortes = [
         <!-- Dirección -->
         <div class="card direccion">
             <h3>DIRECCIÓN</h3>
-
             <p>
                 Cra 99 #999-99<br>
                 2do piso – Soacha
@@ -98,76 +97,58 @@ $fotosCortes = [
                 📋 Ver historial
             </button>
         </div>
-
     </div>
 
     <div class="panel" id="panel-reservas">
-
         <h2 class="section-title">Mis Reservas</h2>
-
         <br>
-
         <div class="section-card">
-
             <table class="data-table" id="tablaCitas">
-
                 <thead>
                     <tr>
                         <th>Barbero</th>
                         <th>Servicio</th>
+                        <th>Producto</th>
                         <th>Fecha</th>
                         <th>Hora</th>
+                        <th>Total</th>
                         <th>Estado</th>
                         <th>Acción</th>
                     </tr>
                 </thead>
-
                 <tbody>
-
                     <?php if (!empty($citas)): ?>
-
                         <?php foreach ($citas as $c): ?>
-
+                            <?php
+                            // Formatear el valor total recibido desde la consulta SQL
+                            $total = isset($c['total']) ? '$' . number_format($c['total'], 0, ',', '.') : '$0';
+                            $producto = !empty($c['producto']) ? $c['producto'] : 'Ninguno';
+                            ?>
                             <tr>
-
                                 <td><?= htmlspecialchars($c['barbero']) ?></td>
-
                                 <td><?= htmlspecialchars($c['servicio']) ?></td>
-
+                                <td><?= htmlspecialchars($producto) ?></td>
                                 <td><?= htmlspecialchars($c['fecha_cita']) ?></td>
-
                                 <td><?= htmlspecialchars($c['hora_cita']) ?></td>
-
+                                <td><strong><?= htmlspecialchars($total) ?></strong></td>
                                 <td>
-
                                     <?php if ($c['estado'] == 'Pendiente'): ?>
-
                                         <span style="color:orange;font-weight:bold;">
                                             🟡 Pendiente
                                         </span>
-
                                     <?php elseif ($c['estado'] == 'Cancelada'): ?>
-
                                         <span style="color:red;font-weight:bold;">
                                             🔴 Cancelada
                                         </span>
-
                                     <?php elseif ($c['estado'] == 'Completada'): ?>
-
                                         <span style="color:green;font-weight:bold;">
                                             🟢 Completada
                                         </span>
-
                                     <?php else: ?>
-
                                         <?= htmlspecialchars($c['estado']) ?>
-
                                     <?php endif; ?>
-
                                 </td>
-
                                 <td>
-
                                     <?php if ($c['estado'] == 'Pendiente'): ?>
 
                                         <!-- CANCELAR -->
@@ -175,12 +156,9 @@ $fotosCortes = [
                                             href="index.php?controller=gestionCita&action=cancelar&id=<?= htmlspecialchars($c['id_reservacion']) ?>"
                                             onclick="return confirm('¿Desea cancelar esta reserva?')"
                                             title="Cancelar">
-
                                             <img src="app/public/assets/icons/cancelarcita.png"
                                                 alt="Cancelar">
-
                                         </a>
-
 
                                         <!-- EDITAR -->
                                         <a href="#"
@@ -193,21 +171,14 @@ $fotosCortes = [
                                             '<?= htmlspecialchars($c['hora_cita']) ?>'
                                             ); return false;"
                                             title="Editar">
-
                                             <img src="app/public/assets/icons/editar.png" alt="Editar">
                                         </a>
 
-
                                         <!-- FINALIZAR -->
-                                        <button
-                                            type="button"
-                                            class="btn-finalizar"
-                                            onclick="abrirModalFinalizar('<?= htmlspecialchars($c['id_reservacion']) ?>','<?= htmlspecialchars($c['id_barbero']) ?>')"
+                                        <button type="button" class="btn-finalizar" onclick="abrirModalFinalizar('<?= htmlspecialchars($c['id_reservacion']) ?>','<?= htmlspecialchars($c['id_barbero']) ?>')"
                                             title="Finalizar">
-
                                             <img src="app/public/assets/icons/finalizarReservacion.png" alt="Finalizar">
                                         </button>
-
 
                                     <?php elseif ($c['estado'] == 'Cancelada'): ?>
 
@@ -215,51 +186,37 @@ $fotosCortes = [
                                             Sin acciones
                                         </span>
 
-
                                     <?php elseif ($c['estado'] == 'Completada'): ?>
 
                                         <span style="color:green;">
                                             ✓ Finalizada
                                         </span>
 
-
                                     <?php endif; ?>
-
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="6" style="text-align:center;">
-                                No tienes reservas registradas.
-                            </td>
+                            <td colspan="8" style="text-align:center;">No tienes reservas registradas.</td>
                         </tr>
-
                     <?php endif; ?>
-
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
 
     <div id="modalEditarCita" class="modal-editar-cita">
 
         <div class="contenido-modal">
 
-            <button type="button"
-                class="cerrar-modal"
-                onclick="cerrarModalEditar()">
+            <button type="button" class="cerrar-modal" onclick="cerrarModalEditar()">
                 &times;
             </button>
 
             <h2>Actualizar reservación</h2>
             <div id="horariosEditar">
-                <p>
-                    Seleccione servicio, barbero y fecha.
-                </p>
+                <p>Seleccione servicio, barbero y fecha.</p>
             </div>
             <br>
             <p>
@@ -267,53 +224,31 @@ $fotosCortes = [
                 <span id="idReservaEditar"></span>
             </p>
 
-            <form id="formEditarCita"
-                method="POST"
-                action="index.php?controller=gestionCita&action=actualizarCita">
+            <form id="formEditarCita" method="POST" action="index.php?controller=gestionCita&action=actualizarCita">
 
-                <input type="hidden"
-                    name="id_reservacion"
-                    id="idReservacionEditar">
-
-
+                <input type="hidden" name="id_reservacion" id="idReservacionEditar">
                 <!-- SERVICIO -->
 
-                <label for="servicioEditar">
-                    Servicio:
-                </label>
+                <label for="servicioEditar">Servicio:</label>
 
-                <select name="servicio"
-                    id="servicioEditar"
-                    required>
-
-                    <option value="">
-                        Seleccione un servicio
-                    </option>
+                <select name="servicio" id="servicioEditar" required>
+                    <option value="">Seleccione un servicio</option>
 
                     <?php foreach ($servicios as $servicio): ?>
-
                         <option value="<?= htmlspecialchars($servicio['id_servicio']) ?>">
                             <?= htmlspecialchars($servicio['nombre']) ?>
                         </option>
-
                     <?php endforeach; ?>
-
                 </select>
-
                 <br>
+
                 <!-- BARBERO -->
 
-                <label for="barberoEditar">
-                    Barbero:
-                </label>
+                <label for="barberoEditar">Barbero:</label>
 
-                <select name="barbero"
-                    id="barberoEditar"
-                    required>
+                <select name="barbero" id="barberoEditar" required>
 
-                    <option value="">
-                        Seleccione un barbero:
-                    </option>
+                    <option value="">Seleccione un barbero:</option>
 
                     <?php foreach ($barberos as $barbero): ?>
 
@@ -322,45 +257,23 @@ $fotosCortes = [
                                 $barbero['nombre'] . ' ' . $barbero['apellido']
                             ) ?>
                         </option>
-
                     <?php endforeach; ?>
-
                 </select>
 
                 <br>
                 <!-- FECHA -->
 
-                <label for="fechaEditar">
-                    Fecha:
-                </label>
+                <label for="fechaEditar">Fecha:</label>
 
-                <input type="date"
-                    name="fecha"
-                    id="fechaEditar"
-                    required>
-
-
+                <input type="date" name="fecha" id="fechaEditar" required>
                 <!-- HORARIOS -->
                 <br>
-                <label>
-                    Hora disponible:
-                </label>
-
-
-                <input type="hidden"
-                    name="hora"
-                    id="horaEditar"
-                    required>
-
+                <label>Hora disponible:</label>
+                <input type="hidden" name="hora" id="horaEditar" required>
                 <br>
-                <button type="submit">
-                    Guardar cambios
-                </button>
-
+                <button type="submit">Guardar cambios</button>
             </form>
-
         </div>
-
     </div>
 
     <!-- =========================================
@@ -423,14 +336,13 @@ $fotosCortes = [
                                             <button type="button"
                                                 class="btn-descargar-pdf"
                                                 onclick="generarPDFReserva(
-                            '<?= htmlspecialchars($h['barbero'], ENT_QUOTES) ?>', 
-                            '<?= htmlspecialchars($h['servicio'], ENT_QUOTES) ?>', 
-                            '<?= htmlspecialchars($h['producto'], ENT_QUOTES) ?>', 
-                            '<?= htmlspecialchars($h['fecha_cita'], ENT_QUOTES) ?>', 
-                            '<?= htmlspecialchars($h['hora_cita'], ENT_QUOTES) ?>', 
-                            '<?= htmlspecialchars($totalFormateado, ENT_QUOTES) ?>', 
-                            '<?= htmlspecialchars($h['estado'], ENT_QUOTES) ?>'
-                        )"
+                                                '<?= htmlspecialchars($h['barbero'], ENT_QUOTES) ?>', 
+                                                '<?= htmlspecialchars($h['servicio'], ENT_QUOTES) ?>', 
+                                                '<?= htmlspecialchars($h['producto'], ENT_QUOTES) ?>', 
+                                                '<?= htmlspecialchars($h['fecha_cita'], ENT_QUOTES) ?>', 
+                                                '<?= htmlspecialchars($h['hora_cita'], ENT_QUOTES) ?>', 
+                                                '<?= htmlspecialchars($totalFormateado, ENT_QUOTES) ?>',
+                                                '<?= htmlspecialchars($h['estado'], ENT_QUOTES) ?>')"
                                                 title="Descargar Comprobante PDF">
 
                                                 <img src="app/public/assets/icons/descargar.png" alt="Descargar">
@@ -445,13 +357,9 @@ $fotosCortes = [
                             </tr>
                         <?php endif; ?>
                     </tbody>
-
                 </table>
-
             </div>
-
         </div>
-
     </div>
 
     <!-- =========================================
@@ -462,51 +370,18 @@ $fotosCortes = [
 
         <div class="contenido-modal-finalizar">
 
-            <button
-                type="button"
-                class="cerrar-modal-finalizar"
-                onclick="cerrarModalFinalizar()">
-
+            <button type="button" class="cerrar-modal-finalizar" onclick="cerrarModalFinalizar()">
                 &times;
-
             </button>
 
-
             <h2>¡Cita finalizada! 🎉</h2>
-
-            <p>
-                ¿Te gustaría calificar nuestro servicio?
-            </p>
-
+            <p>¿Te gustaría calificar nuestro servicio?</p>
 
             <div class="botones-finalizar">
-
-                <!-- SI -->
-                <button
-                    type="button"
-                    onclick="mostrarModalResena()">
-
-                    ⭐ Sí
-
-                </button>
-
-
-                <!-- NO -->
-                <form
-                    method="POST"
-                    action="index.php?controller=gestionCita&action=finalizar">
-
-                    <input
-                        type="hidden"
-                        name="id_reservacion"
-                        id="idReservaFinalizar">
-
-                    <button type="submit">
-
-                        No
-
-                    </button>
-
+                <button type="button" onclick="mostrarModalResena()">Sí</button>
+                <form method="POST" action="index.php?controller=gestionCita&action=finalizar">
+                    <input type="hidden" name="id_reservacion" id="idReservaFinalizar">
+                    <button type="submit"> No </button>
                 </form>
 
             </div>
@@ -523,52 +398,23 @@ $fotosCortes = [
 
         <div class="contenido-modal-resena">
 
-            <button
-                type="button"
-                class="cerrar-modal-resena"
-                onclick="cerrarModalResena()">
-
+            <button type="button" class="cerrar-modal-resena" onclick="cerrarModalResena()">
                 &times;
-
             </button>
 
+            <h2>Califica nuestro servicio</h2>
 
-            <h2>Califica nuestro servicio ⭐</h2>
+            <p>¿Cómo fue tu experiencia?</p>
 
-            <p>
-                ¿Cómo fue tu experiencia?
-            </p>
+            <form method="POST" action="index.php?controller=gestionCita&action=guardarResena">
 
+                <input type="hidden" name="id_reservacion" id="idReservaResena">
+                <input type="hidden" name="id_barbero" id="idBarberoResena">
+                <label>Calificación</label>
 
-            <form
-                method="POST"
-                action="index.php?controller=gestionCita&action=guardarResena">
+                <select name="calificacion" required>
 
-
-                <input
-                    type="hidden"
-                    name="id_reservacion"
-                    id="idReservaResena">
-
-
-                <input
-                    type="hidden"
-                    name="id_barbero"
-                    id="idBarberoResena">
-
-
-                <label>
-                    Calificación
-                </label>
-
-
-                <select
-                    name="calificacion"
-                    required>
-
-                    <option value="">
-                        Selecciona una calificación
-                    </option>
+                    <option value="">Selecciona una calificación</option>
 
                     <option value="5">
                         ⭐⭐⭐⭐⭐ Excelente
@@ -593,22 +439,11 @@ $fotosCortes = [
                 </select>
 
 
-                <label>
-                    Comentario
-                </label>
+                <label>Comentario</label>
 
+                <textarea name="comentario" placeholder="Cuéntanos tu experiencia..." rows="4"></textarea>
 
-                <textarea
-                    name="comentario"
-                    placeholder="Cuéntanos tu experiencia..."
-                    rows="4"></textarea>
-
-
-                <button type="submit">
-
-                    Publicar reseña
-
-                </button>
+                <button type="submit">Publicar reseña</button>
 
             </form>
 

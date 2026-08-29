@@ -6,12 +6,14 @@
     border-radius: 8px;
     margin-bottom: 15px;
 }
+
 .admin-body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     margin: 0;
 }
+
 /* ===== HEADER ===== */
 .admin-header {
     display: flex;
@@ -62,18 +64,18 @@
     color: var(--dorado);
 }
 
-.btn-outline:hover{
+.btn-outline:hover {
     background: var(--dorado);
     color: var(--negro);
 }
 
-.btn-outline{
+.btn-outline {
     position: relative;
     left: 820px;
     border: 1px solid var(--dorado);
 }
 
-.btn{
+.btn {
     padding: 10px 20px;
     border-radius: 30px;
     border: 1px solid var(--dorado);
@@ -371,4 +373,139 @@
     min-height: 35px !important;
 
     object-fit: contain !important;
+}
+
+/* ==========================================
+   ESTILOS KADOSH BARBER - FULLCALENDAR
+   ========================================== */
+
+/* 1. Contenedores laterales y principales */
+#external-events {
+    background: linear-gradient(135deg, #0a0a0a 30%, #240046 100%) !important;
+    border: 1px solid var(--dorado) !important;
+    border-radius: 12px;
+}
+
+#external-events h4 {
+    color: var(--dorado) !important;
+}
+
+.fc-event-item {
+    background: linear-gradient(135deg, #2b123a, #4b2a6b) !important;
+    border: 1px solid var(--dorado) !important;
+    color: var(--blanco) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fc-event-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* 2. Contenedor principal del calendario */
+#calendar {
+    background-color: #12091c !important;
+    color: var(--blanco);
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid var(--dorado);
+}
+
+/* 3. Corrección de la barra blanca de días de la semana (Dom, Lun, Mar...) */
+.fc .fc-col-header,
+.fc .fc-col-header-cell,
+.fc .fc-scrollgrid-section-header th,
+.fc .fc-scrollgrid-sync-inner {
+    background-color: #1e122b !important;
+    color: var(--dorado) !important;
+    border-color: rgba(212, 175, 55, 0.3) !important;
+}
+
+.fc .fc-col-header-cell-cushion {
+    color: var(--dorado) !important;
+    font-weight: 700;
+    text-transform: capitalize;
+    padding: 8px 0 !important;
+}
+
+/* 4. Bordes de la cuadrícula general */
+.fc td,
+.fc th,
+.fc-theme-standard td,
+.fc-theme-standard th,
+.fc-scrollgrid {
+    border-color: rgba(212, 175, 55, 0.2) !important;
+}
+
+/* 5. Título del mes/año y números de días */
+.fc .fc-toolbar-title {
+    color: var(--dorado) !important;
+    font-size: 1.5rem !important;
+    text-transform: capitalize;
+}
+
+.fc .fc-daygrid-day-number {
+    color: var(--blanco-suave) !important;
+    font-weight: 600;
+}
+
+/* Fondo de las celdas de días */
+.fc .fc-daygrid-day {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* Días de otros meses */
+.fc .fc-day-other .fc-daygrid-day-top {
+    opacity: 0.3;
+}
+
+/* 6. Botones de navegación */
+.fc .fc-button-primary {
+    background: #2b123a !important;
+    border: 1px solid var(--dorado) !important;
+    color: var(--blanco) !important;
+    box-shadow: none !important;
+    text-transform: capitalize;
+}
+
+.fc .fc-button-primary:hover {
+    background: var(--morado) !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4) !important;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+    background: var(--dorado) !important;
+    color: var(--negro) !important;
+    border-color: var(--dorado) !important;
+    font-weight: bold;
+}
+
+/* 7. Eventos/Turnos dentro de las casillas */
+.fc-daygrid-event {
+    background: linear-gradient(135deg, #1b4332, #2d6a4f) !important;
+    border: 1px solid #52b788 !important;
+    border-radius: 6px !important;
+    padding: 3px 6px !important;
+}
+
+.fc-event-title {
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+/* 8. Estilo del Modal de Asignación */
+#modalHorario>div {
+    background: linear-gradient(135deg, #0a0a0a 30%, #240046 100%) !important;
+    border: 1px solid var(--dorado) !important;
+    color: var(--blanco) !important;
+    border-radius: 16px !important;
+}
+
+#modalHorario h3 {
+    color: var(--dorado) !important;
+}
+
+#modalHorario label {
+    color: var(--blanco-suave) !important;
 }

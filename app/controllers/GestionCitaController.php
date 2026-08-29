@@ -163,26 +163,35 @@ class GestionCitaController extends Controller
         // 3. OBTENER PRODUCTO SELECCIONADO
         // ==========================================
 
-        $idProducto = $_POST['id_producto'] ?? null;
+        $productosJson = $_POST['productos_seleccionados'] ?? null;
+        $productosIds = [];
 
+        if(!empty($productosJson)){
+            $productosIds = json_decode($productosJson, true);
+        }
 
         // ==========================================
         // 4. SI HAY PRODUCTO, GUARDARLO
         // ==========================================
 
-        if (!empty($idProducto)) {
+        $erroresProductos = false;
 
-            $productoGuardado =
-                $this->clienteProductoModel->agregarProducto(
+        if (is_array($productosIds) && !empty($productosIds)) {
+            foreach ($productosIds as $idProducto) {
+                // Inserta cada producto en detalle_reservacion mediante el modelo existente
+                $productoGuardado = $this->clienteProductoModel->agregarProducto(
                     $idReservacion,
                     $idProducto,
                     1
                 );
 
-            if (!$productoGuardado) {
+                if (!$productoGuardado) {
+                    $erroresProductos = true;
+                }
+            }
 
-                $_SESSION['error_cita'] =
-                    '⚠️ La cita fue creada, pero no fue posible agregar el producto.';
+            if ($erroresProductos) {
+                $_SESSION['error_cita'] = '⚠️ La cita fue creada, pero algunos productos no pudieron guardarse.';
             }
         }
 
@@ -192,15 +201,10 @@ class GestionCitaController extends Controller
         // ==========================================
 
         if (!isset($_SESSION['error_cita'])) {
-
-            if (!empty($idProducto)) {
-
-                $_SESSION['mensaje_cita'] =
-                    '✅ ¡Cita agendada y producto agregado correctamente!';
+            if (!empty($productosIds)) {
+                $_SESSION['mensaje_cita'] = '✅ ¡Cita agendada y productos agregados correctamente!';
             } else {
-
-                $_SESSION['mensaje_cita'] =
-                    '✅ ¡Cita agendada correctamente!';
+                $_SESSION['mensaje_cita'] = '✅ ¡Cita agendada correctamente!';
             }
         }
 

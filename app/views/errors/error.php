@@ -4,15 +4,15 @@ $codigoError = $_GET['codigo'] ?? ($codigoError ?? 404);
 $codigoError = (int) $codigoError;
 
 $imagenesErrores = [
-    403 => 'error403.png',
-    404 => 'error404.png',
-    429 => 'error429.png',
-    500 => 'error500.png',
-    502 => 'error502.png',
-    504 => 'error504.png'
+    403 => 'error403.jpg',
+    404 => 'error404.jpg',
+    429 => 'error429.jpg',
+    500 => 'error500.jpg',
+    502 => 'error502.jpg',
+    504 => 'error504.jpg'
 ];
 
-$imagen = $imagenesErrores[$codigoError] ?? 'error404.png';
+$imagen = $imagenesErrores[$codigoError] ?? 'error404.jpg';
 
 ?>
 

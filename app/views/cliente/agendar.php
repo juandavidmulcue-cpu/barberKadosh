@@ -93,7 +93,9 @@ $productos = $productos ?? [];
 
             <!-- BOTÓN -->
             <button type="submit">AGENDAR CITA</button>
-            <input type="hidden" name="id_producto" id="id_producto" value="">
+
+            <!-- INPUT OCULTO PARA MULTIPLES PRODUCTOS (ENVÍA ARRAY JSON) -->
+            <input type="hidden" name="productos_seleccionados" id="productos_seleccionados" value="">
 
         </form>
 
@@ -105,10 +107,10 @@ $productos = $productos ?? [];
     <!-- MODAL CONFIRMACIÓN PRODUCTO -->
     <div id="modalProducto" class="modal-producto-overlay" style="display: none;">
         <div class="modal-producto-content">
-            <h2>¿Desea añadir un producto?</h2>
-            <p>Puede añadir un producto a su cita antes de finalizar.</p>
+            <h2>¿Desea añadir productos?</h2>
+            <p>Puede añadir uno o más productos a su cita antes de finalizar.</p>
             <div class="modal-producto-botones">
-                <button type="button" id="btnSiProducto" class="btn-producto-si">Sí, añadir producto</button>
+                <button type="button" id="btnSiProducto" class="btn-producto-si">Sí, añadir productos</button>
                 <button type="button" id="btnNoProducto" class="btn-producto-no">No, continuar</button>
             </div>
         </div>
@@ -117,8 +119,8 @@ $productos = $productos ?? [];
     <!-- MODAL LISTA DE PRODUCTOS -->
     <div id="modalProductos" class="modal-producto-overlay" style="display: none;">
         <div class="modal-producto-content">
-            <h2>Seleccionar producto</h2>
-            <p>Seleccione el producto que desea añadir a su cita.</p>
+            <h2>Seleccionar productos</h2>
+            <p>Seleccione los productos que desea añadir a su cita.</p>
             <div id="listaProductos" style="max-height: 250px; overflow-y: auto; margin: 15px 0;">
                 <p>Cargando productos...</p>
             </div>
@@ -176,12 +178,14 @@ $productos = $productos ?? [];
     <!-- SCRIPTS                                    -->
     <!-- ========================================== -->
     <script>
+        // 1. CAPTURA DE ELEMENTOS DEL DOM
         const servicio = document.getElementById('servicio');
         const barbero = document.getElementById('barbero');
         const fecha = document.getElementById('fecha');
         const horariosDisponibles = document.getElementById('horariosDisponibles');
         const horaInput = document.getElementById('hora');
 
+        // 2. FUNCIÓN PARA CONSULTAR HORARIOS DISPONIBLES
         function consultarHorario() {
             const idServicio = servicio.value;
             const idBarbero = barbero.value;
@@ -194,6 +198,8 @@ $productos = $productos ?? [];
                 horariosDisponibles.innerHTML = `<p>Seleccione un servicio, un barbero y una fecha.</p>`;
                 return;
             }
+
+            horariosDisponibles.innerHTML = `<p>Cargando horarios disponibles...</p>`;
 
             fetch(`index.php?controller=gestionCita&action=obtenerHorario&barbero=${idBarbero}&fecha=${fechaSeleccionada}&servicio=${idServicio}`)
                 .then(response => response.json())
@@ -208,25 +214,35 @@ $productos = $productos ?? [];
                     const duracion = data.duracion;
 
                     horariosDisponibles.innerHTML = `
-                        <p style="color:green;">🟢 Horario del barbero: <strong>${inicio}</strong> a <strong>${fin}</strong></p>
-                        <div id="listaHoras"></div>
-                    `;
+                    <p style="color:green;">🟢 Horario del barbero: <strong>${inicio}</strong> a <strong>${fin}</strong></p>
+                    <div id="listaHoras"></div>
+                `;
 
                     generarHoras(inicio, fin, duracion, data.ocupadas);
                 })
                 .catch(error => {
-                    console.error(error);
+                    console.error('Error fetching horarios:', error);
                     horariosDisponibles.innerHTML = `<p style="color:red;">Error al consultar el horario.</p>`;
                 });
         }
 
+        // 3. GENERACIÓN DE BOTONES DE HORAS
         function generarHoras(inicio, fin, duracion, ocupadas) {
             const listaHoras = document.getElementById('listaHoras');
             listaHoras.innerHTML = '';
 
             function horaAMinutos(hora) {
-                const partes = hora.split(':');
-                return parseInt(partes[0]) * 60 + parseInt(partes[1]);
+                // Si la duración ya viene en números (ej: 30 o 45)
+                if (typeof hora === 'number') return hora;
+                if (!isNaN(hora)) return parseInt(hora);
+
+                // Si viene en formato string "HH:MM:SS" o "HH:MM"
+                if (typeof hora === 'string' && hora.includes(':')) {
+                    const partes = hora.split(':');
+                    return parseInt(partes[0]) * 60 + parseInt(partes[1]);
+                }
+
+                return 30; // Valor por defecto si falla el formato
             }
 
             function minutosAHora(minutos) {
@@ -247,15 +263,18 @@ $productos = $productos ?? [];
                 const finNuevaCita = minutosActuales + duracionMinutos;
                 let estaOcupada = false;
 
-                ocupadas.forEach(cita => {
-                    const inicioCita = horaAMinutos(cita.hora_cita);
-                    const duracionCita = horaAMinutos(cita.duracion);
-                    const finCita = inicioCita + duracionCita;
+                if (Array.isArray(ocupadas)) {
+                    ocupadas.forEach(cita => {
+                        const inicioCita = horaAMinutos(cita.hora_cita);
+                        // Soporta si cita.duracion existe o usa la duración del servicio
+                        const duracionCita = cita.duracion ? horaAMinutos(cita.duracion) : duracionMinutos;
+                        const finCita = inicioCita + duracionCita;
 
-                    if (inicioNuevaCita < finCita && finNuevaCita > inicioCita) {
-                        estaOcupada = true;
-                    }
-                });
+                        if (inicioNuevaCita < finCita && finNuevaCita > inicioCita) {
+                            estaOcupada = true;
+                        }
+                    });
+                }
 
                 if (!estaOcupada) {
                     hayDisponibilidad = true;
@@ -264,8 +283,9 @@ $productos = $productos ?? [];
 
                     boton.type = 'button';
                     boton.textContent = horaFormateada;
+                    boton.className = 'btn-horario'; // Puedes asignarle una clase CSS para diseño
                     boton.style.margin = '5px';
-                    boton.style.padding = '10px 15px';
+                    boton.style.padding = '8px 12px';
                     boton.style.cursor = 'pointer';
 
                     boton.addEventListener('click', function() {
@@ -289,11 +309,12 @@ $productos = $productos ?? [];
             }
         }
 
+        // 4. ESCUCHADORES DE CAMBIO (DISPARAN LA BÚSQUEDA)
         servicio.addEventListener('change', consultarHorario);
         barbero.addEventListener('change', consultarHorario);
         fecha.addEventListener('change', consultarHorario);
 
-        // MODAL Y FORMULARIO
+        // 5. MANEJO DE MODALES DE PRODUCTOS Y ENVÍO DEL FORMULARIO
         const formulario = document.getElementById('formAgendar');
         const modalProducto = document.getElementById('modalProducto');
         const btnSiProducto = document.getElementById('btnSiProducto');
@@ -302,47 +323,51 @@ $productos = $productos ?? [];
         const listaProductos = document.getElementById('listaProductos');
         const btnContinuarProducto = document.getElementById('btnContinuarProducto');
         const btnCancelarProducto = document.getElementById('btnCancelarProducto');
-        const idProducto = document.getElementById('id_producto');
+        const productosInput = document.getElementById('productos_seleccionados');
 
         formulario.addEventListener('submit', function(event) {
             event.preventDefault();
 
             if (!horaInput.value) {
-                alert('Por favor seleccione un horario.');
+                alert('Por favor seleccione un horario antes de continuar.');
                 return;
             }
 
-            // Mostrar modal flotante
+            // Mostrar el modal de confirmación de productos
             modalProducto.style.display = 'flex';
         });
 
-        // Respuesta: NO agregar producto
+        // Si hace clic en "NO desea productos"
         btnNoProducto.addEventListener('click', function() {
             modalProducto.style.display = 'none';
-            idProducto.value = "";
+            productosInput.value = JSON.stringify([]);
             formulario.submit();
         });
 
-        // Respuesta: SI agregar producto
+        // Si hace clic en "SÍ desea productos"
         btnSiProducto.addEventListener('click', function() {
             modalProducto.style.display = 'none';
             modalProductos.style.display = 'flex';
             cargarProductos();
         });
 
-        // Confirmar producto seleccionado
+        // Confirmar productos seleccionados
         btnContinuarProducto.addEventListener('click', function() {
-            const productoSeleccionado = document.querySelector('input[name="productoSeleccionado"]:checked');
-            if (!productoSeleccionado) {
-                alert('Por favor seleccione un producto.');
+            const seleccionados = document.querySelectorAll('input[name="productoSeleccionado"]:checked');
+
+            if (seleccionados.length === 0) {
+                alert('Por favor seleccione al menos un producto o presione cancelar.');
                 return;
             }
-            idProducto.value = productoSeleccionado.value;
+
+            const ids = Array.from(seleccionados).map(cb => cb.value);
+            productosInput.value = JSON.stringify(ids);
+
             modalProductos.style.display = 'none';
             formulario.submit();
         });
 
-        // Cancelar desde modal de lista de productos
+        // Cancelar la selección de productos
         btnCancelarProducto.addEventListener('click', function() {
             modalProductos.style.display = 'none';
             modalProducto.style.display = 'flex';
@@ -357,7 +382,7 @@ $productos = $productos ?? [];
                     listaProductos.innerHTML = '';
 
                     if (!productos || productos.length === 0) {
-                        listaProductos.innerHTML = `<p>No hay productos disponibles.</p>`;
+                        listaProductos.innerHTML = `<p>No hay productos disponibles en stock.</p>`;
                         return;
                     }
 
@@ -367,12 +392,12 @@ $productos = $productos ?? [];
                         div.style.padding = "8px";
                         div.style.textAlign = "left";
                         div.innerHTML = `
-                            <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
-                                <input type="radio" name="productoSeleccionado" value="${producto.id_producto}">
-                                <span style="flex-grow: 1;">${producto.nombre}</span>
-                                <strong>$${Number(producto.precio).toLocaleString('es-CO')}</strong>
-                            </label>
-                        `;
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" name="productoSeleccionado" value="${producto.id_producto}">
+                            <span style="flex-grow: 1;">${producto.nombre}</span>
+                            <strong>$${Number(producto.precio).toLocaleString('es-CO')}</strong>
+                        </label>
+                    `;
                         listaProductos.appendChild(div);
                     });
                 })

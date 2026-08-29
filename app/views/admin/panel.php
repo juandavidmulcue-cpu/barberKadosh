@@ -16,6 +16,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet" />
 </head>
 
 <body class="admin-body">
@@ -386,15 +387,25 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                             </div>
 
                             <div class="form-group">
-
                                 <label>Duración</label>
+                                <select name="duracion" required>
+                                    <?php
+                                    $durActual = $servicioEditar['duracion'] ?? '00:30:00';
+                                    ?>
+                                    <!-- SERVICIOS CORTOS -->
+                                    <option value="20" <?= ($durActual == '00:20:00' || $durActual == '20') ? 'selected' : ''; ?>>20 Minutos</option>
+                                    <option value="30" <?= ($durActual == '00:30:00' || $durActual == '30') ? 'selected' : ''; ?>>30 Minutos</option>
+                                    <option value="40" <?= ($durActual == '00:40:00' || $durActual == '40') ? 'selected' : ''; ?>>40 Minutos</option>
+                                    <option value="45" <?= ($durActual == '00:45:00' || $durActual == '45') ? 'selected' : ''; ?>>45 Minutos</option>
+                                    <option value="50" <?= ($durActual == '00:50:00' || $durActual == '50') ? 'selected' : ''; ?>>50 Minutos</option>
 
-                                <input
-                                    type="time"
-                                    name="duracion"
-                                    value="<?= htmlspecialchars($servicioEditar['duracion'] ?? ''); ?>"
-                                    required>
-
+                                    <!-- SERVICIOS LARGOS (TINTES, TRATAMIENTOS, KERA) -->
+                                    <option value="60" <?= ($durActual == '01:00:00' || $durActual == '60') ? 'selected' : ''; ?>>1 Hora (60 Min)</option>
+                                    <option value="90" <?= ($durActual == '01:30:00' || $durActual == '90') ? 'selected' : ''; ?>>1 Hora y Media (90 Min)</option>
+                                    <option value="120" <?= ($durActual == '02:00:00' || $durActual == '120') ? 'selected' : ''; ?>>2 Horas (120 Min)</option>
+                                    <option value="150" <?= ($durActual == '02:30:00' || $durActual == '150') ? 'selected' : ''; ?>>2 Horas y Media (150 Min)</option>
+                                    <option value="180" <?= ($durActual == '03:00:00' || $durActual == '180') ? 'selected' : ''; ?>>3 Horas (180 Min)</option>
+                                </select>
                             </div>
 
 
@@ -470,7 +481,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                                                 <img src="app/public/assets/icons/editar.png" alt="Editar">
                                             </a>
                                             <a class="btn-danger"
-                                                href="index.php?controller=servicio&action=eliminarServicio&id_servicio=<?= urlencode($s['id_servicio']); ?>"
+                                                href="index.php?controller=servicio&action=eliminar&id_servicio=<?= urlencode($s['id_servicio']); ?>"
                                                 onclick="return confirm('¿Está seguro de eliminar este servicio?')"
                                                 title="Eliminar">
 
@@ -493,88 +504,67 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
 
             </div>
 
-            <!-- HORARIOS -->
-            <div class="panel" id="panel-horarios">
+            <!-- CDN de FullCalendar v6 -->
+            <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
 
-                <h2 class="section-title">🕒 Horarios de Barberos</h2>
+            <div class="panel" id="panel-horarios">
+                <h2 class="section-title">Asignación de Horarios de Barberos</h2>
 
                 <div class="admin-card">
-                    <p>Asigna los horarios de trabajo de cada barbero.</p>
+                    <p>Arrastra un barbero desde la lista hacia cualquier día del calendario para asignarle un turno.</p>
                 </div>
 
-                <div class="section-card">
-                    <form action="index.php?controller=horario&action=guardarHorario" method="POST">
-                        <div class="form-group">
-                            <label>Barbero</label>
-                            <select name="id_barbero" required>
-                                <option value="">Seleccione...</option>
-                                <?php if (!empty($barberos) && is_array($barberos)): ?>
-                                    <?php foreach ($barberos as $b): ?>
-                                        <option value="<?= $b['id_usuario']; ?>">
-                                            <?= $b['nombre'] . ' ' . $b['apellido']; ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </select>
-                        </div>
+                <!-- CONTENEDOR PRINCIPAL: SIDEBAR BARBEROS + CALENDARIO -->
+                <div style="display: flex; gap: 20px; align-items: flex-start; margin-top: 15px;">
 
-                        <div class="form-group">
-                            <label>Desde (Fecha Inicio)</label>
-                            <input type="date" name="fecha_inicio" min="<?= date('Y-m-d'); ?>" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Hasta (Fecha Fin)</label>
-                            <input type="date" name="fecha_fin" min="<?= date('Y-m-d'); ?>" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Hora Inicio</label>
-                            <input type="time" name="hora_inicio" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Hora Fin</label>
-                            <input type="time" name="hora_fin" required>
-                        </div>
-
-                        <br>
-                        <button type="submit" class="btn btn-primary">Guardar Horario</button>
-                    </form>
-                </div>
-
-                <!-- TABLA DE HORARIOS -->
-                <table class="data-table" id="tablaHorarios">
-                    <thead>
-                        <tr>
-                            <th>Barbero</th>
-                            <th>Fecha</th>
-                            <th>Hora Inicio</th>
-                            <th>Hora Fin</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($horarios)): ?>
-                            <?php foreach ($horarios as $h): ?>
-                                <tr>
-                                    <td><?= $h['nombre'] . " " . $h['apellido']; ?></td>
-                                    <td><?= date('d/m/Y', strtotime($h['fecha'])); ?></td>
-                                    <td><?= date('g:i A', strtotime($h['hora_inicio'])); ?></td>
-                                    <td><?= date('g:i A', strtotime($h['hora_fin'])); ?></td>
-                                    <td>
-                                        <a class="btn-danger"
-                                            href="index.php?controller=horario&action=eliminarHorario&id_horario=<?= urlencode($h['id_horario']); ?>"
-                                            onclick="return confirm('¿Desea eliminar este horario?')"
-                                            title="Eliminar">
-                                            <img src="app/public/assets/icons/eliminar.png" alt="Eliminar">
-                                        </a>
-                                    </td>
-                                </tr>
+                    <!-- LISTA DE BARBEROS -->
+                    <div id="external-events" style="width: 220px; padding: 15px;">
+                        <h4 style="margin-bottom: 12px; font-size: 15px;">Barberos Activos</h4>
+                        <?php if (!empty($barberos) && is_array($barberos)): ?>
+                            <?php foreach ($barberos as $b): ?>
+                                <div class="fc-event-item"
+                                    data-id="<?= $b['id_usuario']; ?>"
+                                    data-nombre="<?= htmlspecialchars($b['nombre'] . ' ' . $b['apellido']); ?>"
+                                    style="padding: 10px; margin-bottom: 8px; border-radius: 8px; cursor: grab; font-weight: bold; text-align: center;">
+                                    <?= htmlspecialchars($b['nombre'] . ' ' . $b['apellido']); ?>
+                                </div>
                             <?php endforeach; ?>
                         <?php endif; ?>
-                    </tbody>
-                </table>
+                    </div>
+
+                    <!-- CALENDARIO -->
+                    <div style="flex-grow: 1;">
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL PARA ASIGNAR HORAS DE TURNO -->
+            <div id="modalHorario" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+                <div style="background: white; width: 350px; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); position: relative;">
+                    <h3 id="modalTitulo" style="margin-top: 0; margin-bottom: 15px; font-size: 18px; color: #333;">Asignar Horario</h3>
+
+                    <form action="index.php?controller=horario&action=guardarHorario" method="POST">
+                        <input type="hidden" name="id_barbero" id="modal_id_barbero">
+                        <input type="hidden" name="fecha_inicio" id="modal_fecha_inicio">
+                        <input type="hidden" name="fecha_fin" id="modal_fecha_fin">
+
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label style="display:block; margin-bottom: 5px;">Hora Inicio</label>
+                            <input type="time" name="hora_inicio" value="08:00" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 18px;">
+                            <label style="display:block; margin-bottom: 5px;">Hora Fin</label>
+                            <input type="time" name="hora_fin" value="17:00" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                            <button type="button" onclick="cerrarModalHorario()" class="btn" style="background: #ccc; border:none; padding: 8px 12px; border-radius: 4px; cursor:pointer;">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" style="padding: 8px 12px; cursor:pointer;">Guardar Horario</button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <!-- REPORTES -->
@@ -1227,6 +1217,90 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                     }
                 });
             }
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const containerEl = document.getElementById('external-events');
+            const calendarEl = document.getElementById('calendar');
+
+            // 1. Convertir elementos de la lista en arrastables
+            new FullCalendar.Draggable(containerEl, {
+                itemSelector: '.fc-event-item',
+                eventData: function(eventEl) {
+                    return {
+                        title: eventEl.getAttribute('data-nombre'),
+                        idBarbero: eventEl.getAttribute('data-id')
+                    };
+                }
+            });
+
+            // 2. Formatear la lista de horarios traída desde el backend PHP
+            const eventosBD = [
+                <?php if (!empty($horarios)): ?>
+                    <?php foreach ($horarios as $h): ?> {
+                            id: '<?= $h['id_horario']; ?>',
+                            title: '<?= addslashes($h['nombre'] . ' ' . $h['apellido']); ?> (<?= date('g:i A', strtotime($h['hora_inicio'])); ?> - <?= date('g:i A', strtotime($h['hora_fin'])); ?>)',
+                            start: '<?= $h['fecha']; ?>',
+                            allDay: true,
+                            backgroundColor: '#1b4332',
+                            borderColor: '#081c15'
+                        },
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            ];
+
+            // 3. Inicializar el Calendario
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'es',
+                height: 'auto',
+                contentHeight: 'auto',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek'
+                },
+                editable: false,
+                droppable: true,
+                events: eventosBD,
+
+                // Al soltar a un barbero en un día determinado
+                drop: function(info) {
+                    const idBarbero = info.draggedEl.getAttribute('data-id');
+                    const nombreBarbero = info.draggedEl.getAttribute('data-nombre');
+
+                    // Obtener fecha en formato YYYY-MM-DD
+                    const fechaSeleccionada = info.dateStr;
+
+                    abrirModalHorario(idBarbero, nombreBarbero, fechaSeleccionada);
+                },
+
+                // Eliminar horario al hacer click en una asignación existente
+                eventClick: function(info) {
+                    if (confirm(`¿Desea eliminar el horario asignado (${info.event.title})?`)) {
+                        window.location.href = `index.php?controller=horario&action=eliminarHorario&id_horario=${info.event.id}`;
+                    }
+                }
+            });
+
+            calendar.render();
+        });
+
+        // Funciones Auxiliares para el Modal
+        function abrirModalHorario(idBarbero, nombre, fecha) {
+            document.getElementById('modalTitulo').innerText = `Asignar a ${nombre} (${fecha})`;
+            document.getElementById('modal_id_barbero').value = idBarbero;
+            document.getElementById('modal_fecha_inicio').value = fecha;
+            document.getElementById('modal_fecha_fin').value = fecha;
+
+            const modal = document.getElementById('modalHorario');
+            modal.style.display = 'flex';
+        }
+
+        function cerrarModalHorario() {
+            document.getElementById('modalHorario').style.display = 'none';
         }
     </script>
 
