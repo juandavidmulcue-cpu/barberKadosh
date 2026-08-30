@@ -263,7 +263,7 @@ form > button[type="submit"]:hover {
 ========================================= */
 
 /* ===== MODAL DE PRODUCTO UNIFICADO ===== */
-.modal-producto {
+.modal-producto-overlay {
     display: none;
     position: fixed;
     top: 0;
@@ -278,30 +278,101 @@ form > button[type="submit"]:hover {
     padding: 20px;
 }
 
+.modal-producto-overlay[style*="display: flex"],
+.modal-producto-overlay.activo {
+    display: flex !important;
+}
+
 .modal-producto-content {
     background: var(--fondo-modal);
     color: #fff;
-    padding: 30px;
-    border-radius: 18px;
-    width: 90%;
-    max-width: 450px;
+    padding: 30px 25px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 460px;
     text-align: center;
     position: relative;
     border: 1px solid var(--dorado);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-    margin: auto;
 }
 
 .modal-producto-content h2 {
-    color: var(--dorado);
-    margin-bottom: 12px;
-    font-size: 1.3rem;
+    color: var(--dorado, #d4af37);
+    margin-bottom: 8px;
+    font-size: 1.4rem;
 }
 
 .modal-producto-content p {
     color: #e4e4e7;
     margin-bottom: 20px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+}
+
+#listaProductos {
+    max-height: 260px;
+    overflow-y: auto;
+    margin: 15px 0 25px 0;
+    padding-right: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Personalización del Scrollbar */
+#listaProductos::-webkit-scrollbar {
+    width: 6px;
+}
+
+#listaProductos::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+#listaProductos::-webkit-scrollbar-thumb {
+    background: var(--dorado, #d4af37);
+    border-radius: 10px;
+}
+
+/* FILA DENTRO DEL CONTENEDOR (GENERADA POR JS) */
+.item-producto {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: left;
+}
+
+.item-producto:hover {
+    background: rgba(123, 44, 191, 0.25);
+    border-color: var(--dorado, #d4af37);
+}
+
+/* Checkbox estilizado */
+.item-producto input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--dorado, #d4af37);
+    cursor: pointer;
+    margin-right: 12px;
+}
+
+.nombre-producto {
+    flex-grow: 1;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.precio-producto {
+    color: var(--dorado, #d4af37);
+    font-weight: 700;
+    font-size: 14px;
+    white-space: nowrap;
 }
 
 /* OPCIONES DE PRODUCTO (SI ES UN SELECTOR O LISTA) */
@@ -327,7 +398,6 @@ form > button[type="submit"]:hover {
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin-top: 15px;
 }
 
 /* BOTÓN DE CONFIRMACIÓN (SÍ / AGREGAR) */
@@ -363,6 +433,12 @@ form > button[type="submit"]:hover {
     background: var(--dorado) !important;
     color: #000000 !important;
     transform: translateY(-2px);
+}
+
+.btn-horario.selected {
+    background-color: var(--morado, #7b2cbf) !important;
+    color: #ffffff !important;
+    border-color: var(--dorado, #d4af37) !important;
 }
 
 /* Animación de apertura suave */

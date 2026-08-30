@@ -11,8 +11,10 @@ $totalReservas = $totalReservas ?? 0;
 $totalResenas = $totalResenas ?? 0;
 $promedio = $promedio ?? 0;
 $historial = $historial ?? [];
+$horarios = $horarios ?? [];
+$reservaciones = $reservaciones ?? [];
 
-// Ejemplos de fotos para el carrusel
+// Fotos para el carrusel
 $fotosCortes = [
     "app/public/assets/img/foto1.png",
     "app/public/assets/img/foto2.png",
@@ -20,6 +22,17 @@ $fotosCortes = [
     "app/public/assets/img/foto4.png",
     "app/public/assets/img/logo.jpeg"
 ];
+
+// Mapear los horarios de trabajo del barbero a FullCalendar
+$eventosCalendario = [];
+foreach ($horarios as $h) {
+    $eventosCalendario[] = [
+        'id'    => $h['id_horario'] ?? null,
+        'start' => ($h['fecha'] ?? '') . 'T' . ($h['hora_inicio'] ?? ''),
+        'end'   => ($h['fecha'] ?? '') . 'T' . ($h['hora_fin'] ?? ''),
+        'color' => '#3d2857'
+    ];
+}
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +43,10 @@ $fotosCortes = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil del Barbero - Kadosh Barber</title>
     <link rel="stylesheet" href="app/public/css/perfilBarbero.css">
+
+    <!-- Librería FullCalendar 6 -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/es.global.min.js"></script>
 </head>
 
 <body>
@@ -40,7 +57,6 @@ $fotosCortes = [
     <header class="header-barberia">
         <div class="contenedor-header">
             <div class="logo">
-                <!-- Imagen del logo agregada -->
                 <img src="app/public/assets/img/logo1.jpeg" alt="Logo Kadosh Barber" class="logo-img">
                 <h2>KADOSH <span>BARBER</span></h2>
             </div>
@@ -50,7 +66,7 @@ $fotosCortes = [
         </div>
     </header>
 
-    <!-- CONTENEDOR PRINCIPAL MAS AMPLIO -->
+    <!-- CONTENEDOR PRINCIPAL -->
     <div class="contenedorPerfil">
 
         <!-- =========================
@@ -76,17 +92,16 @@ $fotosCortes = [
         </section>
 
         <!-- =========================
-     TARJETA DE PERFIL
-========================== -->
+             TARJETA DE PERFIL
+        ========================== -->
         <section class="perfil">
             <div class="imagen">
                 <img src="app/public/assets/img/fotobarbero.jpg" class="avatar" alt="Foto del barbero">
             </div>
 
             <div class="informacion">
-                <!-- Saludo motivador dinámico integrado -->
                 <div class="mensaje-bienvenida">
-                    <h2>¡Hola, Barber <?php echo $nombreBarbero; ?></h2>
+                    <h2>¡Hola, Barber <?php echo $nombreBarbero; ?>!</h2>
                     <p class="subtitulo-motivador">Bienvenido de nuevo a un día más de trabajo. Cada corte es una obra de arte, ¡a dar la mejor actitud hoy!</p>
                 </div>
 
@@ -133,25 +148,12 @@ $fotosCortes = [
         </section>
 
         <!-- =========================
-             HORARIOS DE TRABAJO
+             HORARIOS DE TRABAJO (CALENDARIO COMPACTO)
         ========================== -->
         <section class="card" id="horarios">
-            <h2>Horarios de Trabajo</h2>
-            <div class="horarios">
-                <?php if (!empty($horarios)) { ?>
-                    <?php foreach ($horarios as $hora) { ?>
-                        <div class="horario">
-                            <span>🕒</span>
-                            <p>
-                                <strong><?php echo date('d/m/Y', strtotime($hora['fecha'])); ?></strong><br>
-                                <?php echo date('h:i A', strtotime($hora['hora_inicio'])); ?> -
-                                <?php echo date('h:i A', strtotime($hora['hora_fin'])); ?>
-                            </p>
-                        </div>
-                    <?php } ?>
-                <?php } else { ?>
-                    <p class="sinDatos">No tienes horarios registrados.</p>
-                <?php } ?>
+            <h2>Mis Horarios de Trabajo</h2>
+            <div class="calendar-wrapper">
+                <div id="calendarBarbero"></div>
             </div>
         </section>
 
@@ -159,7 +161,7 @@ $fotosCortes = [
              RESERVACIONES
         ========================== -->
         <section class="card" id="reservas">
-            <h2>Reservaciones</h2>
+            <h2>Reservaciones Activas</h2>
             <?php if (!empty($reservaciones)) { ?>
                 <div class="tablaResponsive">
                     <table>
@@ -201,13 +203,23 @@ $fotosCortes = [
         </section>
 
         <!-- =========================
-             HISTORIAL
+             HISTORIAL DE RESERVACIONES (CON BUSCADOR Y PAGINACIÓN)
         ========================== -->
         <section class="card" id="historial" style="display:none;">
-            <h2>Historial de Reservaciones</h2>
+            <h2>Historial de Citas</h2>
+
             <?php if (!empty($historial)) { ?>
+                <!-- BARRA DE BÚSQUEDA -->
+                <div class="buscador-contenedor">
+                    <input
+                        type="text"
+                        id="inputBusquedaHistorial"
+                        placeholder="🔍 Buscar por cliente, servicio, fecha o estado..."
+                        onkeyup="filtrarYPaginarHistorial()">
+                </div>
+
                 <div class="tablaResponsive">
-                    <table>
+                    <table id="tablaHistorial">
                         <thead>
                             <tr>
                                 <th>Cliente</th>
@@ -217,18 +229,20 @@ $fotosCortes = [
                                 <th>Estado</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tbodyHistorial">
                             <?php foreach ($historial as $h) { ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($h['cliente']); ?></td>
-                                    <td><?php echo htmlspecialchars($h['servicio']); ?></td>
-                                    <td><?php echo date('d/m/Y', strtotime($h['fecha_cita'])); ?></td>
-                                    <td><?php echo date('h:i A', strtotime($h['hora_cita'])); ?></td>
+                                <tr class="fila-historial">
+                                    <td><?php echo htmlspecialchars($h['cliente'] ?? ''); ?></td>
+                                    <td><?php echo htmlspecialchars($h['servicio'] ?? ''); ?></td>
+                                    <td><?php echo date('d/m/Y', strtotime($h['fecha_cita'] ?? '')); ?></td>
+                                    <td><?php echo date('h:i A', strtotime($h['hora_cita'] ?? '')); ?></td>
                                     <td>
-                                        <?php if ($h['estado'] === 'Completada') { ?>
+                                        <?php if (($h['estado'] ?? '') === 'Completada') { ?>
                                             <span class="estado completada">🟢 Completada</span>
-                                        <?php } elseif ($h['estado'] === 'Cancelada') { ?>
+                                        <?php } elseif (($h['estado'] ?? '') === 'Cancelada') { ?>
                                             <span class="estado cancelada">🔴 Cancelada</span>
+                                        <?php } else { ?>
+                                            <span class="estado"><?php echo htmlspecialchars($h['estado'] ?? ''); ?></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -236,6 +250,14 @@ $fotosCortes = [
                         </tbody>
                     </table>
                 </div>
+
+                <!-- CONTROLES DE PAGINACIÓN -->
+                <div class="paginacion-contenedor" id="paginacionHistorial">
+                    <button id="btnPrevPágina" onclick="cambiarPagina(-1)" class="btn-paginacion">&#10094; Anterior</button>
+                    <span id="infoPágina" class="info-pagina">Página 1 de 1</span>
+                    <button id="btnNextPágina" onclick="cambiarPagina(1)" class="btn-paginacion">Siguiente &#10095;</button>
+                </div>
+
             <?php } else { ?>
                 <div class="sinDatos">
                     <p>No tienes reservaciones en tu historial.</p>
@@ -268,6 +290,7 @@ $fotosCortes = [
                         </div>
                     <?php } ?>
                 </div>
+
             <?php } else { ?>
                 <div class="sinDatos">
                     <p>Este barbero todavía no tiene reseñas.</p>
@@ -278,12 +301,9 @@ $fotosCortes = [
     </div>
 
     <footer class="footer">
-
         <div class="footer-container">
-
             <div class="footer-section">
                 <h4>Enlaces</h4>
-
                 <a href="index.php">Inicio</a>
                 <a href="#">Servicios</a>
                 <a href="#">Contacto</a>
@@ -292,7 +312,6 @@ $fotosCortes = [
 
             <div class="footer-section">
                 <h4>Contacto</h4>
-
                 <p>📍 Bogotá - Colombia</p>
                 <p>📞 +57 300 359 3276</p>
                 <p>✉️ kadosh1234@gmail.com</p>
@@ -300,27 +319,20 @@ $fotosCortes = [
 
             <div class="footer-section">
                 <h4>Desarrollado por:</h4>
-
                 <p>Daniela Yara, Laura Buitrago, Juan Acuña, Juan Mulcue, Jose Cuastumal</p>
-
                 <br>
-
                 <p><strong>SENA - ADSO</strong></p>
                 <p>Ficha: 3171693</p>
             </div>
-
         </div>
 
         <div class="footer-bottom">
             <p>
-                © 2026 <strong>KADOSH Barber Shop</strong>. Todos los derechos reservados.
-                | Versión 1.0
+                © 2026 <strong>KADOSH Barber Shop</strong>. Todos los derechos reservados. | Versión 1.0
             </p>
         </div>
-
     </footer>
 
-    <!-- JS Secciones Tab -->
     <script>
         function mostrarSeccion(opcion) {
             const reservas = document.getElementById("reservas");
@@ -375,9 +387,132 @@ $fotosCortes = [
             track.style.transform = `translateX(${porcentaje}%)`;
         }
 
-        window.onload = function() {
+        document.addEventListener('DOMContentLoaded', function() {
             mostrarSeccion("reservas");
-        };
+
+            const calendarEl = document.getElementById('calendarBarbero');
+            if (calendarEl) {
+                const eventosPHP = <?php echo json_encode($eventosCalendario); ?>;
+
+                const calendar = new FullCalendar.Calendar(calendarEl, {
+                    locale: 'es',
+                    initialView: 'dayGridMonth',
+                    height: 'auto',
+                    aspectRatio: 1.85,
+                    displayEventEnd: true, // <-- FORZAR A MOSTRAR LA HORA DE FIN
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek'
+                    },
+                    events: eventosPHP,
+                    // Configuración del formato de la hora (Inicio - Fin)
+                    eventTimeFormat: {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        meridiem: false, // Cámbialo a 'short' si quieres ver am/pm (ej: 10:00a - 06:00p)
+                        hour12: false // Formato 24 horas (ej: 10:00 - 18:00)
+                    }
+                });
+
+                calendar.render();
+            }
+        });
+
+        function filtrarHistorial() {
+            const input = document.getElementById("inputBusquedaHistorial");
+            const filtro = input.value.toLowerCase();
+            const tabla = document.getElementById("tablaHistorial");
+
+            if (!tabla) return;
+
+            const filas = tabla.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+            for (let i = 0; i < filas.length; i++) {
+                const textoFila = filas[i].textContent || filas[i].innerText;
+                if (textoFila.toLowerCase().indexOf(filtro) > -1) {
+                    filas[i].style.display = "";
+                } else {
+                    filas[i].style.display = "none";
+                }
+            }
+        }
+
+        // Variables globales para paginación
+        let paginaActual = 1;
+        const filasPorPagina = 5;
+        let filasFiltradas = [];
+
+        function inicializarPaginacion() {
+            const tbody = document.getElementById("tbodyHistorial");
+            if (!tbody) return;
+
+            // Obtener todas las filas originales
+            filasFiltradas = Array.from(tbody.getElementsByClassName("fila-historial"));
+            paginaActual = 1;
+            mostrarPaginaActual();
+        }
+
+        function filtrarYPaginarHistorial() {
+            const input = document.getElementById("inputBusquedaHistorial");
+            const filtro = input.value.toLowerCase();
+            const tbody = document.getElementById("tbodyHistorial");
+            if (!tbody) return;
+
+            const todasLasFilas = Array.from(tbody.getElementsByClassName("fila-historial"));
+
+            // Filtrar filas según la búsqueda
+            filasFiltradas = todasLasFilas.filter(fila => {
+                const textoFila = fila.textContent.toLowerCase();
+                return textoFila.indexOf(filtro) > -1;
+            });
+
+            // Reiniciar a la primera página tras una búsqueda
+            paginaActual = 1;
+            mostrarPaginaActual();
+        }
+
+        function mostrarPaginaActual() {
+            const tbody = document.getElementById("tbodyHistorial");
+            if (!tbody) return;
+
+            const todasLasFilas = Array.from(tbody.getElementsByClassName("fila-historial"));
+
+            // Ocultar absolutamente todas las filas
+            todasLasFilas.forEach(fila => fila.style.display = "none");
+
+            const totalPaginas = Math.ceil(filasFiltradas.length / filasPorPagina) || 1;
+            if (paginaActual > totalPaginas) paginaActual = totalPaginas;
+
+            const inicio = (paginaActual - 1) * filasPorPagina;
+            const fin = inicio + filasPorPagina;
+
+            // Mostrar solo las 5 filas correspondientes a la página actual
+            const filasAMostrar = filasFiltradas.slice(inicio, fin);
+            filasAMostrar.forEach(fila => fila.style.display = "");
+
+            // Actualizar texto e interfaz de controles
+            const infoPagina = document.getElementById("infoPágina");
+            const btnPrev = document.getElementById("btnPrevPágina");
+            const btnNext = document.getElementById("btnNextPágina");
+
+            if (infoPagina) {
+                infoPagina.textContent = `Página ${paginaActual} de ${totalPaginas}`;
+            }
+
+            if (btnPrev) btnPrev.disabled = (paginaActual === 1);
+            if (btnNext) btnNext.disabled = (paginaActual === totalPaginas || filasFiltradas.length === 0);
+        }
+
+        function cambiarPagina(direccion) {
+            paginaActual += direccion;
+            mostrarPaginaActual();
+        }
+
+        // Inicializar la paginación al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            inicializarPaginacion();
+        });
     </script>
 
     <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>

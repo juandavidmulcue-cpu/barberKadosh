@@ -11,15 +11,18 @@ class GestionCitaModel
         $this->db = Database::conectar();
     }
 
-    // Obtener las reservas del cliente
+    // Obtener las reservas pendientes del cliente con productos y total calculados
     public function obtenerReservasCliente($idCliente)
     {
         $sql = "SELECT
                 r.id_reservacion,
                 r.id_barbero,
                 r.id_servicio,
-                CONCAT(b.nombre, ' ', b.apellido) AS barbero,
+                CONCAT(b.nombre, ' ', COALESCE(b.apellido, '')) AS barbero,
                 s.nombre AS servicio,
+                s.precio AS precio_servicio,
+                COALESCE(GROUP_CONCAT(p.nombre SEPARATOR ', '), 'Ninguno') AS producto,
+                (s.precio + COALESCE(SUM(p.precio * dr.cantidad), 0)) AS total,
                 r.fecha_cita,
                 r.hora_cita,
                 r.estado
@@ -28,8 +31,13 @@ class GestionCitaModel
                 ON r.id_barbero = b.id_usuario
             INNER JOIN servicios s
                 ON r.id_servicio = s.id_servicio
+            LEFT JOIN detalle_reservacion dr 
+                ON r.id_reservacion = dr.id_reservacion
+            LEFT JOIN productos p 
+                ON dr.id_producto = p.id_producto
             WHERE r.id_cliente = :cliente
             AND r.estado IN ('Pendiente')
+            GROUP BY r.id_reservacion
             ORDER BY r.fecha_cita DESC, r.hora_cita DESC";
 
         $stmt = $this->db->prepare($sql);
@@ -41,19 +49,18 @@ class GestionCitaModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Obtener historial de reservas completadas o canceladas sin duplicar registros
     public function obtenerHistorialCliente($idCliente)
     {
         $sql = "SELECT
             r.id_reservacion,
             r.id_barbero,
             r.id_servicio,
-            CONCAT(b.nombre, ' ', b.apellido) AS barbero,
+            CONCAT(b.nombre, ' ', COALESCE(b.apellido, '')) AS barbero,
             s.nombre AS servicio,
             s.precio AS precio_servicio,
-            COALESCE(p.nombre, 'Ninguno') AS producto,
-            COALESCE(p.precio, 0) AS precio_producto,
-            COALESCE(dr.cantidad, 0) AS cantidad_producto,
-            (s.precio + (COALESCE(p.precio, 0) * COALESCE(dr.cantidad, 0))) AS total,
+            COALESCE(GROUP_CONCAT(p.nombre SEPARATOR ', '), 'Ninguno') AS producto,
+            (s.precio + COALESCE(SUM(p.precio * dr.cantidad), 0)) AS total,
             r.fecha_cita,
             r.hora_cita,
             r.estado
@@ -68,6 +75,7 @@ class GestionCitaModel
             ON dr.id_producto = p.id_producto
         WHERE r.id_cliente = :cliente
         AND r.estado IN ('Completada', 'Cancelada')
+        GROUP BY r.id_reservacion
         ORDER BY r.fecha_cita DESC, r.hora_cita DESC";
 
         $stmt = $this->db->prepare($sql);
@@ -91,7 +99,7 @@ class GestionCitaModel
                 r.estado,
                 s.nombre AS servicio,
                 s.duracion,
-                CONCAT(b.nombre, ' ', b.apellido) AS barbero
+                CONCAT(b.nombre, ' ', COALESCE(b.apellido, '')) AS barbero
             FROM reservacion r
 
             INNER JOIN servicios s
@@ -116,10 +124,7 @@ class GestionCitaModel
     // Crear una reserva
     public function crearReserva($cliente, $barbero, $servicio, $fecha, $hora)
     {
-        // ==========================================
         // 1. Verificar si la hora ya está ocupada
-        // ==========================================
-
         $sql = "SELECT COUNT(*)
             FROM reservacion
             WHERE id_barbero = :barbero
@@ -141,11 +146,7 @@ class GestionCitaModel
             return false;
         }
 
-
-        // ==========================================
         // 2. Buscar la última reservación
-        // ==========================================
-
         $sql = "SELECT id_reservacion
             FROM reservacion
             WHERE id_reservacion LIKE 'RESER%'
@@ -157,34 +158,22 @@ class GestionCitaModel
 
         $ultimo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
-        // ==========================================
         // 3. Generar el siguiente ID
-        // ==========================================
-
         if ($ultimo) {
-
             $numero = intval(
                 substr($ultimo['id_reservacion'], 5)
             );
-
             $numero++;
         } else {
-
             $numero = 1;
         }
-
 
         // RESER001, RESER002, RESER003...
         $idReservacion =
             'RESER' .
             str_pad($numero, 3, '0', STR_PAD_LEFT);
 
-
-        // ==========================================
         // 4. Insertar la reservación
-        // ==========================================
-
         $sql = "INSERT INTO reservacion
             (
                 id_reservacion,
@@ -224,7 +213,6 @@ class GestionCitaModel
         return false;
     }
 
-
     public function verificarDisponibilidad($barbero, $fecha, $hora)
     {
         $sql = "SELECT COUNT(*) 
@@ -244,8 +232,6 @@ class GestionCitaModel
 
         return $stmt->fetchColumn() > 0;
     }
-
-
 
     public function obtenerHorarioBarbero($idBarbero, $fecha)
     {
@@ -350,8 +336,8 @@ class GestionCitaModel
     }
 
     /* =========================================
-   FINALIZAR RESERVA
-========================================= */
+       FINALIZAR RESERVA
+    ========================================= */
 
     public function finalizarReserva($idReserva, $idCliente)
     {
@@ -370,8 +356,8 @@ class GestionCitaModel
     }
 
     /* =========================================
-   GUARDAR RESEÑA
-========================================= */
+       GUARDAR RESEÑA
+    ========================================= */
 
     public function guardarResena(
         $idReservacion,
@@ -380,7 +366,6 @@ class GestionCitaModel
         $comentario
     ) {
         try {
-
             $sql = "SELECT
                     id_reservacion,
                     id_barbero,
@@ -492,18 +477,15 @@ class GestionCitaModel
                 ':calificacion' => $calificacion,
                 ':comentario' => $comentario
             ]);
+
             if ($resultado) {
-
                 $this->db->commit();
-
                 return true;
             }
 
             $this->db->rollBack();
-
             return false;
         } catch (PDOException $e) {
-
             if ($this->db->inTransaction()) {
                 $this->db->rollBack();
             }

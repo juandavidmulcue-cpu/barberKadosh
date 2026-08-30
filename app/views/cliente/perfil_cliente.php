@@ -291,13 +291,22 @@ $fotosCortes = [
                 onclick="cerrarModalHistorial()">
                 &times;
             </button>
-            <h2>Historial de reservas 📋</h2>
+            <h2>Historial de reservas</h2>
             <p class="subtitulo-historial">
                 Aquí puedes consultar tus reservas anteriores.
             </p>
+
+            <!-- BARRA DE BÚSQUEDA -->
+            <div class="header-historial-acciones">
+                <input
+                    type="text"
+                    id="inputBuscarHistorial"
+                    placeholder="Buscar por barbero, servicio, producto, fecha..."
+                    onkeyup="buscarEnHistorial()">
+            </div>
+
             <div class="tabla-historial">
                 <table>
-                    <!-- TABLA EN EL MODAL HISTORIAL -->
                     <thead>
                         <tr>
                             <th>Barbero</th>
@@ -307,58 +316,65 @@ $fotosCortes = [
                             <th>Hora</th>
                             <th>Total</th>
                             <th>Estado</th>
-                            <th>Acción</th> <!-- Columna añadida -->
+                            <th>Acción</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbodyHistorial">
                         <?php if (!empty($historial)): ?>
-                            <?php if (!empty($historial)): ?>
-                                <?php foreach ($historial as $h): ?>
-                                    <?php
-                                    // Formateamos el total que calculó directamente la consulta SQL
-                                    $totalFormateado = '$' . number_format($h['total'], 0, ',', '.');
-                                    ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($h['barbero']) ?></td>
-                                        <td><?= htmlspecialchars($h['servicio']) ?></td>
-                                        <td><?= htmlspecialchars($h['producto']) ?></td>
-                                        <td><?= htmlspecialchars($h['fecha_cita']) ?></td>
-                                        <td><?= htmlspecialchars($h['hora_cita']) ?></td>
-                                        <td><strong><?= htmlspecialchars($totalFormateado) ?></strong></td>
-                                        <td>
-                                            <?php if ($h['estado'] == 'Completada'): ?>
-                                                <span class="estado-completada">🟢 Completada</span>
-                                            <?php else: ?>
-                                                <span class="estado-cancelada">🔴 Cancelada</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td>
-                                            <button type="button"
-                                                class="btn-descargar-pdf"
-                                                onclick="generarPDFReserva(
-                                                '<?= htmlspecialchars($h['barbero'], ENT_QUOTES) ?>', 
-                                                '<?= htmlspecialchars($h['servicio'], ENT_QUOTES) ?>', 
-                                                '<?= htmlspecialchars($h['producto'], ENT_QUOTES) ?>', 
-                                                '<?= htmlspecialchars($h['fecha_cita'], ENT_QUOTES) ?>', 
-                                                '<?= htmlspecialchars($h['hora_cita'], ENT_QUOTES) ?>', 
-                                                '<?= htmlspecialchars($totalFormateado, ENT_QUOTES) ?>',
-                                                '<?= htmlspecialchars($h['estado'], ENT_QUOTES) ?>')"
-                                                title="Descargar Comprobante PDF">
+                            <?php foreach ($historial as $h): ?>
+                                <?php
+                                $totalFormateado = '$' . number_format($h['total'], 0, ',', '.');
+                                ?>
+                                <tr class="fila-historial">
+                                    <td><?= htmlspecialchars($h['barbero']) ?></td>
+                                    <td><?= htmlspecialchars($h['servicio']) ?></td>
+                                    <td><?= htmlspecialchars($h['producto']) ?></td>
+                                    <td><?= htmlspecialchars($h['fecha_cita']) ?></td>
+                                    <td><?= htmlspecialchars($h['hora_cita']) ?></td>
+                                    <td><strong><?= htmlspecialchars($totalFormateado) ?></strong></td>
+                                    <td>
+                                        <?php if ($h['estado'] == 'Completada'): ?>
+                                            <span class="estado-completada">🟢 Completada</span>
+                                        <?php else: ?>
+                                            <span class="estado-cancelada">🔴 Cancelada</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <button type="button"
+                                            class="btn-descargar-pdf"
+                                            onclick="generarPDFReserva(
+                                        '<?= htmlspecialchars($h['barbero'], ENT_QUOTES) ?>', 
+                                        '<?= htmlspecialchars($h['servicio'], ENT_QUOTES) ?>', 
+                                        '<?= htmlspecialchars($h['producto'], ENT_QUOTES) ?>', 
+                                        '<?= htmlspecialchars($h['fecha_cita'], ENT_QUOTES) ?>', 
+                                        '<?= htmlspecialchars($h['hora_cita'], ENT_QUOTES) ?>', 
+                                        '<?= htmlspecialchars($totalFormateado, ENT_QUOTES) ?>',
+                                        '<?= htmlspecialchars($h['estado'], ENT_QUOTES) ?>')"
+                                            title="Descargar Comprobante PDF">
 
-                                                <img src="app/public/assets/icons/descargar.png" alt="Descargar">
-                                            </button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
+                                            <img src="app/public/assets/icons/descargar.png" alt="Descargar">
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         <?php else: ?>
-                            <tr>
+                            <tr id="sinHistorialInicio">
                                 <td colspan="8" class="sin-historial">No tienes reservas en tu historial.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
             </div>
+
+            <!-- CONTROLES DE PAGINACIÓN -->
+            <?php if (!empty($historial)): ?>
+                <div class="paginacion-historial">
+                    <button type="button" id="btnPagAnterior" onclick="cambiarPaginaHistorial(-1)" class="btn-paginacion">&laquo; Anterior</button>
+                    <span id="infoPaginacionHistorial">Página 1 de 1</span>
+                    <button type="button" id="btnPagSiguiente" onclick="cambiarPaginaHistorial(1)" class="btn-paginacion">Siguiente &raquo;</button>
+                </div>
+            <?php endif; ?>
+
         </div>
     </div>
 
@@ -496,6 +512,110 @@ $fotosCortes = [
     </footer>
 
     <script>
+        
+        // Variables de control para el historial
+        let paginaActualHistorial = 1;
+        const filasPorPaginaHistorial = 10;
+        let filasVisiblesHistorial = [];
+
+        // Función para inicializar o resetear la paginación al abrir el modal
+        function inicializarPaginacionHistorial() {
+            const tbody = document.getElementById('tbodyHistorial');
+            if (!tbody) return;
+
+            // Obtener todas las filas que no sean la de "Sin resultados"
+            const todasLasFilas = Array.from(tbody.querySelectorAll('.fila-historial'));
+            filasVisiblesHistorial = todasLasFilas;
+            paginaActualHistorial = 1;
+
+            // Limpiar input de búsqueda si existe
+            const inputBuscar = document.getElementById('inputBuscarHistorial');
+            if (inputBuscar) inputBuscar.value = '';
+
+            mostrarPaginaHistorial();
+        }
+
+        // Función principal para renderizar la página activa
+        function mostrarPaginaHistorial() {
+            const totalFilas = filasVisiblesHistorial.length;
+            const totalPaginas = Math.ceil(totalFilas / filasPorPaginaHistorial) || 1;
+
+            // Asegurar que la página actual no sobrepase el límite
+            if (paginaActualHistorial > totalPaginas) paginaActualHistorial = totalPaginas;
+            if (paginaActualHistorial < 1) paginaActualHistorial = 1;
+
+            // Ocultar todas las filas del historial primero
+            const tbody = document.getElementById('tbodyHistorial');
+            if (tbody) {
+                const filas = tbody.querySelectorAll('.fila-historial');
+                filas.forEach(fila => fila.style.display = 'none');
+            }
+
+            // Calcular los índices de la página actual
+            const inicio = (paginaActualHistorial - 1) * filasPorPaginaHistorial;
+            const fin = inicio + filasPorPaginaHistorial;
+
+            // Mostrar solo las 10 filas del rango actual
+            filasVisiblesHistorial.slice(inicio, fin).forEach(fila => {
+                fila.style.display = '';
+            });
+
+            // Actualizar texto informativo (Ej: "Página 1 de 2")
+            const infoPaginacion = document.getElementById('infoPaginacionHistorial');
+            if (infoPaginacion) {
+                infoPaginacion.textContent = `Página ${paginaActualHistorial} de ${totalPaginas}`;
+            }
+
+            // Activar / Desactivar botones de navegación
+            const btnAnterior = document.getElementById('btnPagAnterior');
+            const btnSiguiente = document.getElementById('btnPagSiguiente');
+
+            if (btnAnterior) btnAnterior.disabled = (paginaActualHistorial === 1);
+            if (btnSiguiente) btnSiguiente.disabled = (paginaActualHistorial === totalPaginas || totalPaginas === 0);
+        }
+
+        // Función para avanzar o retroceder de página
+        function cambiarPaginaHistorial(direccion) {
+            paginaActualHistorial += direccion;
+            mostrarPaginaHistorial();
+        }
+
+        // Función para filtrar filas en tiempo real por el buscador
+        function buscarEnHistorial() {
+            const input = document.getElementById('inputBuscarHistorial');
+            const filtro = input.value.toLowerCase().trim();
+            const tbody = document.getElementById('tbodyHistorial');
+            if (!tbody) return;
+
+            const filas = Array.from(tbody.querySelectorAll('.fila-historial'));
+
+            // Filtrar coincidencias
+            filasVisiblesHistorial = filas.filter(fila => {
+                const textoFila = fila.textContent.toLowerCase();
+                return textoFila.includes(filtro);
+            });
+
+            // Ocultar mensaje previo si existía
+            let filaSinResultados = document.getElementById('filaSinResultadosBusqueda');
+            if (filaSinResultados) filaSinResultados.remove();
+
+            // Si no hay coincidencias en la búsqueda, mostrar fila informativa
+            if (filasVisiblesHistorial.length === 0 && filas.length > 0) {
+                const tr = document.createElement('tr');
+                tr.id = 'filaSinResultadosBusqueda';
+                tr.innerHTML = `<td colspan="8" class="sin-historial" style="text-align:center; padding: 15px;">No se encontraron reservas que coincidan con "${input.value}".</td>`;
+                tbody.appendChild(tr);
+            }
+
+            paginaActualHistorial = 1; // Volver a la página 1 tras filtrar
+            mostrarPaginaHistorial();
+        }
+
+        // Ejecutar automáticamente al abrir el modal
+        document.addEventListener('DOMContentLoaded', () => {
+            inicializarPaginacionHistorial();
+        });
+
         // Paleta de colores corporativos
         const coloresKadosh = {
             morado: '#4A154B',

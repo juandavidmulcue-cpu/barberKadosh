@@ -13,6 +13,8 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
     <link rel="stylesheet" href="app/public/css/admin.css">
     <link rel="stylesheet" href="app/public/css/global.css">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
@@ -39,7 +41,6 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
             <div class="sidebar-link" onclick="showPanel('productos')">📦 Productos</div>
             <div class="sidebar-link" onclick="showPanel('servicios')">✂️ Servicios</div>
             <div class="sidebar-link" onclick="showPanel('horarios')">🕒 Horarios</div>
-            <div class="sidebar-link" onclick="showPanel('reportes')">📈 Reportes</div>
 
         </aside>
 
@@ -508,7 +509,18 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
             <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
 
             <div class="panel" id="panel-horarios">
-                <h2 class="section-title">Asignación de Horarios de Barberos</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h2 class="section-title" style="margin: 0;">Asignación de Horarios de Barberos</h2>
+
+                    <!-- BOTÓN EXCLUSIVO DEL ADMIN PARA DESCARGAR EL MES -->
+                    <button type="button" onclick="abrirModalDescargar()" class="btn btn-primary" style="padding: 8px 15px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; background-color: #28a745; color: white; border: none;">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                        </svg>
+                        Descargar Horarios del Mes
+                    </button>
+                </div>
 
                 <div class="admin-card">
                     <p>Arrastra un barbero desde la lista hacia cualquier día del calendario para asignarle un turno.</p>
@@ -567,12 +579,54 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                 </div>
             </div>
 
-            <!-- REPORTES -->
-            <div class="panel" id="panel-reportes">
-                <h2 class="section-title">📈 Reportes</h2>
-                <p>Próximamente reportes dinámicos.</p>
-            </div>
+            <!-- Modal de Descarga de Horarios del Mes -->
+            <div id="modalDescargarReporte" class="modal-reporte-overlay">
+                <div class="modal-reporte-contenido">
+                    <span class="modal-reporte-cerrar" onclick="cerrarModalReporte()">&times;</span>
+                    <h3 class="modal-reporte-titulo">Descargar Reporte de Horarios</h3>
 
+                    <form action="index.php?controller=horario&action=exportarHorarios" method="POST" target="_blank">
+                        <!-- Selección de Mes -->
+                        <div class="form-group-reporte">
+                            <label for="filtroMes">Seleccionar Mes:</label>
+                            <select name="mes" id="filtroMes" class="select-reporte">
+                                <option value="01">Enero</option>
+                                <option value="02">Febrero</option>
+                                <option value="03">Marzo</option>
+                                <option value="04">Abril</option>
+                                <option value="05">Mayo</option>
+                                <option value="06">Junio</option>
+                                <option value="07">Julio</option>
+                                <option value="08">Agosto</option>
+                                <option value="09">Septiembre</option>
+                                <option value="10">Octubre</option>
+                                <option value="11">Noviembre</option>
+                                <option value="12">Diciembre</option>
+                            </select>
+                        </div>
+
+                        <!-- Selección de Año -->
+                        <div class="form-group-reporte">
+                            <label for="filtroAnio">Seleccionar Año:</label>
+                            <select name="anio" id="filtroAnio" class="select-reporte">
+                                <option value="2026" selected>2026</option>
+                                <option value="2025">2025</option>
+                            </select>
+                        </div>
+
+                        <!-- Botones de Acción -->
+                        <div class="modal-reporte-acciones">
+                            <button type="button" onclick="descargarCalendarioPDF()" class="btn-reporte btn-pdf">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </button>
+                            <button type="submit" name="tipo" value="excel" class="btn-reporte btn-excel">
+                                <i class="fas fa-file-excel"></i> Excel
+                            </button>
+                            <button type="button" onclick="cerrarModalReporte()" class="btn-reporte btn-cancelar">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
     </div>
 
     </div>
@@ -625,6 +679,58 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
     </footer>
 
     <!-- JS PANEL -->
+    <script>
+        function abrirModalDescargar() {
+            const modal = document.getElementById('modalDescargarReporte');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function cerrarModalReporte() {
+            const modal = document.getElementById('modalDescargarReporte');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function cerrarModalHorario() {
+            const modal = document.getElementById('modalHorario');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function descargarCalendarioPDF() {
+            // ID del contenedor donde renderizas FullCalendar (ej: 'calendar')
+            const elemento = document.getElementById('calendar');
+
+            if (!elemento) {
+                alert('No se encontró el elemento del calendario');
+                return;
+            }
+
+            // Configuración para generar el PDF horizontal (landscape)
+            const opciones = {
+                margin: [10, 10, 10, 10],
+                filename: 'Horarios_Kadosh_Calendario.pdf',
+                image: {
+                    type: 'jpeg',
+                    quality: 0.98
+                },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'landscape'
+                }
+            };
+
+            // Cerrar el modal antes de capturar la pantalla
+            cerrarModalReporte();
+
+            // Generar y descargar el PDF
+            html2pdf().set(opciones).from(elemento).save();
+        }
+    </script>
+
     <script>
         function showPanel(panel) {
 

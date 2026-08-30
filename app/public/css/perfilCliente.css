@@ -289,8 +289,7 @@ tbody td {
     gap: 15px;
 }
 
-.btn-descargar-pdf
-.btn-finalizar,
+.btn-descargar-pdf .btn-finalizar,
 .cancelar-cita,
 .btn-editar-cita {
     display: inline-flex;
@@ -454,8 +453,22 @@ tbody td {
 }
 
 .contenido-modal-historial {
-    max-width: 900px;
+    background: var(--fondo-modal);
+    color: #fff;
+    padding: 30px;
+    border-radius: 18px;
     width: 95%;
+    max-width: 900px;
+    text-align: center;
+    position: relative;
+    border: 1px solid var(--dorado);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    margin: auto;
+
+    /* Control de altura para permitir Scroll si es necesario */
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* TÍTULOS Y TEXTOS EN MODALES */
@@ -571,7 +584,12 @@ tbody td {
 /* ===== TABLA HISTORIAL ===== */
 .tabla-historial {
     width: 100%;
-    overflow-x: auto;
+    max-height: 440px; /* Altura ideal para mostrar cómodamente 10 filas */
+    overflow-y: auto;  /* Habilita el scroll vertical para ver de la 1 a la 10 */
+    overflow-x: auto;  /* Scroll horizontal si la pantalla es muy pequeña */
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 
 .tabla-historial table {
@@ -611,6 +629,58 @@ tbody td {
     text-align: center;
     color: #aaa;
     padding: 30px !important;
+}
+
+/* Barra de búsqueda dentro del modal */
+.header-historial-acciones {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#inputBuscarHistorial {
+    width: 100%;
+    max-width: 320px;
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+#inputBuscarHistorial:focus {
+    border-color: #333;
+}
+
+/* Controles de Paginación */
+.paginacion-historial {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+.btn-paginacion {
+    background-color: #222;
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s, opacity 0.2s;
+}
+
+.btn-paginacion:hover:not(:disabled) {
+    background-color: #444;
+}
+
+.btn-paginacion:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 /* =========================

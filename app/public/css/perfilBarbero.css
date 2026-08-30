@@ -542,6 +542,184 @@ tbody tr:hover td {
     color: var(--dorado);
 }
 
+/* Contenedor principal del calendario */
+.calendar-wrapper {
+    max-width: 950px;
+    margin: 10px auto 0 auto;
+    background: var(--fondo-elemento);
+    border: 1px solid var(--borde-dorado);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+#calendarBarbero {
+    font-family: inherit;
+    color: #fff;
+}
+
+/* Encabezado / Barra de herramientas del calendario */
+.fc .fc-toolbar {
+    margin-bottom: 1.2rem;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.fc .fc-toolbar-title {
+    font-size: 1.2rem !important;
+    font-weight: 700;
+    color: var(--dorado);
+    text-transform: capitalize;
+}
+
+/* Botones del calendario */
+.fc .fc-button-primary {
+    background-color: var(--morado) !important;
+    border: 1px solid var(--borde-dorado) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+    font-size: 0.85rem !important;
+    padding: 6px 14px !important;
+    text-transform: capitalize !important;
+    box-shadow: none !important;
+    transition: all 0.3s ease !important;
+}
+
+.fc .fc-button-primary:hover {
+    background-color: var(--morado-claro) !important;
+    border-color: var(--dorado) !important;
+    transform: translateY(-1px);
+}
+
+.fc .fc-button-primary:disabled {
+    background-color: rgba(123, 44, 191, 0.3) !important;
+    border-color: rgba(212, 175, 55, 0.1) !important;
+    color: #777 !important;
+}
+
+.fc .fc-button-active {
+    background-color: var(--morado-claro) !important;
+    border-color: var(--dorado) !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3) !important;
+}
+
+/* Estructura de la tabla del calendario */
+.fc theme-standard td,
+.fc theme-standard th,
+.fc-theme-standard .fc-scrollgrid {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.fc .fc-col-header-cell {
+    background: rgba(123, 44, 191, 0.3);
+    padding: 8px 0;
+}
+
+.fc .fc-col-header-cell-cushion {
+    color: var(--dorado);
+    font-size: 0.85rem;
+    text-transform: capitalize;
+    text-decoration: none;
+}
+
+/* Celdas de los días */
+.fc .fc-daygrid-day {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.fc .fc-daygrid-day-frame {
+    min-height: 70px !important;
+    /* Mantiene un alto adecuado para que no quede gigante */
+}
+
+.fc .fc-daygrid-day-number {
+    font-size: 0.85rem;
+    color: #d8d8d8;
+    padding: 4px 8px;
+    text-decoration: none;
+}
+
+/* Día actual marcado */
+.fc .fc-day-today {
+    background: rgba(157, 78, 221, 0.15) !important;
+}
+
+.fc .fc-day-today .fc-daygrid-day-number {
+    color: var(--dorado);
+    font-weight: bold;
+}
+
+/* Eventos / Horarios de trabajo */
+.fc-event {
+    background: linear-gradient(135deg, var(--morado), var(--morado-claro)) !important;
+    border: 1px solid var(--dorado) !important;
+    border-radius: 6px !important;
+    padding: 2px 6px !important;
+    font-size: 0.78rem !important;
+    color: #fff !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fc-event:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);
+}
+
+.fc-event-main {
+    color: #fff !important;
+}
+
+/* Adaptación responsive */
+@media (max-width: 768px) {
+    .calendar-wrapper {
+        padding: 12px;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 1rem !important;
+    }
+
+    .fc .fc-button-primary {
+        font-size: 0.75rem !important;
+        padding: 4px 8px !important;
+    }
+
+    .fc .fc-daygrid-day-frame {
+        min-height: 55px !important;
+    }
+}
+
+/* =========================================================
+   ESTILOS PARA EL BUSCADOR DE HISTORIAL
+========================================================= */
+.buscador-contenedor {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+#inputBusquedaHistorial {
+    width: 100%;
+    padding: 12px 18px;
+    background: var(--fondo-elemento);
+    border: 1px solid var(--borde-dorado);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#inputBusquedaHistorial::placeholder {
+    color: #aaa;
+}
+
+#inputBusquedaHistorial:focus {
+    border-color: var(--dorado);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+}
+
 /* =========================================================
    DISEÑO ADAPTABLE (MEDIA QUERIES)
 ========================================================= */
@@ -586,5 +764,46 @@ tbody tr:hover td {
     .avatar {
         width: 130px;
         height: 130px;
+    }
+
+    /* =========================================================
+   ESTILOS DE PAGINACIÓN DE HISTORIAL
+========================================================= */
+    .paginacion-contenedor {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .btn-paginacion {
+        background: var(--morado);
+        border: 1px solid var(--borde-dorado);
+        color: #fff;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-paginacion:hover:not(:disabled) {
+        background: var(--morado-claro);
+        border-color: var(--dorado);
+        transform: translateY(-2px);
+    }
+
+    .btn-paginacion:disabled {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #666;
+        cursor: not-allowed;
+    }
+
+    .info-pagina {
+        color: var(--dorado);
+        font-size: 14px;
+        font-weight: 600;
     }
 }

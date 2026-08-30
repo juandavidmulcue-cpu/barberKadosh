@@ -121,7 +121,7 @@ $productos = $productos ?? [];
         <div class="modal-producto-content">
             <h2>Seleccionar productos</h2>
             <p>Seleccione los productos que desea añadir a su cita.</p>
-            <div id="listaProductos" style="max-height: 250px; overflow-y: auto; margin: 15px 0;">
+            <div id="listaProductos">
                 <p>Cargando productos...</p>
             </div>
             <div class="modal-producto-botones">
@@ -232,17 +232,15 @@ $productos = $productos ?? [];
             listaHoras.innerHTML = '';
 
             function horaAMinutos(hora) {
-                // Si la duración ya viene en números (ej: 30 o 45)
                 if (typeof hora === 'number') return hora;
                 if (!isNaN(hora)) return parseInt(hora);
 
-                // Si viene en formato string "HH:MM:SS" o "HH:MM"
                 if (typeof hora === 'string' && hora.includes(':')) {
                     const partes = hora.split(':');
                     return parseInt(partes[0]) * 60 + parseInt(partes[1]);
                 }
 
-                return 30; // Valor por defecto si falla el formato
+                return 30;
             }
 
             function minutosAHora(minutos) {
@@ -266,7 +264,6 @@ $productos = $productos ?? [];
                 if (Array.isArray(ocupadas)) {
                     ocupadas.forEach(cita => {
                         const inicioCita = horaAMinutos(cita.hora_cita);
-                        // Soporta si cita.duracion existe o usa la duración del servicio
                         const duracionCita = cita.duracion ? horaAMinutos(cita.duracion) : duracionMinutos;
                         const finCita = inicioCita + duracionCita;
 
@@ -283,18 +280,13 @@ $productos = $productos ?? [];
 
                     boton.type = 'button';
                     boton.textContent = horaFormateada;
-                    boton.className = 'btn-horario'; // Puedes asignarle una clase CSS para diseño
-                    boton.style.margin = '5px';
-                    boton.style.padding = '8px 12px';
-                    boton.style.cursor = 'pointer';
+                    boton.className = 'btn-horario';
 
                     boton.addEventListener('click', function() {
                         document.querySelectorAll('#listaHoras button').forEach(btn => {
-                            btn.style.backgroundColor = '';
-                            btn.style.color = '';
+                            btn.classList.remove('selected');
                         });
-                        boton.style.backgroundColor = '#6f42c1';
-                        boton.style.color = 'white';
+                        boton.classList.add('selected');
                         horaInput.value = horaFormateada;
                     });
 
@@ -309,7 +301,7 @@ $productos = $productos ?? [];
             }
         }
 
-        // 4. ESCUCHADORES DE CAMBIO (DISPARAN LA BÚSQUEDA)
+        // 4. ESCUCHADORES DE CAMBIO
         servicio.addEventListener('change', consultarHorario);
         barbero.addEventListener('change', consultarHorario);
         fecha.addEventListener('change', consultarHorario);
@@ -333,25 +325,21 @@ $productos = $productos ?? [];
                 return;
             }
 
-            // Mostrar el modal de confirmación de productos
             modalProducto.style.display = 'flex';
         });
 
-        // Si hace clic en "NO desea productos"
         btnNoProducto.addEventListener('click', function() {
             modalProducto.style.display = 'none';
             productosInput.value = JSON.stringify([]);
             formulario.submit();
         });
 
-        // Si hace clic en "SÍ desea productos"
         btnSiProducto.addEventListener('click', function() {
             modalProducto.style.display = 'none';
             modalProductos.style.display = 'flex';
             cargarProductos();
         });
 
-        // Confirmar productos seleccionados
         btnContinuarProducto.addEventListener('click', function() {
             const seleccionados = document.querySelectorAll('input[name="productoSeleccionado"]:checked');
 
@@ -367,14 +355,14 @@ $productos = $productos ?? [];
             formulario.submit();
         });
 
-        // Cancelar la selección de productos
         btnCancelarProducto.addEventListener('click', function() {
             modalProductos.style.display = 'none';
             modalProducto.style.display = 'flex';
         });
 
+        // 6. CARGAR PRODUCTOS DESDE LA BD CON LA ESTRUCTURA CORRECTA
         function cargarProductos() {
-            listaProductos.innerHTML = `<p>Cargando productos...</p>`;
+            listaProductos.innerHTML = `<p style="text-align:center; color:#ccc;">Cargando productos...</p>`;
 
             fetch('index.php?controller=clienteProducto&action=obtenerProductosDisponibles')
                 .then(response => response.json())
@@ -382,28 +370,24 @@ $productos = $productos ?? [];
                     listaProductos.innerHTML = '';
 
                     if (!productos || productos.length === 0) {
-                        listaProductos.innerHTML = `<p>No hay productos disponibles en stock.</p>`;
+                        listaProductos.innerHTML = `<p style="text-align:center; color:#ff8d8d;">No hay productos disponibles en stock.</p>`;
                         return;
                     }
 
                     productos.forEach(producto => {
-                        const div = document.createElement('div');
-                        div.classList.add('producto-opcion');
-                        div.style.padding = "8px";
-                        div.style.textAlign = "left";
-                        div.innerHTML = `
-                        <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
-                            <input type="checkbox" name="productoSeleccionado" value="${producto.id_producto}">
-                            <span style="flex-grow: 1;">${producto.nombre}</span>
-                            <strong>$${Number(producto.precio).toLocaleString('es-CO')}</strong>
-                        </label>
+                        const label = document.createElement('label');
+                        label.className = 'item-producto';
+                        label.innerHTML = `
+                        <input type="checkbox" name="productoSeleccionado" value="${producto.id_producto}">
+                        <span class="nombre-producto">${producto.nombre}</span>
+                        <span class="precio-producto">$${Number(producto.precio).toLocaleString('es-CO')}</span>
                     `;
-                        listaProductos.appendChild(div);
+                        listaProductos.appendChild(label);
                     });
                 })
                 .catch(error => {
                     console.error(error);
-                    listaProductos.innerHTML = `<p style="color:red;">❌ Error al cargar los productos.</p>`;
+                    listaProductos.innerHTML = `<p style="color:red; text-align:center;">❌ Error al cargar los productos.</p>`;
                 });
         }
     </script>

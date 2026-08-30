@@ -494,6 +494,149 @@
     font-weight: 600;
 }
 
+/* ==========================================================
+   1. ESTILOS BASE PARA EL MODAL DE DESCARGA
+   ========================================================== */
+.modal-reporte-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-reporte-contenido {
+    background-color: #ffffff;
+    width: 380px;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.modal-reporte-cerrar {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666666;
+}
+
+.modal-reporte-cerrar:hover {
+    color: #000000;
+}
+
+.modal-reporte-titulo {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #3d2857;
+}
+
+.form-group-reporte {
+    margin-bottom: 15px;
+}
+
+.form-group-reporte label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.select-reporte {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.modal-reporte-acciones {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-reporte {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.btn-pdf {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.btn-pdf:hover {
+    background-color: #bb2d3b;
+}
+
+.btn-excel {
+    background-color: #198754;
+    color: #ffffff;
+}
+
+.btn-excel:hover {
+    background-color: #157347;
+}
+
+.btn-cancelar {
+    background-color: #6c757d;
+    color: #ffffff;
+}
+
+.btn-cancelar:hover {
+    background-color: #5c636a;
+}
+
+
+/* ==========================================================
+   2. REGLAS PARA CAPTURA Y EXPORTACIÓN DEL CALENDARIO EN PDF
+   ========================================================== */
+
+/* Clase temporal que se activa vía JavaScript al generar el PDF */
+.modo-exportar-pdf {
+    background-color: #ffffff !important;
+    padding: 10px !important;
+    width: 100% !important;
+}
+
+/* Oculta la lista de barberos del costado mientras se toma la captura */
+.modo-exportar-pdf #external-events {
+    display: none !important;
+}
+
+/* Asegura que la cuadrícula del calendario ocupe el 100% en la hoja */
+.modo-exportar-pdf #calendar {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Encabezado Kadosh para el PDF impreso */
+.modo-exportar-pdf::before {
+    content: "KADOSH BARBER SHOP - CALENDARIO DE HORARIOS";
+    display: block;
+    text-align: center;
+    font-size: 16pt;
+    font-weight: bold;
+    color: #3d2857;
+    margin-bottom: 12px;
+}
+
 /* 8. Estilo del Modal de Asignación */
 #modalHorario>div {
     background: linear-gradient(135deg, #0a0a0a 30%, #240046 100%) !important;
@@ -508,4 +651,80 @@
 
 #modalHorario label {
     color: var(--blanco-suave) !important;
+}
+
+/* =====================================================
+   📱 MEDIA QUERIES (ADAPTABILIDAD RESPONSIVA CELULAR/TABLET)
+===================================================== */
+
+/* Tablets y Pantallas Medianas (<= 992px) */
+@media (max-width: 992px) {
+    .admin-header {
+        padding: 15px 20px;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    /* FullCalendar: apilar lista de barberos sobre el calendario */
+    #panel-horarios>div[style*="display: flex"] {
+        flex-direction: column !important;
+    }
+
+    #external-events {
+        width: 100% !important;
+        margin-bottom: 15px;
+    }
+}
+
+/* Móviles (<= 768px) */
+@media (max-width: 768px) {
+
+    /* Header vertical/compacto */
+    .admin-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Sidebar apilado arriba de la vista */
+    .admin-content-wrapper {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        padding: 15px;
+    }
+
+    .sidebar-title {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    #panel-inicio {
+        padding: 20px;
+    }
+
+    #panel-inicio h2 {
+        font-size: 22px;
+    }
+
+    /* Ajuste de controles de FullCalendar en móvil */
+    .fc .fc-toolbar {
+        flex-direction: column !important;
+        gap: 10px;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 1.1rem !important;
+    }
 }
