@@ -6,11 +6,13 @@ if (!isset($_SESSION['id'])) {
     exit;
 }
 
-$nombre = $_SESSION['nombre'] ?? 'Cliente';
-$apellido = $_SESSION['apellido'] ?? '';
-$rol    = $_SESSION['nombre_rol'] ?? 'cliente';
+$nombre    = $_SESSION['nombre'] ?? 'Cliente';
+$apellido  = $_SESSION['apellido'] ?? '';
+$rol       = $_SESSION['nombre_rol'] ?? 'cliente';
+$foto      = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/avatar.png';
+
 $servicios = $servicios ?? [];
-$barberos = $barberos ?? [];
+$barberos  = $barberos ?? [];
 $historial = $historial ?? [];
 
 // Rutas de fotos para el carrusel
@@ -45,13 +47,14 @@ $fotosCortes = [
 
         <!-- Usuario -->
         <div class="card info-usuario">
-            <img src="app/public/assets/img/logo1.jpeg" class="avatar">
+            <img src="<?= !empty($_SESSION['foto']) ? htmlspecialchars($_SESSION['foto']) : 'app/public/assets/img/avatar.png'; ?>" class="avatar" alt="Foto de Perfil">
 
             <h2><?php echo htmlspecialchars($nombre . ' ' . $apellido); ?></h2>
             <p class="rol"><?php echo strtoupper(htmlspecialchars($rol)); ?></p>
 
             <div class="acciones">
                 <a href="index.php?controller=gestionCita&action=agendarCita" class="btn btn-primary"><button type="button">AGENDAR</button></a>
+                <button type="button" onclick="abrirModalPerfil()" class="btn-editar-perfil">Editar Perfil</button>
                 <a href="index.php?controller=password&action=resetPassword" class="btn"><button type="button" class="btn-outline">Cambiar contraseña</button></a>
             </div>
 
@@ -98,6 +101,54 @@ $fotosCortes = [
             </button>
         </div>
     </div>
+
+    <?php
+    $hoy = date('d/m/Y');
+    $finRango = date('d/m/Y', strtotime('+4 days'));
+    ?>
+
+    <!-- SECCIÓN DE BARBEROS DISPONIBLES -->
+    <section class="seccion-barberos">
+        <h2 class="titulo-seccion-barberos">Barberos Disponibles Seguidos (<?php echo "$hoy al $finRango"; ?>)</h2>
+
+        <div class="grid-barberos">
+            <?php if (!empty($barberos)): ?>
+                <?php foreach ($barberos as $barbero): ?>
+                    <?php
+                    // Resolver la ruta exacta de la foto del barbero
+                    $fotoBD = !empty($barbero['foto']) ? trim($barbero['foto']) : '';
+                    $fotoBarbero = !empty($fotoBD) ? $fotoBD : 'app/public/assets/img/avatar.png';
+                    ?>
+                    <div class="tarjeta-barbero">
+                        <div class="avatar-barbero-container">
+                            <img src="<?= htmlspecialchars($fotoBarbero); ?>"
+                                class="avatar-barbero"
+                                alt="Foto de <?= htmlspecialchars($barbero['nombre']); ?>"
+                                onerror="this.onerror=null; this.src='app/public/assets/img/avatar.png';">
+                        </div>
+
+                        <div class="info-barbero">
+                            <h3>
+                                <?php
+                                $nombreBarbero = trim(($barbero['nombre'] ?? '') . ' ' . ($barbero['apellido'] ?? ''));
+                                echo !empty($nombreBarbero) ? htmlspecialchars($nombreBarbero) : 'Barbero sin nombre';
+                                ?>
+                            </h3>
+
+                            <?php if (!empty($barbero['telefono'])): ?>
+                                <p class="telefono-barbero">📱 <?php echo htmlspecialchars($barbero['telefono']); ?></p>
+                            <?php endif; ?>
+
+                            <span class="badge-disponible">Disponible 5 días seguidos</span>
+                        </div>
+
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="sin-barberos">No hay barberos con horario asignado para los próximos 5 días seguidos.</p>
+            <?php endif; ?>
+        </div>
+    </section>
 
     <div class="panel" id="panel-reservas">
         <h2 class="section-title">Mis Reservas</h2>
@@ -406,6 +457,59 @@ $fotosCortes = [
 
     </div>
 
+    <!-- MODAL ACTUALIZAR DATOS Y FOTO DEL CLIENTE -->
+    <div id="modalActualizarPerfil" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar-modal" onclick="cerrarModalPerfil()">&times;</span>
+            <h2>Actualizar Perfil</h2>
+
+            <form action="index.php?controller=cliente&action=actualizarPerfil" method="POST" enctype="multipart/form-data" class="form-perfil">
+
+                <!-- FOTO DE PERFIL -->
+                <div class="perfil-foto-contenedor" style="text-align: center; margin-bottom: 20px;">
+                    <div class="avatar-preview" style="width: 120px; height: 120px; margin: 0 auto 10px; border-radius: 50%; overflow: hidden; border: 3px solid #D4AF37;">
+                        <img id="imgPreviewPerfil"
+                            src="<?= !empty($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : 'app/public/assets/img/default-avatar.png'; ?>"
+                            alt="Foto de perfil"
+                            style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+
+                    <label for="inputFotoPerfil" class="btn-cambiar-foto" style="cursor: pointer; background-color: #4A154B; color: #fff; padding: 8px 15px; border-radius: 5px; font-size: 0.9rem; display: inline-block;">
+                        Cambiar Foto
+                    </label>
+                    <input type="file" id="inputFotoPerfil" name="foto_perfil" accept="image/*" style="display: none;" onchange="previsualizarFoto(event)">
+                </div>
+
+                <!-- DATOS PERSONALES -->
+                <div class="form-grupo">
+                    <label for="perfilNombre">Nombre</label>
+                    <input type="text" id="perfilNombre" name="nombre" value="<?= htmlspecialchars($_SESSION['nombre'] ?? '', ENT_QUOTES); ?>" required>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="perfilApellido">Apellido</label>
+                    <input type="text" id="perfilApellido" name="apellido" value="<?= htmlspecialchars($_SESSION['apellido'] ?? '', ENT_QUOTES); ?>" required>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="perfilTelefono">Número de Teléfono</label>
+                    <input type="tel" id="perfilTelefono" name="telefono" value="<?= htmlspecialchars($_SESSION['telefono'] ?? '', ENT_QUOTES); ?>" required>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="perfilCorreo">Correo Electrónico</label>
+                    <input type="email" id="perfilCorreo" name="correo" value="<?= htmlspecialchars($_SESSION['correo'] ?? '', ENT_QUOTES); ?>" required>
+                </div>
+
+                <div class="modal-acciones" style="margin-top: 20px; text-align: right;">
+                    <button type="button" class="btn-cancelar" onclick="cerrarModalPerfil()">Cancelar</button>
+                    <button type="submit" class="btn-guardar" style="background-color: #D4AF37; color: #1A1A1A; font-weight: bold; padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer;">Guardar Cambios</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
     <!-- =========================================
      MODAL RESEÑA
 ========================================= -->
@@ -512,7 +616,28 @@ $fotosCortes = [
     </footer>
 
     <script>
-        
+        /* ==========================================================
+   MODAL ACTUALIZAR PERFIL Y PREVISUALIZACIÓN DE FOTO
+   ========================================================== */
+        function abrirModalPerfil() {
+            document.getElementById('modalActualizarPerfil').classList.add('activo');
+        }
+
+        function cerrarModalPerfil() {
+            document.getElementById('modalActualizarPerfil').classList.remove('activo');
+        }
+
+        function previsualizarFoto(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imgPreviewPerfil').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         // Variables de control para el historial
         let paginaActualHistorial = 1;
         const filasPorPaginaHistorial = 10;

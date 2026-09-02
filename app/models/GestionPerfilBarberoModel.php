@@ -97,7 +97,7 @@ class GestionPerfilBarberoModel
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+
     /* =========================
        HORARIOS DEL BARBERO
     ========================== */
@@ -260,5 +260,50 @@ class GestionPerfilBarberoModel
             $estado,
             $idReservacion
         ]);
+    }
+    /* =========================
+       ACTUALIZAR DATOS DE PERFIL
+    ========================== */
+
+    public function actualizarDatosPerfil($idUsuario, $nombre, $apellido, $telefono, $correo, $rutaFoto = null)
+    {
+        try {
+            if ($rutaFoto !== null) {
+                $sql = "UPDATE usuarios 
+                        SET nombre = :nombre, 
+                            apellido = :apellido, 
+                            telefono = :telefono, 
+                            correo = :correo, 
+                            foto = :foto 
+                        WHERE id_usuario = :id";
+
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+                $stmt->bindParam(':apellido', $apellido, PDO::PARAM_STR);
+                $stmt->bindParam(':telefono', $telefono, PDO::PARAM_STR);
+                $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+                $stmt->bindParam(':foto', $rutaFoto, PDO::PARAM_STR);
+                $stmt->bindParam(':id', $idUsuario, PDO::PARAM_INT);
+            } else {
+                $sql = "UPDATE usuarios 
+                        SET nombre = :nombre, 
+                            apellido = :apellido, 
+                            telefono = :telefono, 
+                            correo = :correo 
+                        WHERE id_usuario = :id";
+
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+                $stmt->bindParam(':apellido', $apellido, PDO::PARAM_STR);
+                $stmt->bindParam(':telefono', $telefono, PDO::PARAM_STR);
+                $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+                $stmt->bindParam(':id', $idUsuario, PDO::PARAM_INT);
+            }
+
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error al actualizar perfil del barbero: " . $e->getMessage());
+            return false;
+        }
     }
 }

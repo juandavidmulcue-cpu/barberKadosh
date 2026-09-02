@@ -6,7 +6,12 @@ if (!isset($_SESSION['id'])) {
 }
 
 $barbero = $barbero ?? [];
-$nombreBarbero = htmlspecialchars($barbero['nombre'] ?? 'Barbero');
+$nombreBarbero = htmlspecialchars($barbero['nombre'] ?? $_SESSION['nombre'] ?? 'Barbero');
+$apellidoBarbero = htmlspecialchars($barbero['apellido'] ?? $_SESSION['apellido'] ?? '');
+$telefonoBarbero = htmlspecialchars($barbero['telefono'] ?? $_SESSION['telefono'] ?? 'No disponible');
+$correoBarbero = htmlspecialchars($barbero['correo'] ?? $_SESSION['correo'] ?? 'No disponible');
+$fotoBarbero = htmlspecialchars($barbero['foto'] ?? $_SESSION['foto'] ?? 'app/public/assets/img/fotobarbero.jpg');
+
 $totalReservas = $totalReservas ?? 0;
 $totalResenas = $totalResenas ?? 0;
 $promedio = $promedio ?? 0;
@@ -96,7 +101,7 @@ foreach ($horarios as $h) {
         ========================== -->
         <section class="perfil">
             <div class="imagen">
-                <img src="app/public/assets/img/fotobarbero.jpg" class="avatar" alt="Foto del barbero">
+                <img src="<?php echo $fotoBarbero; ?>" class="avatar" alt="Foto del barbero">
             </div>
 
             <div class="informacion">
@@ -108,11 +113,14 @@ foreach ($horarios as $h) {
                 <hr class="divisor-perfil">
 
                 <div class="detalles-contacto">
-                    <p><strong>Nombre completo:</strong> <?php echo htmlspecialchars(($barbero['nombre'] ?? 'Barbero') . ' ' . ($barbero['apellido'] ?? '')); ?></p>
-                    <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($barbero['telefono'] ?? 'No disponible'); ?></p>
-                    <p><strong>Correo:</strong> <?php echo htmlspecialchars($barbero['correo'] ?? 'No disponible'); ?></p>
+                    <p><strong>Nombre completo:</strong> <?php echo $nombreBarbero . ' ' . $apellidoBarbero; ?></p>
+                    <p><strong>Teléfono:</strong> <?php echo $telefonoBarbero; ?></p>
+                    <p><strong>Correo:</strong> <?php echo $correoBarbero; ?></p>
                 </div>
 
+                <button type="button" class="btn-editar-perfil" onclick="abrirModalEditarPerfil()">
+                    ✏️ Editar Perfil
+                </button>
             </div>
 
             <!-- ESTADÍSTICAS -->
@@ -203,13 +211,12 @@ foreach ($horarios as $h) {
         </section>
 
         <!-- =========================
-             HISTORIAL DE RESERVACIONES (CON BUSCADOR Y PAGINACIÓN)
+             HISTORIAL DE RESERVACIONES
         ========================== -->
         <section class="card" id="historial" style="display:none;">
             <h2>Historial de Citas</h2>
 
             <?php if (!empty($historial)) { ?>
-                <!-- BARRA DE BÚSQUEDA -->
                 <div class="buscador-contenedor">
                     <input
                         type="text"
@@ -251,7 +258,6 @@ foreach ($horarios as $h) {
                     </table>
                 </div>
 
-                <!-- CONTROLES DE PAGINACIÓN -->
                 <div class="paginacion-contenedor" id="paginacionHistorial">
                     <button id="btnPrevPágina" onclick="cambiarPagina(-1)" class="btn-paginacion">&#10094; Anterior</button>
                     <span id="infoPágina" class="info-pagina">Página 1 de 1</span>
@@ -300,6 +306,53 @@ foreach ($horarios as $h) {
 
     </div>
 
+    <!-- =========================
+     MODAL EDITAR PERFIL BARBERO
+========================== -->
+    <div id="modalEditarPerfilBarbero" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar-modal" onclick="cerrarModalEditarPerfil()">&times;</span>
+            <h2>Editar Perfil</h2>
+
+            <form action="index.php?controller=barbero&action=actualizarPerfil" method="POST" enctype="multipart/form-data">
+
+                <!-- AVATAR Y SUBIDA DE FOTO -->
+                <div class="modal-foto-container">
+                    <img id="previewFotoBarbero" src="<?php echo $fotoBarbero; ?>" alt="Foto de perfil" class="avatar-preview">
+                    <label for="fotoBarberoInput" class="btn-cambiar-foto">
+                        📷 Cambiar Foto
+                    </label>
+                    <input type="file" id="fotoBarberoInput" name="foto_perfil" accept="image/*" onchange="previsualizarFoto(event)">
+                </div>
+
+                <div class="form-grupo">
+                    <label for="nombreBarberoInput">Nombre</label>
+                    <input type="text" id="nombreBarberoInput" name="nombre" value="<?php echo $nombreBarbero; ?>" required>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="apellidoBarberoInput">Apellido</label>
+                    <input type="text" id="apellidoBarberoInput" name="apellido" value="<?php echo $apellidoBarbero; ?>" required>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="telefonoBarberoInput">Teléfono</label>
+                    <input type="text" id="telefonoBarberoInput" name="telefono" value="<?php echo $telefonoBarbero; ?>" required>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="correoBarberoInput">Correo Electrónico</label>
+                    <input type="email" id="correoBarberoInput" name="correo" value="<?php echo $correoBarbero; ?>" required>
+                </div>
+
+                <div class="modal-acciones">
+                    <button type="button" class="btn-cancelar" onclick="cerrarModalEditarPerfil()">Cancelar</button>
+                    <button type="submit" class="btn-guardar">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-section">
@@ -332,6 +385,24 @@ foreach ($horarios as $h) {
             </p>
         </div>
     </footer>
+
+    <!-- SCRIPT MANEJO DE MODAL -->
+    <script>
+        function abrirModalEditarPerfil() {
+            document.getElementById('modalEditarPerfilBarbero').style.display = 'flex';
+        }
+
+        function cerrarModalEditarPerfil() {
+            document.getElementById('modalEditarPerfilBarbero').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalEditarPerfilBarbero');
+            if (event.target === modal) {
+                cerrarModalEditarPerfil();
+            }
+        }
+    </script>
 
     <script>
         function mostrarSeccion(opcion) {
@@ -513,6 +584,21 @@ foreach ($horarios as $h) {
         document.addEventListener('DOMContentLoaded', function() {
             inicializarPaginacion();
         });
+
+        function abrirModalEditarPerfil() {
+            document.getElementById('modalEditarPerfilBarbero').style.display = 'flex';
+        }
+
+        function cerrarModalEditarPerfil() {
+            document.getElementById('modalEditarPerfilBarbero').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalEditarPerfilBarbero');
+            if (event.target === modal) {
+                cerrarModalEditarPerfil();
+            }
+        }
     </script>
 
     <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>

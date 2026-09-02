@@ -738,7 +738,341 @@ tbody td {
 .footer-bottom strong {
     color: var(--dorado);
 }
+/* ==========================================================
+   ESTILOS PARA EL MODAL DE ACTUALIZAR PERFIL
+   ========================================================== */
 
+/* Fondo oscuro y centrado del modal */
+.modal {
+    display: none; /* Se activa añadiendo la clase .activo */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.65);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+}
+
+.modal.activo {
+    display: flex;
+}
+
+/* Tarjeta / Contenido del modal */
+.modal-contenido {
+    background-color: #1A1A1A;
+    color: #FFFFFF;
+    width: 90%;
+    max-width: 480px;
+    padding: 25px 30px;
+    border-radius: 12px;
+    border: 1px solid #D4AF37;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    position: relative;
+    animation: fadeInModal 0.3s ease-out forwards;
+}
+
+@keyframes fadeInModal {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Botón para cerrar (X) */
+.cerrar-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    color: #CCCCCC;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.cerrar-modal:hover {
+    color: #D4AF37;
+}
+
+.modal-contenido h2 {
+    color: #D4AF37;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+/* Sección de Foto de Perfil */
+.perfil-foto-contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.avatar-preview {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #D4AF37;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    background-color: #2A2A2A;
+    margin-bottom: 12px;
+}
+
+.avatar-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-cambiar-foto {
+    background-color: #4A154B;
+    color: #FFFFFF;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.btn-cambiar-foto:hover {
+    background-color: #5E1A5F;
+    transform: translateY(-1px);
+}
+
+/* Campos del Formulario */
+.form-perfil .form-grupo {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.form-perfil label {
+    font-size: 0.85rem;
+    color: #CCCCCC;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-perfil input[type="text"],
+.form-perfil input[type="tel"],
+.form-perfil input[type="email"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background-color: #262626;
+    color: #FFFFFF;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-perfil input:focus {
+    border-color: #D4AF37;
+    box-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
+}
+
+/* Botones de Acción (Cancelar / Guardar) */
+.modal-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.btn-cancelar {
+    background-color: transparent;
+    color: #CCCCCC;
+    border: 1px solid #555;
+    padding: 9px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.btn-cancelar:hover {
+    background-color: #333333;
+    color: #FFFFFF;
+}
+
+.btn-guardar {
+    background-color: #D4AF37;
+    color: #1A1A1A;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-guardar:hover {
+    background-color: #E5C158;
+    transform: translateY(-1px);
+}
+
+/* ==========================================
+   SECCIÓN BARBEROS DISPONIBLES (5 DÍAS)
+========================================== */
+.seccion-barberos {
+    margin: 30px 0;
+    width: 100%;
+}
+
+.titulo-seccion-barberos {
+    font-size: 1.3rem;
+    color: #dad31d;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 2px solid #D4AF37;
+    padding-bottom: 8px;
+    display: inline-block;
+}
+
+.grid-barberos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.tarjeta-barbero {
+    background-color: var(--fondo-oscuro);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border: 1px var(--dorado);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta-barbero:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(74, 21, 75, 0.15);
+}
+
+.avatar-barbero-container {
+    margin-bottom: 12px;
+}
+
+.avatar-barbero {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #D4AF37;
+}
+
+.info-barbero h3 {
+    font-size: 1.05rem;
+    color: var(--blanco-suave);
+    margin: 0 0 5px 0;
+    font-weight: 600;
+}
+
+.telefono-barbero {
+    font-size: 0.85rem;
+    color: var(--blanco-suave);
+    margin: 0 0 8px 0;
+}
+
+.badge-disponible {
+    display: inline-block;
+    background-color: var(--blanco-suave);
+    color: #2e7d32;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+
+.sin-barberos {
+    grid-column: 1 / -1;
+    color: var(--blanco-suave);
+    font-style: italic;
+    background: var(--morado-claro);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+/* ==========================================
+   ESTILOS PARA EL NOMBRE DEL BARBERO (H3)
+   ========================================== */
+
+/* Contenedor principal de la información */
+.info-barbero {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Título con el Nombre y Apellido del Barbero */
+.info-barbero h3 {
+    font-size: 1.25rem; /* ~20px */
+    font-weight: 700;
+    color: #fdfdfd; /* O un tono oscuro acorde a tu paleta */
+    margin: 0;
+    line-height: 1.3;
+    text-transform: capitalize; /* Fuerza mayúscula inicial en cada palabra */
+    letter-spacing: 0.3px;
+    transition: color 0.3s ease;
+}
+
+
+.tarjeta-barbero:hover .info-barbero h3 {
+    color: #d4af37;
+}
+
+
+.info-barbero .telefono-barbero {
+    font-size: 0.9rem;
+    color: var(--blanco-suave);
+    margin: 0;
+}
+
+/* Badge de disponibilidad */
+.info-barbero .badge-disponible {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--morado-claro);
+    background-color: var(--blanco-suave);
+    padding: 4px 10px;
+    border-radius: 12px;
+    align-self: center;
+}
+
+/* Ajustes Responsivos para pantallas pequeñas */
+@media (max-width: 480px) {
+    .info-barbero h3 {
+        font-size: 1.1rem; /* Un poco más pequeño en celulares */
+    }
+}
 /* ===== RESPONSIVE ===== */
 @media (max-width: 992px) {
     .perfil {

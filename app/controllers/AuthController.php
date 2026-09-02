@@ -60,19 +60,27 @@ class AuthController extends Controller
 
                 if ($user) {
 
+                    // En AuthController.php dentro de private function login(...)
+
                     if (password_verify($password, $user['password'])) {
-
-                        // Verificar si el usuario está inactivo
                         if ($user['estado'] === 'inactivo') {
-
                             $error = "Lo sentimos, tu cuenta se encuentra inactiva. Comunícate con el administrador.";
                         } else {
-
-                            // Login correcto: reiniciar contador
                             $_SESSION['login_intentos'] = 0;
                             $_SESSION['login_bloqueado_hasta'] = 0;
 
+                            // Ejecutar el login base
                             $this->loginUser($user, $rol);
+
+                            // Guardar explícitamente todos los campos requeridos por la vista y el modal:
+                            $_SESSION['id']          = $user['id_usuario'];
+                            $_SESSION['nombre']      = $user['nombre'];
+                            $_SESSION['apellido']    = $user['apellido'];
+                            $_SESSION['telefono']    = $user['telefono'];
+                            $_SESSION['correo']      = $user['correo'];
+                            $_SESSION['foto'] = $user['foto'] ?? '';
+                            $_SESSION['nombre_rol']  = $rol;
+
                             $this->redirect($destino);
                             exit;
                         }

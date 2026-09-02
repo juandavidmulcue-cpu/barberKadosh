@@ -40,7 +40,7 @@ class BarberoController extends Controller
         // Reservaciones pendientes del barbero
         $reservaciones = $this->perfilModel
             ->obtenerReservacionesBarbero($idBarbero);
-        
+
         // Reservaciones completadas del barbero
         $historial = $this->perfilModel
             ->obtenerHistorialBarbero($idBarbero);
@@ -133,5 +133,63 @@ class BarberoController extends Controller
         $this->redirect(
             'index.php?controller=barbero&action=perfil'
         );
+    }
+
+    public function actualizarPerfil()
+    {
+        $idUsuario = $_SESSION['id'] ?? $_SESSION['id_usuario'] ?? null;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $idUsuario) {
+            $nombre   = trim($_POST['nombre']);
+            $apellido = trim($_POST['apellido']);
+            $telefono = trim($_POST['telefono']);
+            $correo   = trim($_POST['correo']);
+
+            $rutaFotoDB = null;
+
+            // Procesar la foto de perfil
+            if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                $fileTmpPath   = $_FILES['foto']['tmp_name'];
+                $fileName      = $_FILES['foto']['name'];
+                $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+                $extensionesPermitidas = ['jpg', 'jpeg', 'png', 'webp'];
+
+                if (in_array($fileExtension, $extensionesPermitidas)) {
+                    $nuevoNombreFoto  = "barbero_" . $idUsuario . "_" . time() . "." . $fileExtension;
+                    $directorioSubida = "app/public/uploads/perfiles/";
+
+                    if (!is_dir($directorioSubida)) {
+                        mkdir($directorioSubida, 0755, true);
+                    }
+
+                    $destinoFinal = $directorioSubida . $nuevoNombreFoto;
+
+                    if (move_uploaded_file($fileTmpPath, $destinoFinal)) {
+                        $rutaFotoDB = $destinoFinal;
+                    }
+                }
+            }
+
+            // Actualizar datos en la base de datos
+            $resultado = $this->perfilModel->actualizarDatosPerfil($idUsuario, $nombre, $apellido, $telefono, $correo, $rutaFotoDB);
+            if ($resultado) {
+                // Actualizar variables de sesión
+                $_SESSION['nombre']   = $nombre;
+                $_SESSION['apellido'] = $apellido;
+                $_SESSION['telefono'] = $telefono;
+                $_SESSION['correo']   = $correo;
+
+                if ($rutaFotoDB !== null) {
+                    $_SESSION['foto'] = $rutaFotoDB;
+                }
+
+                $this->redirect("index.php?controller=barbero&action=perfil&status=perfil_actualizado");
+                exit();
+            } else {
+                $this->redirect("index.php?controller=barbero&action=perfil&status=error_perfil");
+                exit();
+            }
+        }
     }
 }

@@ -15,13 +15,13 @@ class AuthModel
     public function getUserByEmailAndRole($correo, $rol)
     {
         $sql = "
-            SELECT u.id_usuario, u.nombre, u.apellido, u.password, u.correo, u.estado
-            FROM usuarios u
-            INNER JOIN roles r ON u.id_rol = r.id_rol
-            WHERE u.correo = :correo
-            AND r.nombre_rol = :rol
-            LIMIT 1
-        ";
+        SELECT u.id_usuario, u.nombre, u.apellido, u.telefono, u.correo, u.password, u.estado, u.foto
+        FROM usuarios u
+        INNER JOIN roles r ON u.id_rol = r.id_rol
+        WHERE u.correo = :correo
+        AND r.nombre_rol = :rol
+        LIMIT 1
+    ";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
