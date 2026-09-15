@@ -1,8 +1,25 @@
-/* CONTENEDOR PRINCIPAL */
+/* =========================================
+   VARIABLES GLOBALES / PALETA DE COLORES
+   ========================================= */
+:root {
+    --dorado: #d4af37;
+    --morado: #4b2a6b;
+    --morado-claro: #7b2cbf;
+    --blanco: #ffffff;
+    --blanco-suave: #e4e4e7;
+    --negro: #000000;
+    --gris: #9ca3af;
+    --fondo-oscuro: #181b21;
+    --fondo-modal: #181b21;
+}
+
+/* =========================================
+   CONTENEDOR PRINCIPAL EN 2 COLUMNAS
+   ========================================= */
 .container {
-    max-width: 700px;
-    margin: 60px auto;
-    padding: 40px;
+    max-width: 1100px; /* Ampliado para acomodar dos columnas con espacio */
+    margin: 40px auto;
+    padding: 35px;
     background: rgba(13, 13, 13, 0.88);
     border: 1px solid rgba(212, 175, 55, 0.35);
     border-radius: 24px;
@@ -10,41 +27,51 @@
         0 0 25px rgba(0, 0, 0, 0.7),
         0 0 35px rgba(75, 42, 107, 0.45);
     backdrop-filter: blur(10px);
+    
+    /* Layout Flex para organizar las 2 secciones */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px;
 }
 
 /* =========================================
-   TITULO
-========================================= */
-
+   TÍTULO Y ENLACE DE VOLVER
+   ========================================= */
 .container h1 {
+    width: 100%; /* Ocupa todo el ancho superior */
     text-align: center;
     color: var(--dorado);
-    font-size: 32px;
-    margin-bottom: 35px;
+    font-size: 30px;
+    margin-bottom: 10px;
     text-shadow: 0 0 8px rgba(212, 175, 55, 0.35);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Alerta de error si aplica */
+.container > div[style*="background"] {
+    width: 100%;
+    background: rgba(255, 0, 0, 0.12) !important;
+    color: #ffaaaa !important;
+    border: 1px solid rgba(255, 80, 80, 0.25);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.08);
 }
 
 /* =========================================
-   FORMULARIO
-========================================= */
-
-form {
+   COLUMNA IZQUIERDA: FORMULARIO AGENDAR
+   ========================================= */
+form#formAgendar {
+    flex: 1 1 480px; /* Ancho base para la columna izquierda */
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-/* =========================================
-   GRUPOS
-========================================= */
-
 .form-group {
-    margin-bottom: 22px;
+    margin-bottom: 20px;
 }
-
-/* =========================================
-   LABELS
-========================================= */
 
 .form-group label {
     display: block;
@@ -53,10 +80,6 @@ form {
     font-size: 15px;
     font-weight: 600;
 }
-
-/* =========================================
-   SELECT E INPUT DATE
-========================================= */
 
 .form-group select,
 .form-group input[type="date"] {
@@ -69,56 +92,44 @@ form {
     color: var(--blanco);
     font-size: 15px;
     transition: 0.3s ease;
+    box-sizing: border-box;
 }
 
-/* SELECT */
 .form-group select {
     cursor: pointer;
 }
 
-/* OPCIONES DEL SELECT */
 .form-group select option {
     background: #1a1022;
-    color: white;
+    color: var(--blanco);
 }
 
-/* HOVER */
 .form-group select:hover,
 .form-group input[type="date"]:hover {
     border-color: rgba(212, 175, 55, 0.6);
 }
 
-/* FOCUS */
 .form-group select:focus,
 .form-group input[type="date"]:focus {
     outline: none;
     border-color: var(--dorado);
-    box-shadow:
-        0 0 10px rgba(212, 175, 55, 0.25);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.25);
 }
-
-/* =========================================
-   FECHA
-========================================= */
 
 input[type="date"] {
     color-scheme: dark;
 }
 
-/* =========================================
-   HORARIOS DISPONIBLES
-========================================= */
-
+/* Horarios */
 #horariosDisponibles {
-    margin-top: 10px;
-    padding: 20px;
+    margin-top: 8px;
+    padding: 16px;
     min-height: 80px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(212, 175, 55, 0.2);
     border-radius: 15px;
 }
 
-/* TEXTO INICIAL */
 #horariosDisponibles > p {
     margin: 0;
     color: var(--gris);
@@ -127,67 +138,9 @@ input[type="date"] {
     line-height: 1.6;
 }
 
-/* =========================================
-   HORARIO DEL BARBERO
-========================================= */
-
 #horariosDisponibles p strong {
     color: var(--dorado);
 }
-
-/* =========================================
-   LISTA DE HORAS
-========================================= */
-
-#listaHoras {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-    gap: 12px;
-    margin-top: 20px;
-}
-
-/* =========================================
-   BOTONES DE HORARIOS
-========================================= */
-
-#listaHoras button {
-    width: 100%;
-    padding: 12px 10px;
-    border: 1px solid rgba(212, 175, 55, 0.4);
-    border-radius: 10px;
-    background: rgba(75, 42, 107, 0.55);
-    color: var(--blanco);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.25s ease;
-}
-
-/* HOVER HORAS */
-#listaHoras button:hover {
-    background: var(--dorado);
-    color: var(--negro);
-    border-color: var(--dorado);
-    transform: translateY(-2px);
-    box-shadow:
-        0 5px 15px rgba(212, 175, 55, 0.25);
-}
-
-/* =========================================
-   HORA SELECCIONADA
-========================================= */
-
-#listaHoras button.selected {
-    background: var(--dorado) !important;
-    color: var(--negro) !important;
-    border-color: var(--dorado);
-    box-shadow:
-        0 0 15px rgba(212, 175, 55, 0.45);
-}
-
-/* =========================================
-   MENSAJES DE HORARIO
-========================================= */
 
 #horariosDisponibles p[style*="color:red"] {
     padding: 12px;
@@ -197,72 +150,197 @@ input[type="date"] {
     border: 1px solid rgba(255, 80, 80, 0.2);
 }
 
+#listaHoras {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
 
-/* =========================================
-   BOTÓN AGENDAR
-========================================= */
+#listaHoras button,
+.btn-horario {
+    width: 100%;
+    padding: 10px 8px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 10px;
+    background: rgba(75, 42, 107, 0.55);
+    color: var(--blanco);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
 
+#listaHoras button:hover,
+.btn-horario:hover {
+    background: var(--dorado);
+    color: var(--negro);
+    border-color: var(--dorado);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.25);
+}
+
+#listaHoras button.selected,
+.btn-horario.selected {
+    background: var(--dorado) !important;
+    color: var(--negro) !important;
+    border-color: var(--dorado) !important;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.45);
+}
+
+/* Botón Submit */
 form > button[type="submit"] {
     width: 100%;
     margin-top: 10px;
     padding: 15px;
     border: none;
     border-radius: 14px;
-    background: linear-gradient( 135deg, var(--morado), var(--morado-claro));
+    background: linear-gradient(135deg, var(--morado), var(--morado-claro));
     color: var(--blanco);
     font-size: 15px;
     font-weight: 700;
     letter-spacing: 0.5px;
     cursor: pointer;
     transition: 0.3s ease;
-    box-shadow:
-        0 0 15px rgba(75, 42, 107, 0.5);
+    box-shadow: 0 0 15px rgba(75, 42, 107, 0.5);
 }
 
-/* HOVER BOTÓN */
 form > button[type="submit"]:hover {
     background: linear-gradient(135deg, var(--dorado), #b8941f);
     color: var(--negro);
     transform: translateY(-2px);
-    box-shadow:
-        0 0 20px rgba(212, 175, 55, 0.45);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.45);
 }
 
 /* =========================================
-   MENSAJE DE ERROR DE SESIÓN
-========================================= */
-
-.container > div[style*="background"] {
-    background: rgba(255, 0, 0, 0.12) !important;
-    color: #ffaaaa !important;
-    border: 1px solid rgba(255, 80, 80, 0.25);
-    box-shadow:
-        0 0 10px rgba(255, 0, 0, 0.08);
+   COLUMNA DERECHA: BARBEROS DISPONIBLES
+   ========================================= */
+.seccion-barberos {
+    flex: 1 1 400px; /* Ancho base para la columna derecha */
+    margin: 0;
+    padding-left: 20px;
+    border-left: 1px solid rgba(212, 175, 55, 0.2); /* Separador sutil */
 }
 
-/* =========================================
-   VOLVER A MIS CITAS
-========================================= */
+.titulo-seccion-barberos {
+    font-size: 1.15rem;
+    color: var(--dorado);
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--dorado);
+    padding-bottom: 8px;
+    display: inline-block;
+}
 
+.grid-barberos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 15px;
+}
+
+.tarjeta-barbero {
+    background-color: var(--fondo-oscuro);
+    border-radius: 12px;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta-barbero:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
+    border-color: var(--dorado);
+}
+
+.avatar-barbero-container {
+    margin-bottom: 10px;
+}
+
+.avatar-barbero {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--dorado);
+}
+
+.info-barbero {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+}
+
+.info-barbero h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--blanco);
+    margin: 0;
+    line-height: 1.2;
+    text-transform: capitalize;
+    letter-spacing: 0.3px;
+    transition: color 0.3s ease;
+}
+
+.tarjeta-barbero:hover .info-barbero h3 {
+    color: var(--dorado);
+}
+
+.info-barbero .telefono-barbero {
+    font-size: 0.8rem;
+    color: var(--gris);
+    margin: 0;
+}
+
+.info-barbero .badge-disponible {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #4ade80;
+    background-color: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    padding: 3px 8px;
+    border-radius: 12px;
+    align-self: center;
+}
+
+.sin-barberos {
+    grid-column: 1 / -1;
+    color: var(--blanco-suave);
+    font-style: italic;
+    background: rgba(123, 44, 191, 0.2);
+    border: 1px solid rgba(123, 44, 191, 0.4);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* Enlace inferior centrado */
 .container > a {
-    display: block;
-    width: fit-content;
-    margin: 25px auto 0;
+    width: 100%;
+    text-align: center;
+    margin: 20px auto 0;
     color: var(--gris);
     font-size: 14px;
+    text-decoration: none;
     transition: 0.3s ease;
 }
 
 .container > a:hover {
     color: var(--dorado);
-    transform: translateX(-4px);
 }
 
 /* =========================================
    MODALES (ESTILO OSCURO KADOSH BARBER)
-========================================= */
-
-/* ===== MODAL DE PRODUCTO UNIFICADO ===== */
+   ========================================= */
 .modal-producto-overlay {
     display: none;
     position: fixed;
@@ -276,6 +354,7 @@ form > button[type="submit"]:hover {
     align-items: center;
     z-index: 99999;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 .modal-producto-overlay[style*="display: flex"],
@@ -285,7 +364,7 @@ form > button[type="submit"]:hover {
 
 .modal-producto-content {
     background: var(--fondo-modal);
-    color: #fff;
+    color: var(--blanco);
     padding: 30px 25px;
     border-radius: 20px;
     width: 100%;
@@ -294,16 +373,18 @@ form > button[type="submit"]:hover {
     position: relative;
     border: 1px solid var(--dorado);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    animation: modalEntrada 0.3s ease-out forwards;
 }
 
 .modal-producto-content h2 {
-    color: var(--dorado, #d4af37);
+    color: var(--dorado);
+    margin-top: 0;
     margin-bottom: 8px;
     font-size: 1.4rem;
 }
 
 .modal-producto-content p {
-    color: #e4e4e7;
+    color: var(--blanco-suave);
     margin-bottom: 20px;
     font-size: 0.9rem;
 }
@@ -318,7 +399,6 @@ form > button[type="submit"]:hover {
     gap: 10px;
 }
 
-/* Personalización del Scrollbar */
 #listaProductos::-webkit-scrollbar {
     width: 6px;
 }
@@ -329,11 +409,10 @@ form > button[type="submit"]:hover {
 }
 
 #listaProductos::-webkit-scrollbar-thumb {
-    background: var(--dorado, #d4af37);
+    background: var(--dorado);
     border-radius: 10px;
 }
 
-/* FILA DENTRO DEL CONTENEDOR (GENERADA POR JS) */
 .item-producto {
     display: flex !important;
     align-items: center;
@@ -349,65 +428,44 @@ form > button[type="submit"]:hover {
 
 .item-producto:hover {
     background: rgba(123, 44, 191, 0.25);
-    border-color: var(--dorado, #d4af37);
+    border-color: var(--dorado);
 }
 
-/* Checkbox estilizado */
 .item-producto input[type="checkbox"] {
     width: 18px;
     height: 18px;
-    accent-color: var(--dorado, #d4af37);
+    accent-color: var(--dorado);
     cursor: pointer;
     margin-right: 12px;
 }
 
 .nombre-producto {
     flex-grow: 1;
-    color: #ffffff;
+    color: var(--blanco);
     font-size: 14px;
     font-weight: 500;
 }
 
 .precio-producto {
-    color: var(--dorado, #d4af37);
+    color: var(--dorado);
     font-weight: 700;
     font-size: 14px;
     white-space: nowrap;
 }
 
-/* OPCIONES DE PRODUCTO (SI ES UN SELECTOR O LISTA) */
-.modal-producto select,
-.modal-producto input[type="text"],
-.modal-producto input[type="number"] {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid var(--dorado);
-    background: rgba(255, 255, 255, 0.05);
-    color: #ffffff;
-    margin-bottom: 15px;
-}
-
-.modal-producto select option {
-    background: #18181b;
-    color: #ffffff;
-}
-
-/* CONTENEDOR DE BOTONES */
 .modal-producto-botones {
     display: flex;
     justify-content: center;
     gap: 15px;
 }
 
-/* BOTÓN DE CONFIRMACIÓN (SÍ / AGREGAR) */
 .btn-producto-si {
     padding: 12px 28px;
     border: none;
     border-radius: 50px;
     cursor: pointer;
     font-weight: bold;
-    color: #ffffff;
+    color: var(--blanco);
     background: linear-gradient(135deg, var(--morado), var(--morado-claro));
     transition: 0.3s ease;
 }
@@ -417,7 +475,6 @@ form > button[type="submit"]:hover {
     box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
 }
 
-/* BOTÓN DE CANCELACIÓN (NO / CERRAR) */
 .btn-producto-no {
     padding: 12px 28px;
     border-radius: 50px;
@@ -431,17 +488,10 @@ form > button[type="submit"]:hover {
 
 .btn-producto-no:hover {
     background: var(--dorado) !important;
-    color: #000000 !important;
+    color: var(--negro) !important;
     transform: translateY(-2px);
 }
 
-.btn-horario.selected {
-    background-color: var(--morado, #7b2cbf) !important;
-    color: #ffffff !important;
-    border-color: var(--dorado, #d4af37) !important;
-}
-
-/* Animación de apertura suave */
 @keyframes modalEntrada {
     from {
         opacity: 0;
@@ -454,60 +504,48 @@ form > button[type="submit"]:hover {
 }
 
 /* =========================================
-   RESPONSIVE
-========================================= */
-
-@media (max-width: 768px) {
-
+   RESPONSIVE DESIGN (PANTALLAS PEQUEÑAS Y MÓVILES)
+   ========================================= */
+@media (max-width: 900px) {
     .container {
-        width: 92%;
-        margin: 30px auto;
+        flex-direction: column;
         padding: 25px 20px;
-        border-radius: 20px;
     }
 
-    .container h1 {
-        font-size: 26px;
+    form#formAgendar,
+    .seccion-barberos {
+        flex: 1 1 100%;
+        width: 100%;
+        padding-left: 0;
+        border-left: none;
     }
 
-    #listaHoras {
-        grid-template-columns:
-            repeat(3, 1fr);
-        gap: 9px;
-    }
-
-    #listaHoras button {
-        padding: 11px 5px;
-        font-size: 13px;
+    .seccion-barberos {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(212, 175, 55, 0.2);
     }
 }
 
 @media (max-width: 480px) {
-
-    .container {
-        width: 94%;
-        padding: 22px 16px;
-    }
-
     .container h1 {
-        font-size: 23px;
+        font-size: 22px;
     }
 
     #listaHoras {
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .form-group select,
-    .form-group input[type="date"] {
-        height: 47px;
-    }
-
-    .modal-producto-content {
-        padding: 20px 15px;
+    .grid-barberos {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     }
 
     .modal-producto-botones {
         flex-direction: column;
+    }
+
+    .btn-producto-si,
+    .btn-producto-no {
+        width: 100%;
     }
 }

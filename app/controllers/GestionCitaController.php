@@ -5,6 +5,8 @@ require_once 'app/models/GestionCitaModel.php';
 require_once 'app/models/ServicioModel.php';
 require_once 'app/models/BarberoModel.php';
 require_once 'app/models/ClienteProductoModel.php';
+require_once 'app/models/PromocionModel.php';
+require_once 'app/models/GestionProductoModel.php';
 
 class GestionCitaController extends Controller
 {
@@ -12,6 +14,8 @@ class GestionCitaController extends Controller
     private $servicioModel;
     private $barberoModel;
     private $clienteProductoModel;
+    private $promocionModel;
+    private $gestionProductoModel;
 
     public function __construct()
     {
@@ -24,6 +28,8 @@ class GestionCitaController extends Controller
         $this->servicioModel = new ServicioModel();
         $this->barberoModel = new BarberoModel();
         $this->clienteProductoModel = new ClienteProductoModel();
+        $this->promocionModel = new PromocionModel();
+        $this->gestionProductoModel = new GestionProductoModel();
     }
 
     /* =========================================
@@ -59,12 +65,19 @@ class GestionCitaController extends Controller
     public function agendarCita()
     {
         $servicios = $this->servicioModel->obtenerServicios();
-
         $barberos = $this->barberoModel->obtenerBarberosDisponibles();
+        $productos = $this->gestionProductoModel->obtenerProductos();
+
+        // Obtener arreglos de promociones activas
+        $promosServicios = $this->promocionModel->obtenerPromocionesServiciosActivas();
+        $promosProductos = $this->promocionModel->obtenerPromocionesProductosActivas();
 
         $this->view('app/views/cliente/agendar.php', [
             'servicios' => $servicios,
             'barberos'  => $barberos,
+            'productos' => $productos,
+            'promosServicios' => $promosServicios,
+            'promosProductos' => $promosProductos,
             'idServicio' => '',
             'idBarbero' => '',
             'fecha' => '',
@@ -117,7 +130,6 @@ class GestionCitaController extends Controller
        GUARDAR RESERVA
     ========================================= */
 
-
     public function guardar()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -141,7 +153,6 @@ class GestionCitaController extends Controller
             $_POST['hora']
         );
 
-
         // ==========================================
         // 2. VERIFICAR SI LA RESERVACIÓN SE CREÓ
         // ==========================================
@@ -158,35 +169,39 @@ class GestionCitaController extends Controller
             return;
         }
 
-
         // ==========================================
-        // 3. OBTENER PRODUCTO SELECCIONADO
+        // 3. OBTENER PRODUCTOS SELECCIONADOS
         // ==========================================
 
         $productosJson = $_POST['productos_seleccionados'] ?? null;
-        $productosIds = [];
+        $productosItems = [];
 
-        if(!empty($productosJson)){
-            $productosIds = json_decode($productosJson, true);
+        if (!empty($productosJson)) {
+            $productosItems = json_decode($productosJson, true);
         }
 
         // ==========================================
-        // 4. SI HAY PRODUCTO, GUARDARLO
+        // 4. SI HAY PRODUCTOS, GUARDARLOS EN DETALLE
         // ==========================================
 
         $erroresProductos = false;
 
-        if (is_array($productosIds) && !empty($productosIds)) {
-            foreach ($productosIds as $idProducto) {
-                // Inserta cada producto en detalle_reservacion mediante el modelo existente
-                $productoGuardado = $this->clienteProductoModel->agregarProducto(
-                    $idReservacion,
-                    $idProducto,
-                    1
-                );
+        if (is_array($productosItems) && !empty($productosItems)) {
+            foreach ($productosItems as $item) {
+                // Soportar array directo de IDs o array de objetos JSON [{id_producto, cantidad}, ...]
+                $idProducto = is_array($item) ? ($item['id_producto'] ?? null) : $item;
+                $cantidad = is_array($item) ? ($item['cantidad'] ?? 1) : 1;
 
-                if (!$productoGuardado) {
-                    $erroresProductos = true;
+                if ($idProducto) {
+                    $productoGuardado = $this->clienteProductoModel->agregarProducto(
+                        $idReservacion,
+                        $idProducto,
+                        $cantidad
+                    );
+
+                    if (!$productoGuardado) {
+                        $erroresProductos = true;
+                    }
                 }
             }
 
@@ -195,19 +210,17 @@ class GestionCitaController extends Controller
             }
         }
 
-
         // ==========================================
         // 5. MENSAJE DE ÉXITO
         // ==========================================
 
         if (!isset($_SESSION['error_cita'])) {
-            if (!empty($productosIds)) {
+            if (!empty($productosItems)) {
                 $_SESSION['mensaje_cita'] = '✅ ¡Cita agendada y productos agregados correctamente!';
             } else {
                 $_SESSION['mensaje_cita'] = '✅ ¡Cita agendada correctamente!';
             }
         }
-
 
         // ==========================================
         // 6. VOLVER AL PERFIL
@@ -219,7 +232,6 @@ class GestionCitaController extends Controller
 
         return;
     }
-
 
     public function editarCita()
     {
@@ -325,7 +337,6 @@ class GestionCitaController extends Controller
         );
     }
 
-
     /* =========================================
        CANCELAR RESERVA
     ========================================= */
@@ -344,8 +355,8 @@ class GestionCitaController extends Controller
     }
 
     /* =========================================
-   FINALIZAR RESERVA
-========================================= */
+       FINALIZAR RESERVA
+    ========================================= */
 
     public function finalizar()
     {
@@ -369,20 +380,17 @@ class GestionCitaController extends Controller
             return;
         }
 
-
         // Finalizar solamente si pertenece al cliente
         $resultado = $this->citaModel->finalizarReserva(
             $idReserva,
             $_SESSION['id']
         );
 
-
         if ($resultado) {
 
             $_SESSION['mensaje_cita'] =
                 '✅ La cita ha sido finalizada correctamente.';
         }
-
 
         // Volver al perfil
         $this->redirect(
@@ -391,8 +399,8 @@ class GestionCitaController extends Controller
     }
 
     /* =========================================
-   GUARDAR RESEÑA Y CALIFICACIÓN
-========================================= */
+       GUARDAR RESEÑA Y CALIFICACIÓN
+    ========================================= */
 
     public function guardarResena()
     {

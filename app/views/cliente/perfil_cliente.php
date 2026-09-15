@@ -9,7 +9,6 @@ if (!isset($_SESSION['id'])) {
 $nombre    = $_SESSION['nombre'] ?? 'Cliente';
 $apellido  = $_SESSION['apellido'] ?? '';
 $rol       = $_SESSION['nombre_rol'] ?? 'cliente';
-$foto      = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/avatar.png';
 
 $servicios = $servicios ?? [];
 $barberos  = $barberos ?? [];
@@ -54,7 +53,6 @@ $fotosCortes = [
 
             <div class="acciones">
                 <a href="index.php?controller=gestionCita&action=agendarCita" class="btn btn-primary"><button type="button">AGENDAR</button></a>
-                <button type="button" onclick="abrirModalPerfil()" class="btn-editar-perfil">Editar Perfil</button>
                 <a href="index.php?controller=password&action=resetPassword" class="btn"><button type="button" class="btn-outline">Cambiar contraseña</button></a>
             </div>
 
@@ -93,12 +91,8 @@ $fotosCortes = [
 
             <a href="#">Ver en el mapa</a>
 
-            <button
-                type="button"
-                class="btn-historial"
-                onclick="abrirModalHistorial()">
-                📋 Ver historial
-            </button>
+            <button type="button" class="btn-historial" onclick="abrirModalHistorial()"> Ver historial </button>
+            <button type="button" onclick="abrirModalPerfil()" class="btn-historial">Editar Perfil</button>
         </div>
     </div>
 
@@ -106,49 +100,6 @@ $fotosCortes = [
     $hoy = date('d/m/Y');
     $finRango = date('d/m/Y', strtotime('+4 days'));
     ?>
-
-    <!-- SECCIÓN DE BARBEROS DISPONIBLES -->
-    <section class="seccion-barberos">
-        <h2 class="titulo-seccion-barberos">Barberos Disponibles Seguidos (<?php echo "$hoy al $finRango"; ?>)</h2>
-
-        <div class="grid-barberos">
-            <?php if (!empty($barberos)): ?>
-                <?php foreach ($barberos as $barbero): ?>
-                    <?php
-                    // Resolver la ruta exacta de la foto del barbero
-                    $fotoBD = !empty($barbero['foto']) ? trim($barbero['foto']) : '';
-                    $fotoBarbero = !empty($fotoBD) ? $fotoBD : 'app/public/assets/img/avatar.png';
-                    ?>
-                    <div class="tarjeta-barbero">
-                        <div class="avatar-barbero-container">
-                            <img src="<?= htmlspecialchars($fotoBarbero); ?>"
-                                class="avatar-barbero"
-                                alt="Foto de <?= htmlspecialchars($barbero['nombre']); ?>"
-                                onerror="this.onerror=null; this.src='app/public/assets/img/avatar.png';">
-                        </div>
-
-                        <div class="info-barbero">
-                            <h3>
-                                <?php
-                                $nombreBarbero = trim(($barbero['nombre'] ?? '') . ' ' . ($barbero['apellido'] ?? ''));
-                                echo !empty($nombreBarbero) ? htmlspecialchars($nombreBarbero) : 'Barbero sin nombre';
-                                ?>
-                            </h3>
-
-                            <?php if (!empty($barbero['telefono'])): ?>
-                                <p class="telefono-barbero">📱 <?php echo htmlspecialchars($barbero['telefono']); ?></p>
-                            <?php endif; ?>
-
-                            <span class="badge-disponible">Disponible 5 días seguidos</span>
-                        </div>
-
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p class="sin-barberos">No hay barberos con horario asignado para los próximos 5 días seguidos.</p>
-            <?php endif; ?>
-        </div>
-    </section>
 
     <div class="panel" id="panel-reservas">
         <h2 class="section-title">Mis Reservas</h2>
@@ -240,7 +191,7 @@ $fotosCortes = [
                                     <?php elseif ($c['estado'] == 'Completada'): ?>
 
                                         <span style="color:green;">
-                                            ✓ Finalizada
+                                            ✓ Fina lizada
                                         </span>
 
                                     <?php endif; ?>

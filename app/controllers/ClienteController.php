@@ -32,21 +32,8 @@ class ClienteController extends Controller
        =============================== */
     public function perfil()
     {
-        $idUsuario = $_SESSION['id_usuario'] ?? $_SESSION['id'] ?? null;
-
-        if (!$idUsuario) {
-            $this->redirect('index.php?controller=auth&action=login');
-            exit;
-        }
-
-        $cliente = $this->clienteModel->obtenerPorId($idUsuario);
-        $barberos = $this->clienteModel->obtenerBarberosDisponiblesCincoDias();
-
-        // Cargamos la vista y le enviamos los datos
-        $this->view('app/views/cliente/perfil_cliente.php', [
-            'cliente'  => $cliente,
-            'barberos' => $barberos
-        ]);
+        header("Location: index.php?controller=gestionCita&action=misCitas");
+        exit;
     }
     /* ===============================
        IR A AGENDAR CITA

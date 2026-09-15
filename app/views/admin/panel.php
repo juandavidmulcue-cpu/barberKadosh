@@ -27,6 +27,10 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
         <div class="logo">
             <img src="app/public/assets/img/logo1.jpeg" alt="Kadosh Barber Shop" class="logo-img-circle">
             <span class="logo-text">PANEL ADMINISTRADOR</span>
+            <button id="theme-toggle" class="btn-primary" style="display: flex; align-items: center; gap: 8px; padding: 8px 16px;">
+                <span id="theme-icon">☀️</span>
+                <span id="theme-text">Modo Claro</span>
+            </button>
             <a href="index.php?controller=auth&action=logout" class="btn btn-outline">Cerrar sesión</a>
         </div>
     </header>
@@ -40,6 +44,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
             <div class="sidebar-link" onclick="showPanel('clientes')">👤 Clientes</div>
             <div class="sidebar-link" onclick="showPanel('productos')">📦 Productos</div>
             <div class="sidebar-link" onclick="showPanel('servicios')">✂️ Servicios</div>
+            <div class="sidebar-link" onclick="showPanel('promociones')">🏷️Promociones</div>
             <div class="sidebar-link" onclick="showPanel('horarios')">🕒 Horarios</div>
 
         </aside>
@@ -505,6 +510,226 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
 
             </div>
 
+            <!-- PROMOCIONES -->
+            <div class="panel" id="panel-promociones">
+
+                <h2 class="section-title">🏷️ Promociones</h2>
+
+                <div class="admin-card">
+                    <p>Gestiona los descuentos y ofertas especiales de Kadosh Barber Shop.</p>
+                </div>
+
+                <!-- BOTÓN PARA ABRIR EL MODAL -->
+                <div class="action-row">
+                    <button type="button" class="btn btn-primary" onclick="abrirModalPromo()">
+                        + Nueva Promoción
+                    </button>
+                </div>
+
+                <br>
+
+                <!-- TABLA DE PROMOCIONES -->
+                <div class="section-card">
+                    <table class="data-table" id="tablaPromociones">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Descuento (%)</th>
+                                <th>Fecha Inicio</th>
+                                <th>Fecha Fin</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($promociones)): ?>
+                                <?php foreach ($promociones as $promo): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($promo['id_promocion']); ?></td>
+                                        <td><?= htmlspecialchars($promo['nombre']); ?></td>
+                                        <td><?= htmlspecialchars($promo['descuento_porcentaje']); ?>%</td>
+                                        <td><?= htmlspecialchars($promo['fecha_inicio']); ?></td>
+                                        <td><?= htmlspecialchars($promo['fecha_fin']); ?></td>
+                                        <td>
+                                            <?php if ($promo['estado'] == '1'): ?>
+                                                <span style="color:green;font-weight:bold;">🟢 Activa</span>
+                                            <?php else: ?>
+                                                <span style="color:red;font-weight:bold;">🔴 Inactiva</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <a class="icono-editar btn-editar-promo"
+                                                href="javascript:void(0);"
+                                                title="Editar"
+                                                data-id="<?= htmlspecialchars($promo['id_promocion']); ?>"
+                                                data-nombre="<?= htmlspecialchars($promo['nombre']); ?>"
+                                                data-descuento="<?= htmlspecialchars($promo['descuento_porcentaje']); ?>"
+                                                data-inicio="<?= htmlspecialchars($promo['fecha_inicio']); ?>"
+                                                data-fin="<?= htmlspecialchars($promo['fecha_fin']); ?>"
+                                                data-estado="<?= htmlspecialchars($promo['estado']); ?>">
+                                                <img src="app/public/assets/icons/editar.png" alt="Editar" style="pointer-events: none;">
+                                            </a>
+
+                                            <?php if ($promo['estado'] == 1): ?>
+                                                <a class="btn-danger"
+                                                    href="index.php?controller=promocion&action=cambiarEstado&id=<?= $promo['id_promocion']; ?>&panel=promociones"
+                                                    onclick="return confirm('¿Desea desactivar esta promoción?')"
+                                                    title="Desactivar">
+                                                    <img src="app/public/assets/icons/desactivar.png" alt="Desactivar">
+                                                </a>
+                                            <?php else: ?>
+                                                <a class="btn-success"
+                                                    href="index.php?controller=promocion&action=cambiarEstado&id=<?= $promo['id_promocion']; ?>&panel=promociones"
+                                                    onclick="return confirm('¿Desea activar esta promoción?')"
+                                                    title="Activar">
+                                                    <img src="app/public/assets/icons/activar.png" alt="Activar">
+                                                </a>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="7">No hay promociones registradas</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- MODAL REGISTRAR PROMOCIÓN -->
+            <div id="modalPromo" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close-modal" onclick="cerrarModalPromo()">&times;</span>
+                    <h3>🏷️ Registrar Nueva Promoción</h3>
+
+                    <form action="index.php?controller=promocion&action=guardar" method="POST">
+                        <input type="hidden" name="id_promocion" id="id_promocion" value="">
+
+                        <div class="form-group">
+                            <label for="nombre">Nombre de la Promoción:</label>
+                            <input type="text" name="nombre" id="nombre" placeholder="Ej. Combo Fin de Semana" required class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descuento_porcentaje">Descuento (%):</label>
+                            <input type="number" name="descuento_porcentaje" id="descuento_porcentaje" min="1" max="100" placeholder="Ej. 20" required class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fecha_inicio">Fecha Inicio:</label>
+                            <input type="date" name="fecha_inicio" id="fecha_inicio" required class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fecha_fin">Fecha Fin:</label>
+                            <input type="date" name="fecha_fin" id="fecha_fin" required class="form-control">
+                        </div>
+
+                        <!-- TIPO DE APLICACIÓN -->
+                        <div class="form-group">
+                            <label for="tipo_aplicacion">¿A qué aplica la promoción?</label>
+                            <select name="tipo_aplicacion" id="tipo_aplicacion" required class="form-control" onchange="toggleSeleccionItems(this.value)">
+                                <option value="">-- Seleccione una opción --</option>
+                                <option value="servicio">Servicios</option>
+                                <option value="producto">Productos</option>
+                            </select>
+                        </div>
+
+                        <!-- LISTA DE SERVICIOS (para la tabla promociones_servicios) -->
+                        <div class="form-group item-selector" id="box-servicios" style="display:none;">
+                            <label>Selecciona los Servicios en oferta:</label>
+                            <div class="checkbox-list">
+                                <?php if (!empty($servicios)): ?>
+                                    <?php foreach ($servicios as $serv): ?>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" name="items[]" value="<?= $serv['id_servicio']; ?>">
+                                            ✂️ <?= htmlspecialchars($serv['nombre']); ?>
+                                        </label>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <p style="color:var(--texto-secundario); font-size:0.85rem;">No hay servicios registrados.</p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <!-- LISTA DE PRODUCTOS (para la tabla promociones_productos) -->
+                        <div class="form-group item-selector" id="box-productos" style="display:none;">
+                            <label>Selecciona los Productos en oferta:</label>
+                            <div class="checkbox-list">
+                                <?php if (!empty($productos)): ?>
+                                    <?php foreach ($productos as $prod): ?>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" name="items[]" value="<?= $prod['id_producto']; ?>">
+                                            📦 <?= htmlspecialchars($prod['nombre']); ?>
+                                        </label>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <p style="color:var(--texto-secundario); font-size:0.85rem;">No hay productos registrados.</p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <div class="modal-actions">
+                            <button type="button" class="btn-cancel" onclick="cerrarModalPromo()">Cancelar</button>
+                            <button type="submit" class="btn-submit">Guardar Promoción</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal Editar Promoción -->
+            <div id="modalEditarPromocion" class="modal">
+                <div class="modal-content">
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 class="section-title" style="margin: 0;">Editar Promoción</h3>
+                        <span id="cerrarModalPromo" class="modal-reporte-cerrar">&times;</span>
+                    </div>
+
+                    <form action="index.php?controller=promocion&action=editar" method="POST">
+                        <!-- ID Oculto -->
+                        <input type="hidden" id="edit_id_promocion" name="id_promocion">
+
+                        <div class="form-group-reporte">
+                            <label for="edit_nombre_promo">Nombre</label>
+                            <input type="text" id="edit_nombre_promo" name="nombre" class="select-reporte" maxlength="80" required>
+                        </div>
+
+                        <div class="form-group-reporte">
+                            <label for="edit_descuento_promo">Descuento (%)</label>
+                            <input type="number" step="0.01" min="0" max="100" id="edit_descuento_promo" name="descuento_porcentaje" class="select-reporte" required>
+                        </div>
+
+                        <div class="form-group-reporte">
+                            <label for="edit_fecha_inicio_promo">Fecha de Inicio</label>
+                            <input type="date" id="edit_fecha_inicio_promo" name="fecha_inicio" class="select-reporte" required>
+                        </div>
+
+                        <div class="form-group-reporte">
+                            <label for="edit_fecha_fin_promo">Fecha Fin</label>
+                            <input type="date" id="edit_fecha_fin_promo" name="fecha_fin" class="select-reporte" required>
+                        </div>
+
+                        <div class="form-group-reporte">
+                            <label for="edit_estado_promo">Estado</label>
+                            <select id="edit_estado_promo" name="estado" class="select-reporte">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
+
+                        <div class="modal-actions">
+                            <button type="button" id="btnCancelarPromo" class="btn-cancel">Cancelar</button>
+                            <button type="submit" class="btn-submit">Guardar Cambios</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
             <!-- CDN de FullCalendar v6 -->
             <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
 
@@ -680,6 +905,41 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
 
     <!-- JS PANEL -->
     <script>
+        function abrirModalPromo() {
+            document.getElementById('modalPromo').style.display = 'block';
+        }
+
+        function cerrarModalPromo() {
+            document.getElementById('modalPromo').style.display = 'none';
+        }
+
+        function toggleSeleccionItems(tipo) {
+            const boxServicios = document.getElementById('box-servicios');
+            const boxProductos = document.getElementById('box-productos');
+
+            // Desmarcar todos los checkboxes al cambiar de opción
+            document.querySelectorAll('.checkbox-item input[type="checkbox"]').forEach(cb => cb.checked = false);
+
+            if (tipo === 'servicio') {
+                boxServicios.style.display = 'block';
+                boxProductos.style.display = 'none';
+            } else if (tipo === 'producto') {
+                boxServicios.style.display = 'none';
+                boxProductos.style.display = 'block';
+            } else {
+                boxServicios.style.display = 'none';
+                boxProductos.style.display = 'none';
+            }
+        }
+
+        // Cerrar al hacer clic fuera del cuadro del modal
+        window.onclick = function(event) {
+            var modal = document.getElementById('modalPromo');
+            if (event.target === modal) {
+                cerrarModalPromo();
+            }
+        };
+
         function abrirModalDescargar() {
             const modal = document.getElementById('modalDescargarReporte');
             if (modal) modal.style.display = 'flex';
@@ -730,7 +990,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
             html2pdf().set(opciones).from(elemento).save();
         }
     </script>
-
+    <script src="app/public/js/theme.js"></script>
     <script>
         function showPanel(panel) {
 
@@ -1408,6 +1668,51 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
         function cerrarModalHorario() {
             document.getElementById('modalHorario').style.display = 'none';
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('modalEditarPromocion');
+            const btnCerrar = document.getElementById('cerrarModalPromo');
+            const btnCancelar = document.getElementById('btnCancelarPromo');
+
+            // Detectar clic en el botón de edición
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.btn-editar-promo');
+
+                if (btn) {
+                    e.preventDefault();
+
+                    // Cargar datos en los inputs del modal desde atributos data-*
+                    document.getElementById('edit_id_promocion').value = btn.getAttribute('data-id');
+                    document.getElementById('edit_nombre_promo').value = btn.getAttribute('data-nombre');
+                    document.getElementById('edit_descuento_promo').value = btn.getAttribute('data-descuento');
+                    document.getElementById('edit_fecha_inicio_promo').value = btn.getAttribute('data-inicio');
+                    document.getElementById('edit_fecha_fin_promo').value = btn.getAttribute('data-fin');
+                    document.getElementById('edit_estado_promo').value = btn.getAttribute('data-estado');
+
+                    // Abrir el modal usando flex para centrarlo en pantalla
+                    modal.style.display = 'flex';
+                }
+            });
+
+            // Cerrar el modal
+            if (btnCerrar) {
+                btnCerrar.onclick = function() {
+                    modal.style.display = 'none';
+                };
+            }
+            if (btnCancelar) {
+                btnCancelar.onclick = function() {
+                    modal.style.display = 'none';
+                };
+            }
+
+            // Cerrar al hacer clic en el fondo borroso (overlay)
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            };
+        });
     </script>
 
     <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
