@@ -20,7 +20,7 @@
             <div class="error-msg"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="index.php?controller=gestionbarbero&action=registrar">
+        <form method="POST" action="index.php?controller=gestionBarbero&action=registrar" onsubmit="return validarRegistroBarbero(event)">
 
             <div class="form-group">
                 <label>Documento de identidad</label>
@@ -58,7 +58,7 @@
                 Registrar al barbero </button>
         </form>
 
-        <script src="app/public/js/validaciones.js"></script>
+        <script src="app/public/js/validarRegistroBarbero.js"></script>
         
         <a href="index.php?controller=admin&action=panel&panel=barberos" class="logout-btn">← Volver</a>
     </div>

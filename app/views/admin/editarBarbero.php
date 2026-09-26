@@ -79,9 +79,8 @@
             <div class="footer-section">
                 <h4>Enlaces</h4>
 
-                <a href="index.php">Inicio</a>
+                <a href="http://localhost/barberkadosh/index.html">Inicio</a>
                 <a href="#">Servicios</a>
-                <a href="#">Contacto</a>
                 <a href="#">Política de Privacidad</a>
             </div>
 
@@ -89,8 +88,8 @@
                 <h4>Contacto</h4>
 
                 <p>📍 Bogotá - Colombia</p>
-                <p>📞 +57 300 359 3276</p>
-                <p>✉️ kadosh1234@gmail.com</p>
+                <a href="tel:+573003593276">📞 +573003593276</a>
+                <a href="mailto:kadosh1234@gmail.com">✉️ kadosh1234@gmail.com</a>
             </div>
 
             <div class="footer-section">
@@ -114,7 +113,7 @@
         </div>
 
     </footer>
-    
+
     <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
     <script src="https://files.bpcontent.cloud/2026/05/14/17/20260514174101-A2E9JALD.js" defer></script>
 

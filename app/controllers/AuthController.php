@@ -148,4 +148,22 @@ class AuthController extends Controller
         echo '<script>window.location.replace("index.html");</script>';
         exit;
     }
+
+    public function servicios()
+    {
+        require_once 'app/models/ServicioModel.php';
+        $servicioModel = new ServicioModel();
+
+        // Obtener los servicios
+        $servicios = $servicioModel->obtenerServicios();
+
+        // Comprobar si el archivo de la vista existe antes de requerirlo
+        $vista = 'app/views/cliente/servicios.php';
+
+        if (file_exists($vista)) {
+            require_once $vista;
+        } else {
+            die("Error: No se encontró la vista en " . realpath('.') . '/' . $vista);
+        }
+    }
 }

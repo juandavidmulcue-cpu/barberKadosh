@@ -419,10 +419,7 @@ $fotosCortes = [
                 <!-- FOTO DE PERFIL -->
                 <div class="perfil-foto-contenedor" style="text-align: center; margin-bottom: 20px;">
                     <div class="avatar-preview" style="width: 120px; height: 120px; margin: 0 auto 10px; border-radius: 50%; overflow: hidden; border: 3px solid #D4AF37;">
-                        <img id="imgPreviewPerfil"
-                            src="<?= !empty($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : 'app/public/assets/img/default-avatar.png'; ?>"
-                            alt="Foto de perfil"
-                            style="width: 100%; height: 100%; object-fit: cover;">
+                        <img src="<?= !empty($_SESSION['foto']) ? htmlspecialchars($_SESSION['foto']) : 'app/public/assets/img/avatar.png'; ?>" class="avatar" alt="Foto de Perfil">
                     </div>
 
                     <label for="inputFotoPerfil" class="btn-cambiar-foto" style="cursor: pointer; background-color: #4A154B; color: #fff; padding: 8px 15px; border-radius: 5px; font-size: 0.9rem; display: inline-block;">
@@ -530,9 +527,8 @@ $fotosCortes = [
             <div class="footer-section">
                 <h4>Enlaces</h4>
 
-                <a href="index.php">Inicio</a>
+                <a href="http://localhost/barberkadosh/index.html">Inicio</a>
                 <a href="#">Servicios</a>
-                <a href="#">Contacto</a>
                 <a href="#">Política de Privacidad</a>
             </div>
 
@@ -540,8 +536,8 @@ $fotosCortes = [
                 <h4>Contacto</h4>
 
                 <p>📍 Bogotá - Colombia</p>
-                <p>📞 +57 300 359 3276</p>
-                <p>✉️ kadosh1234@gmail.com</p>
+                <a href="tel:+573003593276">📞 +573003593276</a>
+                <a href="mailto:kadosh1234@gmail.com">✉️ kadosh1234@gmail.com</a>
             </div>
 
             <div class="footer-section">

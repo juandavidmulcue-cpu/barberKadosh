@@ -209,8 +209,8 @@ textarea:focus {
 
 .footer-section p {
     color: var(--texto-secundario);
-    line-height: 1.8;
-    font-size: 14px;
+    line-height: 1.9;
+    font-size: 16px;
 }
 
 .footer-section a {

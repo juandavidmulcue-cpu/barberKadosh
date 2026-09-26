@@ -1,4 +1,4 @@
-function validarRegistro(e) {
+function validarRegistroBarbero(e) {
     const nombre = document.querySelector('input[name="nombre"]');
     const apellido = document.querySelector('input[name="apellido"]');
     const correo = document.querySelector('input[name="correo"]');
@@ -13,12 +13,12 @@ function validarRegistro(e) {
         mensaje.style.display = "none";
     }
 
-    const nom = nombre.value.trim();
-    const ape = apellido.value.trim();
-    const email = correo.value.trim();
-    const doc = documento.value.trim();
-    const tel = telefono.value.trim();
-    const pass = password.value;
+    const nom = nombre ? nombre.value.trim() : "";
+    const ape = apellido ? apellido.value.trim() : "";
+    const email = correo ? correo.value.trim() : "";
+    const doc = documento ? documento.value.trim() : "";
+    const tel = telefono ? telefono.value.trim() : "";
+    const pass = password ? password.value : "";
 
     const soloNumeros = /^\d+$/;
     const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
@@ -26,7 +26,7 @@ function validarRegistro(e) {
     // ==========================
     // VALIDACIONES DE NOMBRE
     // ==========================
-    if (!soloLetras.test(nom)) {
+    if (!nom || !soloLetras.test(nom)) {
         if (e) e.preventDefault();
         mostrarError("❌ El nombre solo puede contener letras.", nombre, mensaje);
         return false;
@@ -35,7 +35,7 @@ function validarRegistro(e) {
     // ==========================
     // VALIDACIONES DE APELLIDO
     // ==========================
-    if (!soloLetras.test(ape)) {
+    if (!ape || !soloLetras.test(ape)) {
         if (e) e.preventDefault();
         mostrarError("❌ El apellido solo puede contener letras.", apellido, mensaje);
         return false;
@@ -48,7 +48,7 @@ function validarRegistro(e) {
 
     if (!correoRegex.test(email)) {
         if (e) e.preventDefault();
-        mostrarError("❌ El correo debe ser válido y terminar en '.com'.", correo, mensaje);
+        mostrarError("❌ El correo del barbero debe ser válido y terminar en '.com'.", correo, mensaje);
         return false;
     }
 
@@ -57,7 +57,7 @@ function validarRegistro(e) {
     // ==========================
     if (!soloNumeros.test(doc)) {
         if (e) e.preventDefault();
-        mostrarError("❌ El documento debe contener únicamente números.", documento, mensaje);
+        mostrarError("❌ El documento del barbero debe contener únicamente números.", documento, mensaje);
         return false;
     }
 
@@ -104,7 +104,9 @@ function mostrarError(texto, elementoInput, contenedorMensaje) {
         alert(texto);
     }
 
-    elementoInput.focus();
+    if (elementoInput) {
+        elementoInput.focus();
+    }
 }
 
 // =========================================
@@ -132,14 +134,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Solo números para documento
+    // Solo números para documento (rango de 8 a 11 dígitos máximo)
     if (documento) {
         documento.addEventListener("input", function () {
             this.value = this.value.replace(/\D/g, "").slice(0, 11);
         });
     }
 
-    // Solo números para teléfono
+    // Solo números para teléfono (10 dígitos máximo)
     if (telefono) {
         telefono.addEventListener("input", function () {
             this.value = this.value.replace(/\D/g, "").slice(0, 10);

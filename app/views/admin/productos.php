@@ -41,7 +41,6 @@
             <table id="tablaProductos" class="display">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Nombre</th>
                         <th>Precio</th>
                         <th>Acción</th>
@@ -51,7 +50,6 @@
                     <?php if (!empty($productos) && is_array($productos)): ?>
                         <?php foreach ($productos as $p): ?>
                             <tr>
-                                <td><?= $p['id_producto'] ?></td>
                                 <td><?= htmlspecialchars($p['nombre']) ?></td>
                                 <td>$<?= number_format($p['precio'], 2) ?></td>
                                 <td class="acciones">
@@ -72,7 +70,7 @@
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="4" style="text-align:center;">
+                            <td colspan="3" style="text-align:center;">
                                 No hay productos registrados
                             </td>
                         </tr>
@@ -90,9 +88,8 @@
             <div class="footer-section">
                 <h4>Enlaces</h4>
 
-                <a href="index.php">Inicio</a>
+                <a href="http://localhost/barberkadosh/index.html">Inicio</a>
                 <a href="#">Servicios</a>
-                <a href="#">Contacto</a>
                 <a href="#">Política de Privacidad</a>
             </div>
 
@@ -100,8 +97,8 @@
                 <h4>Contacto</h4>
 
                 <p>📍 Bogotá - Colombia</p>
-                <p>📞 +57 300 359 3276</p>
-                <p>✉️ kadosh1234@gmail.com</p>
+                <a href="tel:+573003593276">📞 +573003593276</a>
+                <a href="mailto:kadosh1234@gmail.com">✉️ kadosh1234@gmail.com</a>
             </div>
 
             <div class="footer-section">
@@ -125,7 +122,7 @@
         </div>
 
     </footer>
-    
+
     <!-- JS -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>

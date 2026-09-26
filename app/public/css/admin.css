@@ -92,6 +92,7 @@ body {
 }
 
 /* ===== HEADER ===== */
+/* ===== HEADER BASE ===== */
 .admin-header {
     display: flex;
     justify-content: space-between;
@@ -103,34 +104,17 @@ body {
     transition: background 0.3s ease;
 }
 
+/* ===== SECCIÓN IZQUIERDA (LOGO Y TÍTULO) ===== */
 .header-left {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.logo-img {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.admin-header h1 {
-    margin: 0;
-    color: var(--dorado);
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
 .logo-img-circle {
     width: 65px;
     height: 65px;
-    border-radius: 70%;
+    border-radius: 50%;
     object-fit: cover;
     border: 2px solid var(--dorado);
 }
@@ -142,23 +126,94 @@ body {
     color: var(--dorado);
 }
 
-.btn-outline:hover {
-    background: var(--dorado);
-    color: #ffffff;
+/* ===== SECCIÓN DERECHA (ACCIONES Y BOTONES) ===== */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.btn-outline {
-    position: relative;
-    left: 690px;
-    border: 1px solid var(--dorado);
-}
-
+/* ===== ESTILOS BASE DE BOTONES ===== */
 .btn {
     padding: 10px 20px;
     border-radius: 30px;
     border: 1px solid var(--dorado);
     color: var(--texto-principal);
     transition: 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: transparent;
+}
+
+.btn-outline {
+    border: 1px solid var(--dorado);
+}
+
+.btn-outline:hover {
+    background: var(--dorado);
+    color: #ffffff;
+}
+
+.btn-icon {
+    padding: 10px 14px;
+    font-size: 16px;
+}
+
+/* ===== ICONO PERFIL DE USUARIO ===== */
+.user-profile-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--dorado);
+    color: var(--texto-principal);
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.user-profile-icon:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== TOOLTIPS (CUADROS FLOTANTES BLANCOS) ===== */
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background-color: #ffffff;
+    color: #1a1a1a;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e0e0e0;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    pointer-events: none;
+    z-index: 10;
+}
+
+[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(4px);
 }
 
 /* ===== SIDEBAR ===== */

@@ -24,16 +24,24 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
 <body class="admin-body">
 
     <header class="admin-header">
-        <div class="logo">
+        <div class="header-left">
             <img src="app/public/assets/img/logo1.jpeg" alt="Kadosh Barber Shop" class="logo-img-circle">
             <span class="logo-text">PANEL ADMINISTRADOR</span>
-            <button id="theme-toggle" class="btn-primary" style="display: flex; align-items: center; gap: 8px; padding: 8px 16px;">
+        </div>
+
+        <div class="header-actions">
+            <div class="user-profile-icon" data-tooltip="<?php echo htmlspecialchars(Session::nombreCompleto()); ?>">
+                <span class="user-icon">👤</span>
+            </div>
+
+            <button id="theme-toggle" class="btn btn-icon" data-tooltip="Cambiar modo oscuro">
                 <span id="theme-icon">☀️</span>
-                <span id="theme-text">Modo Claro</span>
             </button>
             <a href="index.php?controller=auth&action=logout" class="btn btn-outline">Cerrar sesión</a>
         </div>
+
     </header>
+
     <div class="admin-content-wrapper">
         <!-- SIDEBAR -->
         <aside class="sidebar">
@@ -111,7 +119,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
 
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Documento</th>
                                 <th>Nombre</th>
                                 <th>Apellido</th>
                                 <th>Teléfono</th>
@@ -195,7 +203,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                     <table class="data-table" id="tablaClientes">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Documento</th>
                                 <th>Nombre</th>
                                 <th>Apellido</th>
                                 <th>Teléfono</th>
@@ -867,9 +875,8 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
             <div class="footer-section">
                 <h4>Enlaces</h4>
 
-                <a href="index.php">Inicio</a>
+                <a href="http://localhost/barberkadosh/index.html">Inicio</a>
                 <a href="#">Servicios</a>
-                <a href="#">Contacto</a>
                 <a href="#">Política de Privacidad</a>
             </div>
 
@@ -877,8 +884,8 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                 <h4>Contacto</h4>
 
                 <p>📍 Bogotá - Colombia</p>
-                <p>📞 +57 300 359 3276</p>
-                <p>✉️ kadosh1234@gmail.com</p>
+                <a href="tel:+573003593276">📞 +573003593276</a>
+                <a href="mailto:kadosh1234@gmail.com">✉️ kadosh1234@gmail.com</a>
             </div>
 
             <div class="footer-section">
@@ -1006,8 +1013,8 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                 clientes: 2,
                 productos: 3,
                 servicios: 4,
-                horarios: 5,
-                reportes: 6
+                promociones: 5,
+                horarios: 6
             };
 
             if (indice[panel] !== undefined) {
@@ -1041,6 +1048,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
         let tablaProductos = null;
         let tablaServicios = null;
         let tablaClientes = null;
+        let tablaPromociones = null;
         let tablaHorarios = null;
 
 
@@ -1565,6 +1573,25 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
             }
 
             /* ========================================================
+               PROMOCIONES
+            ======================================================== */
+
+            if (panel === 'promociones' && !tablaPromociones) {
+                if (!document.getElementById('tablaPromociones')) return;
+                tablaPromociones = $('#tablaPromociones').DataTable({
+                    destroy: true,
+                    dom: 'Bfrtip',
+                    buttons: botonesKadosh(
+                        'Promociones',
+                        [0, 1, 2, 3, 4, 5]
+                    ),
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
+                    }
+                });
+            }
+
+            /* ========================================================
                HORARIOS
             ======================================================== */
 
@@ -1623,15 +1650,22 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                 locale: 'es',
                 height: 'auto',
                 contentHeight: 'auto',
+
+                buttonText: {
+                    today: 'Hoy',
+                    month: 'Mes'
+                },
+
+                // SOLO MOSTRAR EL BOTÓN DE MES A LA DERECHA
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek'
+                    right: 'dayGridMonth'
                 },
+
                 editable: false,
                 droppable: true,
                 events: eventosBD,
-
                 // Al soltar a un barbero en un día determinado
                 drop: function(info) {
                     const idBarbero = info.draggedEl.getAttribute('data-id');

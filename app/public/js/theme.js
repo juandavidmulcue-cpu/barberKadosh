@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const toggleBtn = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
-    const themeText = document.getElementById('theme-text');
 
     // Cargar el tema guardado o usar 'dark' por defecto
     const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -20,13 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateButton(theme) {
-        if (!themeIcon || !themeText) return;
+        if (!toggleBtn || !themeIcon) return;
+
         if (theme === 'dark') {
             themeIcon.textContent = '☀️';
-            themeText.textContent = 'Modo Claro';
+            toggleBtn.setAttribute('data-tooltip', 'Cambiar a modo claro');
         } else {
             themeIcon.textContent = '🌙';
-            themeText.textContent = 'Modo Oscuro';
+            toggleBtn.setAttribute('data-tooltip', 'Cambiar a modo oscuro');
         }
     }
 });

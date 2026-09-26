@@ -1,442 +1,172 @@
-/*=========================================
-        SERVICIOS.CSS
-        KADOSH BARBER SHOP
-==========================================*/
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.servicios-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-
-    background: linear-gradient(135deg,
-            #050505 0%,
-            #14001f 20%,
-            #260040 45%,
-            #3b0066 60%,
-            #14001f 80%,
-            #050505 100%);
-
-    background-attachment: fixed;
-
-    min-height: 100vh;
-
-    color: #fff;
-
-}
-
-/*================ HEADER ================*/
-
-header {
-
-    background: linear-gradient(90deg, #050505, #3d006b, #050505);
-
-    padding: 45px;
-
+/* ===== ENCABEZADO ===== */
+.servicios-header {
     text-align: center;
-
-    box-shadow: 0 8px 20px rgba(0, 0, 0, .7);
-
-    border-bottom: 2px solid #d4af37;
-
+    margin-bottom: 40px;
 }
 
-header h1 {
-
-    color: #d4af37;
-
-    font-size: 58px;
-
-    letter-spacing: 4px;
-
-    text-transform: uppercase;
-
-    text-shadow: 0px 0px 12px rgba(212, 175, 55, .4);
-
-}
-
-header p {
-
-    margin-top: 15px;
-
-    font-size: 22px;
-
-    color: #fff;
-
-}
-
-/*================ CONTENEDOR ================*/
-
-.contenedor {
-
-    width: 92%;
-
-    max-width: 1500px;
-
-    margin: 50px auto;
-
-}
-
-/*================ TITULO SECCION ================*/
-
-.titulo-seccion {
-
-    width: 430px;
-
-    max-width: 100%;
-
-    margin: 70px auto;
-
-    padding: 16px;
-
-    text-align: center;
-
-    font-size: 28px;
-
-    color: #d4af37;
-
-    background: #0f0f0f;
-
-    border: 2px solid #7d24ff;
-
-    border-radius: 12px;
-
+.servicios-header h1 {
+    font-size: 36px;
+    color: var(--dorado, #D4AF37);
+    margin-bottom: 10px;
     letter-spacing: 2px;
-
-    box-shadow:
-        0 0 15px rgba(125, 36, 255, .6);
-
 }
 
-/*================ GRID ================*/
-
-.grid {
-
-    display: grid;
-
-    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-
-    gap: 35px;
-
-    margin-bottom: 70px;
-
-}
-
-/*================ TARJETAS ================*/
-
-.card {
-
-    background: rgba(12, 12, 12, .92);
-
-    border: 1px solid #7d24ff;
-
-    border-radius: 18px;
-
-    padding: 30px;
-
-    text-align: center;
-
-    transition: .35s;
-
-    box-shadow:
-
-        0 0 15px rgba(125, 36, 255, .25),
-
-        0 12px 25px rgba(0, 0, 0, .6);
-
-    backdrop-filter: blur(8px);
-
-}
-
-.card:hover {
-
-    transform: translateY(-8px);
-
-    border-color: #d4af37;
-
-    box-shadow:
-
-        0 0 20px rgba(212, 175, 55, .45),
-
-        0 0 25px rgba(125, 36, 255, .4);
-
-}
-
-/*================ TITULO CARD ================*/
-
-.card h3 {
-
-    color: #ffffff;
-
-    font-size: 31px;
-
-    margin-bottom: 20px;
-
-    min-height: 70px;
-
-}
-
-/*================ TEXTO ================*/
-
-.card p {
-
-    color: #d9d9d9;
-
+.servicios-header p {
+    color: var(--texto-principal, #ccc);
     font-size: 16px;
-
-    line-height: 28px;
-
-    min-height: 140px;
-
 }
 
-/*================ PRECIO ================*/
+/* ===== CUADRÍCULA DE TARJETAS ===== */
+.servicios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
 
-.card span {
+.servicio-card {
+    background: var(--bg-card, #1a1a1a);
+    border: 1px solid var(--dorado, #D4AF37);
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
 
-    display: block;
+.servicio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.2);
+}
 
-    color: #d4af37;
+/* ===== CONTENIDO ===== */
+.servicio-info {
+    flex-grow: 1;
+}
 
-    font-size: 35px;
+.servicio-nombre {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--dorado, #D4AF37);
+    margin-top: 0;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    padding-bottom: 8px;
+}
 
+.servicio-descripcion {
+    color: var(--texto-principal, #e0e0e0);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* ===== PIE DE LA TARJETA ===== */
+.servicio-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.servicio-precio {
+    font-size: 20px;
     font-weight: bold;
-
-    margin: 25px 0;
-
+    color: #ffffff;
 }
 
-/*================ BOTON ================*/
-
-button {
-
-    width: 180px;
-
-    padding: 14px;
-
-    border: none;
-
-    border-radius: 40px;
-
-    cursor: pointer;
-
-    font-size: 17px;
-
-    font-weight: bold;
-
-    color: white;
-
-    background: linear-gradient(90deg, #5d00b8, #842dff);
-
-    border: 2px solid #d4af37;
-
-    transition: .35s;
-
-}
-
-button:hover {
-
-    background: #d4af37;
-
-    color: #000;
-
-    transform: scale(1.05);
-
-    box-shadow: 0 0 18px rgba(212, 175, 55, .7);
-
-}
-
-/*================ BOTON VOLVER ================*/
-
-.volver {
-
-    text-align: center;
-
-    margin: 60px 0;
-
-}
-
-.volver a {
-
-    display: inline-block;
-
-    padding: 16px 40px;
-
+.btn-reservar {
+    background-color: var(--dorado, #D4AF37);
+    color: #0d0d0d;
+    padding: 10px 20px;
+    border-radius: 25px;
     text-decoration: none;
-
-    font-size: 18px;
-
     font-weight: bold;
-
-    color: #d4af37;
-
-    background: #0d0d0d;
-
-    border: 2px solid #7d24ff;
-
-    border-radius: 40px;
-
-    transition: .35s;
-
-    box-shadow: 0 0 15px rgba(125, 36, 255, .5);
-
+    font-size: 14px;
+    transition: background 0.3s ease, color 0.3s ease;
+    display: inline-block;
 }
 
-.volver a:hover {
-
-    background: #d4af37;
-
-    color: #000;
-
-    border-color: #d4af37;
-
+.btn-reservar:hover {
+    background-color: #ffffff;
+    color: #0d0d0d;
 }
 
-/*================ LINEA DECORATIVA ================*/
-
-.titulo-seccion::before {
-
-    content: "";
-
-    display: block;
-
-    width: 120px;
-
-    height: 2px;
-
-    background: #d4af37;
-
-    margin: 0 auto 15px;
-
+.no-servicios {
+    text-align: center;
+    color: var(--texto-principal, #ccc);
+    font-size: 18px;
+    grid-column: 1 / -1;
+    padding: 40px;
 }
 
-.titulo-seccion::after {
+/* ===== ADAPTABILIDAD RESPONSIVE ===== */
 
-    content: "";
-
-    display: block;
-
-    width: 120px;
-
-    height: 2px;
-
-    background: #d4af37;
-
-    margin: 15px auto 0;
-
-}
-
-/*================ SCROLL ================*/
-
-::-webkit-scrollbar {
-
-    width: 10px;
-
-}
-
-::-webkit-scrollbar-track {
-
-    background: #111;
-
-}
-
-::-webkit-scrollbar-thumb {
-
-    background: #6a0dad;
-
-    border-radius: 20px;
-
-}
-
-::-webkit-scrollbar-thumb:hover {
-
-    background: #d4af37;
-
-}
-
-/*================ RESPONSIVE ================*/
-
-@media(max-width:992px) {
-
-    header h1 {
-
-        font-size: 45px;
-
+/* Tablets y pantallas medianas (menos de 768px) */
+@media (max-width: 768px) {
+    .servicios-container {
+        margin: 20px auto;
+        padding: 0 15px;
     }
 
-    header p {
-
-        font-size: 18px;
-
+    .servicios-header h1 {
+        font-size: 28px;
     }
 
+    .servicios-header p {
+        font-size: 14px;
+    }
+
+    .servicios-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+    }
+
+    .servicio-card {
+        padding: 20px;
+    }
 }
 
-@media(max-width:768px) {
-
-    header {
-
-        padding: 30px;
-
+/* Teléfonos móviles (menos de 480px) */
+@media (max-width: 480px) {
+    .servicios-header {
+        margin-bottom: 25px;
     }
 
-    header h1 {
-
-        font-size: 35px;
-
+    .servicios-header h1 {
+        font-size: 24px;
     }
 
-    header p {
-
-        font-size: 16px;
-
-    }
-
-    .titulo-seccion {
-
-        width: 100%;
-
-        font-size: 22px;
-
-    }
-
-    .grid {
-
+    .servicios-grid {
         grid-template-columns: 1fr;
-
+        /* Una sola columna en celulares */
+        gap: 15px;
     }
 
-    .card h3 {
-
-        font-size: 25px;
-
-        min-height: auto;
-
+    .servicio-nombre {
+        font-size: 18px;
     }
 
-    .card p {
-
-        min-height: auto;
-
+    .servicio-descripcion {
+        font-size: 13px;
     }
 
-    button {
-
-        width: 100%;
-
+    .servicio-precio {
+        font-size: 18px;
     }
 
-    .volver a {
-
-        width: 100%;
-
+    .btn-reservar {
+        padding: 8px 16px;
+        font-size: 13px;
     }
-
 }
