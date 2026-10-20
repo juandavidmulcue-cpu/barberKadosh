@@ -4,12 +4,18 @@ require_once 'app/controllers/Controller.php';
 require_once 'app/models/GestionCitaModel.php';
 require_once 'app/models/ServicioModel.php';
 require_once 'app/models/BarberoModel.php';
+require_once 'app/models/ClienteProductoModel.php';
+require_once 'app/models/PromocionModel.php';
+require_once 'app/models/GestionProductoModel.php';
 
 class GestionCitaController extends Controller
 {
     private $citaModel;
     private $servicioModel;
     private $barberoModel;
+    private $clienteProductoModel;
+    private $promocionModel;
+    private $gestionProductoModel;
 
     public function __construct()
     {
@@ -21,6 +27,9 @@ class GestionCitaController extends Controller
         $this->citaModel = new GestionCitaModel();
         $this->servicioModel = new ServicioModel();
         $this->barberoModel = new BarberoModel();
+        $this->clienteProductoModel = new ClienteProductoModel();
+        $this->promocionModel = new PromocionModel();
+        $this->gestionProductoModel = new GestionProductoModel();
     }
 
     /* =========================================
@@ -33,12 +42,17 @@ class GestionCitaController extends Controller
             $_SESSION['id']
         );
 
+        $historial = $this->citaModel->obtenerHistorialCliente(
+            $_SESSION['id']
+        );
+
         $servicios = $this->servicioModel->obtenerServicios();
 
         $barberos = $this->barberoModel->obtenerBarberosDisponibles();
 
         $this->view('app/views/cliente/perfil_cliente.php', [
             'citas' => $citas,
+            'historial' => $historial,
             'servicios' => $servicios,
             'barberos' => $barberos
         ]);
@@ -51,12 +65,19 @@ class GestionCitaController extends Controller
     public function agendarCita()
     {
         $servicios = $this->servicioModel->obtenerServicios();
-
         $barberos = $this->barberoModel->obtenerBarberosDisponibles();
+        $productos = $this->gestionProductoModel->obtenerProductos();
+
+        // Obtener arreglos de promociones activas
+        $promosServicios = $this->promocionModel->obtenerPromocionesServiciosActivas();
+        $promosProductos = $this->promocionModel->obtenerPromocionesProductosActivas();
 
         $this->view('app/views/cliente/agendar.php', [
             'servicios' => $servicios,
             'barberos'  => $barberos,
+            'productos' => $productos,
+            'promosServicios' => $promosServicios,
+            'promosProductos' => $promosProductos,
             'idServicio' => '',
             'idBarbero' => '',
             'fecha' => '',
@@ -109,48 +130,108 @@ class GestionCitaController extends Controller
        GUARDAR RESERVA
     ========================================= */
 
-
     public function guardar()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-            $resultado = $this->citaModel->crearReserva(
-                $_SESSION['id'],
-                $_POST['barbero'],
-                $_POST['servicio'],
-                $_POST['fecha'],
-                $_POST['hora']
-            );
-
-            // Si la hora ya está ocupada
-            if ($resultado === false) {
-
-                $_SESSION['error_cita'] =
-                    '❌ Esta hora no está disponible. Selecciona otra hora.';
-
-                $this->redirect(
-                    "index.php?controller=gestionCita&action=agendarCita"
-                );
-
-                return;
-            }
-
-            // Si la reserva se guardó correctamente
-            $_SESSION['mensaje_cita'] =
-                '✅ ¡Cita agendada correctamente!';
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
             $this->redirect(
-                "index.php?controller=gestionCita&action=misCitas"
+                "index.php?controller=gestionCita&action=agendarCita"
             );
 
             return;
         }
 
-        $this->redirect(
-            "index.php?controller=gestionCita&action=agendarCita"
-        );
-    }
+        // ==========================================
+        // 1. CREAR LA RESERVACIÓN
+        // ==========================================
 
+        $idReservacion = $this->citaModel->crearReserva(
+            $_SESSION['id'],
+            $_POST['barbero'],
+            $_POST['servicio'],
+            $_POST['fecha'],
+            $_POST['hora']
+        );
+
+        // ==========================================
+        // 2. VERIFICAR SI LA RESERVACIÓN SE CREÓ
+        // ==========================================
+
+        if ($idReservacion === false) {
+
+            $_SESSION['error_cita'] =
+                '❌ Esta hora no está disponible. Selecciona otra hora.';
+
+            $this->redirect(
+                "index.php?controller=gestionCita&action=agendarCita"
+            );
+
+            return;
+        }
+
+        // ==========================================
+        // 3. OBTENER PRODUCTOS SELECCIONADOS
+        // ==========================================
+
+        $productosJson = $_POST['productos_seleccionados'] ?? null;
+        $productosItems = [];
+
+        if (!empty($productosJson)) {
+            $productosItems = json_decode($productosJson, true);
+        }
+
+        // ==========================================
+        // 4. SI HAY PRODUCTOS, GUARDARLOS EN DETALLE
+        // ==========================================
+
+        $erroresProductos = false;
+
+        if (is_array($productosItems) && !empty($productosItems)) {
+            foreach ($productosItems as $item) {
+                // Soportar array directo de IDs o array de objetos JSON [{id_producto, cantidad}, ...]
+                $idProducto = is_array($item) ? ($item['id_producto'] ?? null) : $item;
+                $cantidad = is_array($item) ? ($item['cantidad'] ?? 1) : 1;
+
+                if ($idProducto) {
+                    $productoGuardado = $this->clienteProductoModel->agregarProducto(
+                        $idReservacion,
+                        $idProducto,
+                        $cantidad
+                    );
+
+                    if (!$productoGuardado) {
+                        $erroresProductos = true;
+                    }
+                }
+            }
+
+            if ($erroresProductos) {
+                $_SESSION['error_cita'] = '⚠️ La cita fue creada, pero algunos productos no pudieron guardarse.';
+            }
+        }
+
+        // ==========================================
+        // 5. MENSAJE DE ÉXITO
+        // ==========================================
+
+        if (!isset($_SESSION['error_cita'])) {
+            if (!empty($productosItems)) {
+                $_SESSION['mensaje_cita'] = '✅ ¡Cita agendada y productos agregados correctamente!';
+            } else {
+                $_SESSION['mensaje_cita'] = '✅ ¡Cita agendada correctamente!';
+            }
+        }
+
+        // ==========================================
+        // 6. VOLVER AL PERFIL
+        // ==========================================
+
+        $this->redirect(
+            "index.php?controller=gestionCita&action=misCitas"
+        );
+
+        return;
+    }
 
     public function editarCita()
     {
@@ -199,11 +280,16 @@ class GestionCitaController extends Controller
             $_SESSION['id']
         );
 
+        $historial = $this->citaModel->obtenerHistorialCliente(
+            $_SESSION['id']
+        );
+
         // Cargar el perfil con las reservas y la cita a editar
         $this->view(
             'app/views/cliente/perfil_cliente.php',
             [
                 'citas' => $citas,
+                'historial' => $historial,
                 'citaEditar' => $cita
             ]
         );
@@ -251,7 +337,6 @@ class GestionCitaController extends Controller
         );
     }
 
-
     /* =========================================
        CANCELAR RESERVA
     ========================================= */
@@ -267,5 +352,115 @@ class GestionCitaController extends Controller
         }
 
         $this->redirect("index.php?controller=gestionCita&action=misCitas");
+    }
+
+    /* =========================================
+       FINALIZAR RESERVA
+    ========================================= */
+
+    public function finalizar()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+
+            $this->redirect(
+                "index.php?controller=gestionCita&action=misCitas"
+            );
+
+            return;
+        }
+
+        $idReserva = $_POST['id_reservacion'] ?? null;
+
+        if (!$idReserva) {
+
+            $this->redirect(
+                "index.php?controller=gestionCita&action=misCitas"
+            );
+
+            return;
+        }
+
+        // Finalizar solamente si pertenece al cliente
+        $resultado = $this->citaModel->finalizarReserva(
+            $idReserva,
+            $_SESSION['id']
+        );
+
+        if ($resultado) {
+
+            $_SESSION['mensaje_cita'] =
+                '✅ La cita ha sido finalizada correctamente.';
+        }
+
+        // Volver al perfil
+        $this->redirect(
+            "index.php?controller=gestionCita&action=misCitas"
+        );
+    }
+
+    /* =========================================
+       GUARDAR RESEÑA Y CALIFICACIÓN
+    ========================================= */
+
+    public function guardarResena()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect(
+                "index.php?controller=gestionCita&action=misCitas"
+            );
+            return;
+        }
+
+        $idReservacion = $_POST['id_reservacion'] ?? null;
+        $calificacion = $_POST['calificacion'] ?? null;
+        $comentario = trim($_POST['comentario'] ?? '');
+
+        // Validar datos
+        if (!$idReservacion || !$calificacion) {
+
+            $_SESSION['error_cita'] =
+                '❌ Debes seleccionar una calificación.';
+
+            $this->redirect(
+                "index.php?controller=gestionCita&action=misCitas"
+            );
+
+            return;
+        }
+
+        // La calificación debe estar entre 1 y 5
+        if ($calificacion < 1 || $calificacion > 5) {
+
+            $_SESSION['error_cita'] =
+                '❌ La calificación debe estar entre 1 y 5.';
+
+            $this->redirect(
+                "index.php?controller=gestionCita&action=misCitas"
+            );
+
+            return;
+        }
+
+        // Guardar reseña
+        $resultado = $this->citaModel->guardarResena(
+            $idReservacion,
+            $_SESSION['id'],
+            $calificacion,
+            $comentario
+        );
+
+        if ($resultado) {
+
+            $_SESSION['mensaje_cita'] =
+                '✅ ¡Gracias por calificar nuestro servicio!';
+        } else {
+
+            $_SESSION['error_cita'] =
+                '❌ No fue posible guardar la reseña.';
+        }
+
+        $this->redirect(
+            "index.php?controller=gestionCita&action=misCitas"
+        );
     }
 }

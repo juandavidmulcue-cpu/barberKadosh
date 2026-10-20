@@ -1,4 +1,5 @@
 <?php
+
 /**
  * --------------------------------------------------
  * CONFIGURACIÓN GENERAL DEL SISTEMA
@@ -18,16 +19,22 @@ class Database
     {
         try {
             $dsn = "mysql:host=" . self::$host .
-                   ";dbname=" . self::$db .
-                   ";charset=" . self::$charset;
+                ";dbname=" . self::$db .
+                ";charset=" . self::$charset;
 
             $pdo = new PDO($dsn, self::$user, self::$pass);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             return $pdo;
-
         } catch (PDOException $e) {
-            die("Error de conexión: " . $e->getMessage());
+
+            http_response_code(500);
+
+            $codigoError = 500;
+
+            require_once __DIR__ . '/../views/errors/error.php';
+
+            exit;
         }
     }
 }

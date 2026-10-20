@@ -30,7 +30,10 @@ class Auth
         self::requireLogin($destino);
 
         if (Session::rol() !== $rol) {
-            header("Location: {$destino}");
+
+            http_response_code(403);
+            $codigoError = 403;
+            require_once __DIR__ . '/../views/errors/error.php';
             exit;
         }
     }

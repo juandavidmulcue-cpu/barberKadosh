@@ -61,9 +61,9 @@ function validarRegistro(e) {
         return false;
     }
 
-    if (doc.length < 10 || doc.length > 11) {
+    if (doc.length < 8 || doc.length > 11) {
         if (e) e.preventDefault();
-        mostrarError("❌ El documento debe tener exactamente 10 o 11 números.", documento, mensaje);
+        mostrarError("❌ El documento debe tener entre 8 y 11 números.", documento, mensaje);
         return false;
     }
 

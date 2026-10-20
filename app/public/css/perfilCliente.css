@@ -1,3 +1,12 @@
+/* ===== VARIABLES GLOBALES ===== */
+:root {
+    --dorado: #d4af37;
+    --morado: #7b2cbf;
+    --morado-claro: #9d4edd;
+    --fondo-oscuro: #18181b;
+    --fondo-modal: rgba(10, 10, 10, 0.97);
+}
+
 /* ===== RESET ===== */
 * {
     margin: 0;
@@ -24,7 +33,7 @@ body {
     text-align: center;
     font-size: 22px;
     font-weight: bold;
-    color: #d4af37;
+    color: var(--dorado);
     margin-bottom: 30px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
@@ -55,7 +64,7 @@ body {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    border: 3px solid #d4af37;
+    border: 3px solid var(--dorado);
     margin-bottom: 15px;
     object-fit: cover;
 }
@@ -66,51 +75,13 @@ body {
 }
 
 .rol {
-    color: #d4af37;
+    color: var(--dorado);
     margin-bottom: 20px;
     font-weight: bold;
 }
 
-/* ===== BOTONES ===== */
-.acciones {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.btn button {
-    width: 100%;
-    padding: 12px;
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.3s ease;
-    background: linear-gradient(135deg, rgba(123, 44, 191, 1), rgba(157, 78, 221, 1));
-    color: white;
-}
-
-.btn button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
-}
-
-/* ===== BOTÓN OUTLINE ===== */
-.btn-outline {
-    background: transparent !important;
-    border: 2px solid #d4af37 !important;
-    color: #d4af37 !important;
-}
-
-.btn-outline:hover {
-    background: #d4af37 !important;
-    color: #000 !important;
-}
-
-/* ===== LINK LOGOUT ===== */
 .info-usuario a {
-    color: #d4af37;
+    color: var(--dorado);
     text-decoration: none;
     font-size: 14px;
 }
@@ -119,7 +90,85 @@ body {
     text-decoration: underline;
 }
 
-/* ===== GALERÍA ===== */
+/* ===== BOTONES GENERALES ===== */
+.acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.acciones .btn,
+.acciones a {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0;
+    text-decoration: none;
+}
+
+.acciones button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s ease;
+    background: linear-gradient(135deg, var(--morado), var(--morado-claro));
+    color: white;
+}
+
+.acciones button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
+}
+
+.btn-outline {
+    background: transparent !important;
+    border: 2px solid var(--dorado) !important;
+    color: var(--dorado) !important;
+}
+
+.btn-outline:hover {
+    background: var(--dorado) !important;
+    color: #000 !important;
+}
+
+.btn-no {
+    background: transparent !important;
+    border: 2px solid var(--dorado) !important;
+    color: var(--dorado) !important;
+}
+
+.btn-outline:hover,
+.btn-no:hover {
+    background: var(--dorado) !important;
+    color: #000 !important;
+}
+
+.btn-historial {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px 20px;
+    border: 2px solid var(--dorado);
+    border-radius: 50px;
+    background: transparent;
+    color: var(--dorado);
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn-historial:hover {
+    background: var(--dorado);
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+}
+
+/* ===== GALERÍA Y SECCIONES ===== */
 .galeria {
     display: flex;
     flex-direction: column;
@@ -131,7 +180,7 @@ body {
     border-radius: 18px;
     background: url('../img/barberia.jpg') center/cover;
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     justify-content: center;
     padding: 20px;
     position: relative;
@@ -153,7 +202,6 @@ body {
     color: #fff;
 }
 
-/* ===== PUNTOS ===== */
 .puntos {
     display: flex;
     justify-content: center;
@@ -169,12 +217,12 @@ body {
 }
 
 .puntos span:first-child {
-    background: #d4af37;
+    background: var(--dorado);
 }
 
 /* ===== DIRECCIÓN ===== */
 .direccion h3 {
-    color: #d4af37;
+    color: var(--dorado);
     margin-bottom: 15px;
 }
 
@@ -186,7 +234,7 @@ body {
 .direccion a {
     display: inline-block;
     margin-top: 15px;
-    color: #d4af37;
+    color: var(--dorado);
     text-decoration: none;
 }
 
@@ -194,17 +242,16 @@ body {
     text-decoration: underline;
 }
 
-/* ===== RESERVAS ===== */
+/* ===== TABLA PRINCIPAL ===== */
 .reservas {
     width: 100%;
 }
 
 .reservas h3 {
-    color: #d4af37;
+    color: var(--dorado);
     margin-bottom: 20px;
 }
 
-/* ===== TABLA ===== */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -236,16 +283,798 @@ tbody td {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* ===== ACCIONES TABLA ===== */
 .acciones-tabla {
     margin-top: 20px;
     display: flex;
     gap: 15px;
 }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width: 992px) {
+.btn-descargar-pdf .btn-finalizar,
+.cancelar-cita,
+.btn-editar-cita {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 4px;
+    margin: 0;
+    border: 2px solid var(--dorado);
+    border-radius: 8px;
+    background: transparent;
+    text-decoration: none;
+    box-sizing: border-box;
+}
 
+.btn-descargar-pdf img,
+.btn-finalizar img,
+.cancelar-cita img,
+.btn-editar-cita img {
+    display: block;
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+/* ===== CARRUSEL Y HERO ===== */
+.carousel-section {
+    position: relative;
+    width: 100%;
+}
+
+.carousel-title {
+    margin-bottom: 20px;
+    color: var(--dorado);
+    text-align: center;
+}
+
+.carousel {
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.carousel-track-container {
+    overflow: hidden;
+    width: 100%;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    min-width: 50%;
+    padding: 0 5px;
+    box-sizing: border-box;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 345px;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+}
+
+/* Flechas de navegación del carrusel */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: var(--dorado);
+    border: 1px solid var(--dorado);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s ease;
+}
+
+.carousel-btn:hover {
+    background: var(--dorado);
+    color: #000;
+}
+
+.carousel-btn.prev {
+    left: 10px;
+}
+
+.carousel-btn.next {
+    right: 10px;
+}
+
+.hero-wrapper {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 50px;
+    padding: 80px 60px;
+    align-items: center;
+}
+
+/* =========================================
+   SISTEMA DE MODALES UNIFICADO
+========================================= */
+#modalEditarCita,
+.modal-finalizar,
+.modal-resena,
+.modal-producto,
+.modal-historial {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    padding: 20px;
+}
+
+#modalEditarCita.activo,
+.modal-finalizar.activo,
+.modal-resena.activo,
+.modal-historial.activo,
+.modal-producto[style*="display: flex"],
+.modal-producto[style*="display:flex"] {
+    display: flex !important;
+}
+
+/* CAJAS DE CONTENIDO DE MODALES */
+.contenido-modal,
+.contenido-modal-finalizar,
+.contenido-modal-resena,
+.contenido-modal-historial,
+.modal-producto-content {
+    background: var(--fondo-modal);
+    color: #fff;
+    padding: 30px;
+    border-radius: 18px;
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    position: relative;
+    border: 1px solid var(--dorado);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    margin: auto;
+}
+
+.contenido-modal-historial {
+    background: var(--fondo-modal);
+    color: #fff;
+    padding: 30px;
+    border-radius: 18px;
+    width: 95%;
+    max-width: 900px;
+    text-align: center;
+    position: relative;
+    border: 1px solid var(--dorado);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    margin: auto;
+
+    /* Control de altura para permitir Scroll si es necesario */
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* TÍTULOS Y TEXTOS EN MODALES */
+.contenido-modal h2,
+.contenido-modal-finalizar h2,
+.contenido-modal-resena h2,
+.contenido-modal-historial h2,
+.modal-producto-content h2 {
+    color: var(--dorado);
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+}
+
+.subtitulo-historial,
+.modal-producto-content p,
+.contenido-modal-finalizar p,
+.contenido-modal-resena p {
+    color: #e4e4e7;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+/* BOTONES DE CERRAR (X) */
+.cerrar-modal,
+.cerrar-modal-finalizar,
+.cerrar-modal-resena,
+.cerrar-modal-historial {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.cerrar-modal:hover,
+.cerrar-modal-finalizar:hover,
+.cerrar-modal-resena:hover,
+.cerrar-modal-historial:hover {
+    color: #ff4444;
+}
+
+/* BOTONES INTERNOS DE MODAL */
+.botones-finalizar,
+.modal-producto-botones {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.botones-finalizar button,
+.btn-producto-si {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--morado), var(--morado-claro));
+    transition: 0.3s ease;
+}
+
+.btn-producto-si {
+    border-radius: 6px;
+    padding: 10px 18px;
+}
+
+.botones-finalizar button:hover,
+.btn-producto-si:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
+}
+
+.btn-producto-no {
+    background-color: transparent;
+    color: #a1a1aa;
+    border: 1px solid #3f3f46;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* FORMULARIO DENTRO DE MODALES */
+#modalEditarCita form,
+.contenido-modal-resena form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+}
+
+#modalEditarCita input,
+#modalEditarCita select,
+#modalEditarCita textarea,
+.contenido-modal-resena select,
+.contenido-modal-resena textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--dorado);
+    background: #ffffff;
+    color: #000000;
+}
+
+.contenido-modal-resena textarea {
+    resize: vertical;
+}
+
+/* ===== TABLA HISTORIAL ===== */
+.tabla-historial {
+    width: 100%;
+    max-height: 440px; /* Altura ideal para mostrar cómodamente 10 filas */
+    overflow-y: auto;  /* Habilita el scroll vertical para ver de la 1 a la 10 */
+    overflow-x: auto;  /* Scroll horizontal si la pantalla es muy pequeña */
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.tabla-historial table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-historial thead {
+    background: rgba(123, 44, 191, 0.6);
+}
+
+.tabla-historial th,
+.tabla-historial td {
+    padding: 14px;
+    text-align: left;
+}
+
+.tabla-historial td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tabla-historial tbody tr {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.estado-completada {
+    color: #00c853;
+    font-weight: bold;
+}
+
+.estado-cancelada {
+    color: #ff4444;
+    font-weight: bold;
+}
+
+.sin-historial {
+    text-align: center;
+    color: #aaa;
+    padding: 30px !important;
+}
+
+/* Barra de búsqueda dentro del modal */
+.header-historial-acciones {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#inputBuscarHistorial {
+    width: 100%;
+    max-width: 320px;
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+#inputBuscarHistorial:focus {
+    border-color: #333;
+}
+
+/* Controles de Paginación */
+.paginacion-historial {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+.btn-paginacion {
+    background-color: #222;
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s, opacity 0.2s;
+}
+
+.btn-paginacion:hover:not(:disabled) {
+    background-color: #444;
+}
+
+.btn-paginacion:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+    margin-top: 60px;
+    background: linear-gradient(135deg, #0d0d0d, #1d102e);
+    border-top: 2px solid var(--dorado);
+    color: var(--blanco-suave);
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 45px 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 35px;
+}
+
+.footer-section h3,
+.footer-section h4 {
+    color: var(--dorado);
+    margin-bottom: 18px;
+}
+
+.footer-section p {
+    color: #d8d8d8;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+.footer-section a {
+    display: block;
+    color: #d8d8d8;
+    margin-bottom: 10px;
+    transition: .3s;
+}
+
+.footer-section a:hover {
+    color: var(--dorado);
+    padding-left: 6px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(212, 175, 55, .25);
+    text-align: center;
+    padding: 18px;
+    font-size: 14px;
+    color: #bdbdbd;
+}
+
+.footer-bottom strong {
+    color: var(--dorado);
+}
+/* ==========================================================
+   ESTILOS PARA EL MODAL DE ACTUALIZAR PERFIL
+   ========================================================== */
+
+/* Fondo oscuro y centrado del modal */
+.modal {
+    display: none; /* Se activa añadiendo la clase .activo */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.65);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+}
+
+.modal.activo {
+    display: flex;
+}
+
+/* Tarjeta / Contenido del modal */
+.modal-contenido {
+    background-color: #1A1A1A;
+    color: #FFFFFF;
+    width: 90%;
+    max-width: 480px;
+    padding: 25px 30px;
+    border-radius: 12px;
+    border: 1px solid #D4AF37;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    position: relative;
+    animation: fadeInModal 0.3s ease-out forwards;
+}
+
+@keyframes fadeInModal {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Botón para cerrar (X) */
+.cerrar-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    color: #CCCCCC;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.cerrar-modal:hover {
+    color: #D4AF37;
+}
+
+.modal-contenido h2 {
+    color: #D4AF37;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+/* Sección de Foto de Perfil */
+.perfil-foto-contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.avatar-preview {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #D4AF37;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    background-color: #2A2A2A;
+    margin-bottom: 12px;
+}
+
+.avatar-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-cambiar-foto {
+    background-color: #4A154B;
+    color: #FFFFFF;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.btn-cambiar-foto:hover {
+    background-color: #5E1A5F;
+    transform: translateY(-1px);
+}
+
+/* Campos del Formulario */
+.form-perfil .form-grupo {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.form-perfil label {
+    font-size: 0.85rem;
+    color: #CCCCCC;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-perfil input[type="text"],
+.form-perfil input[type="tel"],
+.form-perfil input[type="email"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background-color: #262626;
+    color: #FFFFFF;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-perfil input:focus {
+    border-color: #D4AF37;
+    box-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
+}
+
+/* Botones de Acción (Cancelar / Guardar) */
+.modal-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.btn-cancelar {
+    background-color: transparent;
+    color: #CCCCCC;
+    border: 1px solid #555;
+    padding: 9px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.btn-cancelar:hover {
+    background-color: #333333;
+    color: #FFFFFF;
+}
+
+.btn-guardar {
+    background-color: #D4AF37;
+    color: #1A1A1A;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-guardar:hover {
+    background-color: #E5C158;
+    transform: translateY(-1px);
+}
+
+/* ==========================================
+   SECCIÓN BARBEROS DISPONIBLES (5 DÍAS)
+========================================== */
+.seccion-barberos {
+    margin: 30px 0;
+    width: 100%;
+}
+
+.titulo-seccion-barberos {
+    font-size: 1.3rem;
+    color: #dad31d;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 2px solid #D4AF37;
+    padding-bottom: 8px;
+    display: inline-block;
+}
+
+.grid-barberos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.tarjeta-barbero {
+    background-color: var(--fondo-oscuro);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border: 1px var(--dorado);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta-barbero:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(74, 21, 75, 0.15);
+}
+
+.avatar-barbero-container {
+    margin-bottom: 12px;
+}
+
+.avatar-barbero {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #D4AF37;
+}
+
+.info-barbero h3 {
+    font-size: 1.05rem;
+    color: var(--blanco-suave);
+    margin: 0 0 5px 0;
+    font-weight: 600;
+}
+
+.telefono-barbero {
+    font-size: 0.85rem;
+    color: var(--blanco-suave);
+    margin: 0 0 8px 0;
+}
+
+.badge-disponible {
+    display: inline-block;
+    background-color: var(--blanco-suave);
+    color: #2e7d32;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+
+.sin-barberos {
+    grid-column: 1 / -1;
+    color: var(--blanco-suave);
+    font-style: italic;
+    background: var(--morado-claro);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+/* ==========================================
+   ESTILOS PARA EL NOMBRE DEL BARBERO (H3)
+   ========================================== */
+
+/* Contenedor principal de la información */
+.info-barbero {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Título con el Nombre y Apellido del Barbero */
+.info-barbero h3 {
+    font-size: 1.25rem; /* ~20px */
+    font-weight: 700;
+    color: #fdfdfd; /* O un tono oscuro acorde a tu paleta */
+    margin: 0;
+    line-height: 1.3;
+    text-transform: capitalize; /* Fuerza mayúscula inicial en cada palabra */
+    letter-spacing: 0.3px;
+    transition: color 0.3s ease;
+}
+
+
+.tarjeta-barbero:hover .info-barbero h3 {
+    color: #d4af37;
+}
+
+
+.info-barbero .telefono-barbero {
+    font-size: 0.9rem;
+    color: var(--blanco-suave);
+    margin: 0;
+}
+
+/* Badge de disponibilidad */
+.info-barbero .badge-disponible {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--morado-claro);
+    background-color: var(--blanco-suave);
+    padding: 4px 10px;
+    border-radius: 12px;
+    align-self: center;
+}
+
+/* Ajustes Responsivos para pantallas pequeñas */
+@media (max-width: 480px) {
+    .info-barbero h3 {
+        font-size: 1.1rem; /* Un poco más pequeño en celulares */
+    }
+}
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
     .perfil {
         grid-template-columns: 1fr;
     }
@@ -253,10 +1082,14 @@ tbody td {
     .acciones-tabla {
         flex-direction: column;
     }
+
+    .hero-wrapper {
+        grid-template-columns: 1fr;
+        padding: 40px 20px;
+    }
 }
 
-@media(max-width: 600px) {
-
+@media (max-width: 600px) {
     body {
         padding: 15px;
     }
@@ -273,136 +1106,8 @@ tbody td {
         display: block;
         overflow-x: auto;
     }
-}
 
-/* =========================
-   CARRUSEL
-========================= */
-.carousel-section {
-    position: relative;
-}
-
-.carousel-title {
-    margin-bottom: 20px;
-    color: var(--dorado);
-}
-
-.carousel {
-    overflow: hidden;
-    border-radius: 20px;
-    border: 1px solid rgba(212, 175, 55, 0.4);
-    position: relative;
-}
-
-.carousel-track {
-    display: flex;
-    transition: transform 1s ease;
-}
-
-.carousel-item {
-    min-width: 100%;
-}
-
-.carousel-item img {
-    width: 100%;
-    height: 345px;
-    object-fit: cover;
-    display: block;
-}
-
-/* =========================
-   HERO + CARRUSEL WRAPPER
-========================= */
-.hero-wrapper {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 50px;
-    padding: 80px 60px;
-    align-items: center;
-}
-
-/* =========================================
-   MODAL EDITAR CITA
-========================================= */
-
-#modalEditarCita {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-
-    background: rgba(0, 0, 0, 0.80);
-
-    justify-content: center;
-    align-items: center;
-
-    z-index: 9999;
-}
-
-#modalEditarCita.activo {
-    display: flex;
-}
-
-#modalEditarCita .contenido-modal {
-    width: 500px;
-    max-width: 90%;
-
-    background: rgba(6, 6, 6, 0.423);
-    color: var(--blanco-suave);
-
-    padding: 30px;
-    border-radius: 15px;
-
-    border: 1px solid #d4af37;
-
-    position: relative;
-}
-
-#modalEditarCita .cerrar-modal {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-
-    background: none;
-    border: none;
-
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
-}
-
-#modalEditarCita .cerrar-modal:hover {
-    color: #ff0000;
-}
-.cancelar-cita,
-.btn-editar-cita {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    width: 36px !important;
-    height: 36px !important;
-
-    padding: 4px !important;
-    margin: 0 !important;
-
-    border: 2px solid var(--dorado) !important;
-    border-radius: 8px;
-
-    background: transparent !important;
-    text-decoration: none !important;
-
-    box-sizing: border-box !important;
-}
-
-.cancelar-cita img,
-.btn-editar-cita img {
-    display: block !important;
-
-    width: 25px !important;
-    height: 25px !important;
-
-    object-fit: contain !important;
+    .carousel-item {
+        min-width: 100%;
+    }
 }

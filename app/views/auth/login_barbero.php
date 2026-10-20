@@ -15,8 +15,8 @@
 
         <!-- 🔝 BOTÓN SUPERIOR -->
         <div class="login-switch">
-            <a href="index.php?controller=auth&action=loginBarbero" class="switch-btn">
-                Barbero
+            <a href="index.php?controller=auth&action=loginCliente" class="switch-btn">
+                Cliente
             </a>
         </div>
 
@@ -37,9 +37,9 @@
                 <label>Contraseña</label>
                 <input type="password" name="password" required>
             </div>
-            <a href="index.php?controller=auth&action=resetPassword">¿Olvidaste la contraseña?</a>
+            <a href="index.php?controller=password&action=resetPassword">¿Olvidaste la contraseña?</a>
             </p>
-            <a href="index.php?controller=auth&action=logout" class="back-home">← Volver al inicio</a>
+            <a href="index.php?controller=auth&action=loginCliente" class="back-home">← Volver al inicio</a>
             <button type="submit" class="btn-primary">Ingresar</button>
         </form>
 

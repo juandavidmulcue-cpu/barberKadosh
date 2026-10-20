@@ -44,24 +44,23 @@ class GestionBarberoController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $data = [
-                ':id'        => $_POST['id_usuario'],
-                ':nombre'    => $_POST['nombre'],
-                ':apellido'  => $_POST['apellido'],
-                ':telefono'  => $_POST['telefono'],
-                ':correo'    => $_POST['correo'],
-                ':password'  => password_hash($_POST['password'], PASSWORD_DEFAULT)
+                ':id'        => trim($_POST['id_usuario'] ?? ''),
+                ':nombre'    => trim($_POST['nombre'] ?? ''),
+                ':apellido'  => trim($_POST['apellido'] ?? ''),
+                ':telefono'  => trim($_POST['telefono'] ?? ''),
+                ':correo'    => trim($_POST['correo'] ?? ''),
+                ':password'  => password_hash($_POST['password'] ?? '', PASSWORD_DEFAULT)
             ];
 
-            $ok = $this->usuarioModel->registrarBarbero($data);
+            //la validación previa la realiza 100% validacionesBarbero.js
+           $ok = $this->usuarioModel->registrarBarbero($data);
 
             if ($ok) {
-
                 $_SESSION['mensaje_exito'] = "Barbero registrado correctamente.";
-
-                $this->redirect("index.php?controller=admin&action=panel");
+                $this->redirect("index.php?controller=gestionBarbero&action=listar");
             }
 
-            $error = "No se pudo registrar el barbero.";
+            $error = "No se pudo registrar el barbero en la base de datos.";
         }
 
         $this->view('app/views/admin/register_barbero.php', [

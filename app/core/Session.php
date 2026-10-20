@@ -26,7 +26,19 @@ class Session
     {
         $_SESSION['id'] = $user['id_usuario'];
         $_SESSION['nombre'] = $user['nombre'];
+        $_SESSION['apellido'] = $user['apellido'] ?? '';
         $_SESSION['rol'] = $rol;
+    }
+
+    /**
+     * Devuelve el nombre completo uniendo nombre + apellido
+     */
+    public static function nombreCompleto()
+    {
+        $nombre = $_SESSION['nombre'] ?? 'Administrador';
+        $apellido = $_SESSION['apellido'] ?? '';
+
+        return trim("$nombre $apellido");
     }
 
     /**

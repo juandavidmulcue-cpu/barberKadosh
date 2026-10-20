@@ -41,7 +41,6 @@
             <table id="tablaProductos" class="display">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Nombre</th>
                         <th>Precio</th>
                         <th>Acción</th>
@@ -51,7 +50,6 @@
                     <?php if (!empty($productos) && is_array($productos)): ?>
                         <?php foreach ($productos as $p): ?>
                             <tr>
-                                <td><?= $p['id_producto'] ?></td>
                                 <td><?= htmlspecialchars($p['nombre']) ?></td>
                                 <td>$<?= number_format($p['precio'], 2) ?></td>
                                 <td class="acciones">
@@ -72,7 +70,7 @@
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="4" style="text-align:center;">
+                            <td colspan="3" style="text-align:center;">
                                 No hay productos registrados
                             </td>
                         </tr>
@@ -82,6 +80,48 @@
         </div>
 
     </main>
+
+    <footer class="footer">
+
+        <div class="footer-container">
+
+            <div class="footer-section">
+                <h4>Enlaces</h4>
+
+                <a href="http://localhost/barberkadosh/index.html">Inicio</a>
+                <a href="#">Servicios</a>
+                <a href="#">Política de Privacidad</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Contacto</h4>
+
+                <p>📍 Bogotá - Colombia</p>
+                <a href="tel:+573003593276">📞 +573003593276</a>
+                <a href="mailto:kadosh1234@gmail.com">✉️ kadosh1234@gmail.com</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Desarrollado por:</h4>
+
+                <p>Daniela Yara, Laura Buitrago, Juan Acuña, Juan Mulcue, Jose Cuastumal</p>
+
+                <br>
+
+                <p><strong>SENA - ADSO</strong></p>
+                <p>Ficha: 3171693</p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                © 2026 <strong>KADOSH Barber Shop</strong>. Todos los derechos reservados.
+                | Versión 1.0
+            </p>
+        </div>
+
+    </footer>
 
     <!-- JS -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>

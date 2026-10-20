@@ -1,3 +1,79 @@
+/* =========================================================
+PALETA BASE Y VARIABLES PARA MODO OSCURO / MODO CLARO
+   ========================================================= */
+:root {
+    /* Variables Tema Oscuro */
+    --morado: #4B2A6B;
+    --morado-claro: #6a3d8c;
+    --morado-hover: #551d8a;
+    --dorado: #D4AF37;
+    --negro: #0D0D0D;
+    --blanco: #ffffff;
+    --blanco-suave: #e8e8e8;
+
+    /* Fondos y gradientes modo oscuro */
+    --bg-body: #0a0a0a;
+    --bg-header: #0a0a0a;
+    --bg-sidebar: #0D0D0D;
+    --bg-card: linear-gradient(135deg, #0a0a0a 30%, #240046 100%);
+    --bg-card-inicio: linear-gradient(135deg, #0a0a0a 50%, #551d8a 90%);
+    --bg-calendar: #12091c;
+    --bg-calendar-header: #1e122b;
+    --texto-principal: #ffffff;
+    --texto-secundario: #cfcfcf;
+    --borde-dorado: rgba(212, 175, 55, 0.25);
+    --sombra-card: rgba(0, 0, 0, 0.6);
+}
+
+/* Redefinición para Tema Claro con las nuevas tonalidades */
+[data-theme="light"] {
+    --morado: #522775;
+    /* Morado principal */
+    --morado-claro: #EBE1F2;
+    /* Morado muy claro para encabezados/tablas */
+    --morado-hover: #3B1B54;
+    /* Morado oscuro */
+    --dorado: #C59B27;
+    /* Dorado */
+    --negro: #0D0D0D;
+    /* Negro */
+    --blanco: #F7F3FA;
+    /* Morado ultra claro tirando a blanco */
+    --blanco-suave: #EAE2F0;
+    /* Morado suave para acentos */
+
+    /* Fondos y superficies */
+    --bg-body: #F7F3FA;
+    /* Morado ultra claro en lugar de blanco */
+    --bg-header: #FAF8FC;
+    /* Superficie clara */
+    --bg-sidebar: #FAF8FC;
+    /* Superficie clara */
+    --bg-card: #FAF8FC;
+    /* Fondo tarjetas */
+    --bg-card-inicio: linear-gradient(135deg, #FAF8FC 30%, #EBE1F2 100%);
+    --bg-calendar: #FAF8FC;
+    --bg-calendar-header: #EBE1F2;
+    /* Morado claro */
+    --texto-principal: #0D0D0D;
+    /* Negro */
+    --texto-secundario: #50445E;
+    /* Morado oscuro/grisáceo */
+    --borde-dorado: #E4D9EF;
+    /* Borde suave morado */
+    --sombra-card: rgba(13, 13, 13, 0.07);
+}
+
+/* =========================================================
+   ESTILOS GENERALES Y ESTRUCTURA ADMIN
+   ========================================================= */
+
+body {
+    background-color: var(--bg-body);
+    color: var(--texto-principal);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 .success-msg {
     background: rgba(0, 200, 0, 0.15);
     border: 1px solid #00c853;
@@ -7,43 +83,38 @@
     margin-bottom: 15px;
 }
 
+.admin-body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    background-color: var(--bg-body);
+}
+
 /* ===== HEADER ===== */
+/* ===== HEADER BASE ===== */
 .admin-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 60px;
-    border-bottom: 2px solid rgba(255, 196, 0, 0.927);
+    border-bottom: 2px solid var(--dorado);
+    flex-shrink: 0;
+    background: var(--bg-header);
+    transition: background 0.3s ease;
 }
 
+/* ===== SECCIÓN IZQUIERDA (LOGO Y TÍTULO) ===== */
 .header-left {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.logo-img {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.admin-header h1 {
-    margin: 0;
-    color: #D4AF37;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
 .logo-img-circle {
     width: 65px;
     height: 65px;
-    border-radius: 70%;
+    border-radius: 50%;
     object-fit: cover;
     border: 2px solid var(--dorado);
 }
@@ -55,40 +126,112 @@
     color: var(--dorado);
 }
 
-.btn-outline:hover{
-    background: var(--dorado);
-    color: var(--negro);
+/* ===== SECCIÓN DERECHA (ACCIONES Y BOTONES) ===== */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.btn-outline{
-    position: relative;
-    left: 820px;
-    border: 1px solid var(--dorado);
-}
-
-.btn{
+/* ===== ESTILOS BASE DE BOTONES ===== */
+.btn {
     padding: 10px 20px;
     border-radius: 30px;
     border: 1px solid var(--dorado);
-    color: var(--blanco);
+    color: var(--texto-principal);
     transition: 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: transparent;
+}
+
+.btn-outline {
+    border: 1px solid var(--dorado);
+}
+
+.btn-outline:hover {
+    background: var(--dorado);
+    color: #ffffff;
+}
+
+.btn-icon {
+    padding: 10px 14px;
+    font-size: 16px;
+}
+
+/* ===== ICONO PERFIL DE USUARIO ===== */
+.user-profile-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--dorado);
+    color: var(--texto-principal);
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.user-profile-icon:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== TOOLTIPS (CUADROS FLOTANTES BLANCOS) ===== */
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background-color: #ffffff;
+    color: #1a1a1a;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e0e0e0;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    pointer-events: none;
+    z-index: 10;
+}
+
+[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(4px);
 }
 
 /* ===== SIDEBAR ===== */
 .sidebar {
-    position: absolute;
-    top: 106px;
-    left: 0;
+    position: relative;
     width: 240px;
-    height: calc(122vh - 106px);
-    background: var(--negro);
+    flex-shrink: 0;
+    background: var(--bg-sidebar);
     padding: 20px;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
+    border-right: 1px solid var(--borde-dorado);
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .sidebar-title {
-    color: #d4af37;
+    color: var(--dorado);
     font-weight: 700;
     margin-bottom: 20px;
 }
@@ -98,27 +241,41 @@
     border-radius: 12px;
     margin-bottom: 10px;
     cursor: pointer;
+    color: var(--texto-principal);
     transition: 0.3s;
 }
 
 .sidebar-link:hover,
 .sidebar-link.active {
-    background: linear-gradient(135deg, rgba(123, 44, 191, 0.9), rgba(157, 78, 221, 0.9));
+    background: var(--morado);
+    color: #ffffff;
 }
 
 .sidebar a {
     text-align: center;
     padding: 12px;
     border-radius: 50px;
-    background: linear-gradient(135deg, #b8962e, #d4af37);
-    color: #000;
+    background: var(--dorado);
+    color: #ffffff;
     font-weight: 600;
+}
+
+/* =====================================================
+   CONTENEDOR SIDEBAR + MAIN
+===================================================== */
+.admin-content-wrapper {
+    display: flex;
+    flex: 0;
+    min-height: 0;
+    width: 100%;
 }
 
 /* ===== MAIN ===== */
 .main-content {
-    margin-left: 260px;
+    flex: 1;
+    min-width: 0;
     padding: 40px;
+    box-sizing: border-box;
 }
 
 .panel {
@@ -131,18 +288,20 @@
 
 /* ===== SECCIONES ===== */
 .section-title {
-    color: #d4af37;
+    color: var(--dorado);
     margin-bottom: 15px;
 }
 
 .admin-card,
 .section-card,
 .action-row {
-    background: linear-gradient(135deg, #0a0a0a 30%, #240046 100%);
+    background: var(--bg-card);
     padding: 25px;
     border-radius: 16px;
-    border: 1px solid var(--dorado);
+    border: 1px solid var(--borde-dorado);
     margin-bottom: 25px;
+    box-shadow: 0 10px 25px var(--sombra-card);
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 /* ===== TABLAS ===== */
@@ -152,40 +311,49 @@
 }
 
 .data-table th {
-    background: var(--negro);
-    color: #d4af37;
+    background: var(--morado-claro);
+    color: var(--texto-principal);
     padding: 12px;
 }
 
 .data-table td {
     padding: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--borde-dorado);
+    color: var(--texto-principal);
 }
 
 /* ===== PANEL INICIO ===== */
 #panel-inicio {
-    background: linear-gradient(135deg, #0a0a0a 30%, #240046 100%);
-    border: 1px solid rgba(212, 175, 55, 0.25);
+    background: var(--bg-card);
+    border: 1px solid var(--borde-dorado);
     border-radius: 20px;
     padding: 40px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 25px 60px var(--sombra-card);
     animation: fadeIn 0.5s ease-in-out;
+    color: var(--texto-principal);
 }
 
 /* ===== TITULO INICIO ===== */
 #panel-inicio h2 {
     font-size: 30px;
-    color: #d4af37;
+    color: var(--dorado);
     margin-bottom: 12px;
     letter-spacing: 1px;
+    font-weight: 700;
 }
 
 /* ===== TEXTO ===== */
 #panel-inicio p {
-    color: #cfcfcf;
+    color: var(--texto-secundario);
     font-size: 15px;
     line-height: 1.7;
     max-width: 700px;
+}
+
+#panel-inicio .subtext {
+    color: var(--texto-secundario);
+    letter-spacing: 0.5px;
+    margin-bottom: 30px;
 }
 
 /* ===== BLOQUES DASHBOARD ===== */
@@ -197,27 +365,28 @@
 }
 
 .dashboard-box {
-    background: var(--dorado);
+    background: var(--bg-card-inicio);
     padding: 22px;
     border-radius: 18px;
-    border-left: 4px solid #d4af37;
+    border: 1px solid var(--borde-dorado);
+    border-left: 4px solid var(--dorado);
     transition: 0.3s ease;
 }
 
 .dashboard-box:hover {
     transform: translateY(-6px);
-    background: var(--dorado);
+    box-shadow: 0 8px 20px var(--sombra-card);
 }
 
 .dashboard-box h4 {
-    color: #d4af37;
+    color: var(--texto-principal);
     margin-bottom: 8px;
     font-size: 16px;
 }
 
 .dashboard-box span {
     font-size: 13px;
-    color: #bfbfbf;
+    color: var(--texto-secundario);
 }
 
 /* ===== ANIMACION ===== */
@@ -233,36 +402,6 @@
     }
 }
 
-/* 🎨 PALETA BASE */
-:root {
-    --morado: #4B2A6B;
-    --dorado: #D4AF37;
-    --negro: #0D0D0D;
-    --blanco: #ffffff;
-}
-
-/* PANEL */
-#panel-inicio {
-    color: var(--blanco);
-}
-
-/* TÍTULO PRINCIPAL */
-#panel-inicio h2 {
-    font-size: 30px;
-    font-weight: 700;
-    color: var(--dorado);
-    text-shadow:
-        0 0 6px rgba(212, 175, 55, 0.6),
-        0 0 15px rgba(212, 175, 55, 0.3);
-}
-
-/* SUBTEXTO */
-#panel-inicio .subtext {
-    color: #e5d8f0;
-    letter-spacing: 0.5px;
-    margin-bottom: 30px;
-}
-
 /* CONTENEDOR DE CARDS */
 .inicio-cards {
     gap: 25px;
@@ -270,31 +409,26 @@
 
 /* CARDS */
 .inicio-cards .card {
-    background: linear-gradient(135deg, #0a0a0a 30%, #551d8a 100%);
-    border: 1px solid rgba(212, 175, 55, 0.25);
-    box-shadow:
-        0 0 15px rgba(75, 42, 107, 0.6),
-        inset 0 0 20px rgba(0, 0, 0, 0.6);
+    background: var(--bg-card-inicio);
+    border: 1px solid var(--borde-dorado);
+    box-shadow: 0 0 15px var(--sombra-card);
 }
 
 /* EFECTO HOVER */
 .inicio-cards .card:hover {
     transform: translateY(-6px) scale(1.02);
-    box-shadow:
-        0 0 20px rgba(212, 175, 55, 0.6),
-        0 0 40px rgba(75, 42, 107, 0.8);
+    box-shadow: 0 0 20px var(--borde-dorado);
 }
 
 /* TITULO CARD */
 .inicio-cards h3 {
     color: var(--dorado);
     font-size: 19px;
-    text-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
 }
 
 /* TEXTO CARD */
 .inicio-cards p {
-    color: #f0e9f7;
+    color: var(--texto-secundario);
     font-size: 14px;
 }
 
@@ -302,9 +436,141 @@
 .footer-text {
     margin-top: 35px;
     text-align: center;
-    color: #d4af37;
+    color: var(--dorado);
     opacity: 0.85;
-    text-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+}
+
+/* ==========================================================
+   ESTILOS PARA EL MODAL DE EDICIÓN DE PROMOCIONES
+   ========================================================== */
+
+/* Fondo flotante (Overlay) */
+#modalEditarPromocion.modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 99999 !important;
+    background-color: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(4px);
+    overflow-y: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tarjeta / Cuestionario del Modal */
+#modalEditarPromocion .modal-content {
+    background: var(--bg-card);
+    border: 1px solid var(--borde-dorado);
+    padding: 25px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 480px;
+    box-shadow: 0 10px 30px var(--sombra-card);
+    position: relative !important;
+    color: var(--texto-principal);
+    margin: auto !important;
+}
+
+/* Título e Icono de Cierre */
+#modalEditarPromocion h3 {
+    color: var(--dorado);
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+#modalEditarPromocion .modal-reporte-cerrar {
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--texto-secundario);
+    transition: color 0.3s ease;
+}
+
+#modalEditarPromocion .modal-reporte-cerrar:hover {
+    color: var(--dorado);
+}
+
+/* Formulario e Inputs */
+#modalEditarPromocion .form-group-reporte {
+    margin-bottom: 15px;
+}
+
+#modalEditarPromocion .form-group-reporte label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--texto-principal);
+}
+
+#modalEditarPromocion .select-reporte {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--borde-dorado);
+    background: var(--bg-body);
+    color: var(--texto-principal);
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+#modalEditarPromocion .select-reporte:focus {
+    outline: none;
+    border-color: var(--dorado);
+}
+
+/* Forzar que las opciones del desplegable mantengan el tema */
+#modalEditarPromocion select.select-reporte option {
+    background-color: var(--bg-body) !important;
+    color: var(--texto-principal) !important;
+}
+
+/* Botones del Modal */
+#modalEditarPromocion .modal-actions {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+#modalEditarPromocion .btn-cancel {
+    background: transparent !important;
+    color: var(--texto-secundario) !important;
+    border: 1px solid var(--texto-secundario) !important;
+    padding: 9px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.3s ease;
+}
+
+#modalEditarPromocion .btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: var(--texto-principal) !important;
+}
+
+#modalEditarPromocion .btn-submit {
+    background-color: var(--morado) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--dorado) !important;
+    padding: 9px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.3s ease;
+}
+
+#modalEditarPromocion .btn-submit:hover {
+    background-color: var(--morado-hover) !important;
+    box-shadow: 0 0 10px var(--borde-dorado);
 }
 
 /* =========================
@@ -316,22 +582,15 @@
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-
     width: 35px !important;
     height: 35px !important;
-
     padding: 5px !important;
     margin: 2px;
-
     border: 2px solid var(--dorado) !important;
     border-radius: 8px;
-
     background: transparent !important;
-
     text-decoration: none !important;
-
     box-sizing: border-box !important;
-
     overflow: hidden !important;
 }
 
@@ -339,15 +598,463 @@
 .btn-success img,
 .icono-editar img {
     display: block !important;
-
     width: 35px !important;
     height: 35px !important;
-
     max-width: 35px !important;
     max-height: 35px !important;
-
     min-width: 35px !important;
     min-height: 35px !important;
-
     object-fit: contain !important;
+}
+
+/* ==========================================
+   ESTILOS KADOSH BARBER - FULLCALENDAR
+   ========================================== */
+
+/* 1. Contenedores laterales y principales */
+#external-events {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--borde-dorado) !important;
+    border-radius: 12px;
+}
+
+#external-events h4 {
+    color: var(--dorado) !important;
+}
+
+.fc-event-item {
+    background: var(--morado) !important;
+    border: 1px solid var(--dorado) !important;
+    color: #ffffff !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fc-event-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px rgba(184, 146, 32, 0.4);
+}
+
+/* 2. Contenedor principal del calendario */
+#calendar {
+    background-color: var(--bg-calendar) !important;
+    color: var(--texto-principal);
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid var(--borde-dorado);
+}
+
+/* 3. Corrección de la barra de días de la semana */
+.fc .fc-col-header,
+.fc .fc-col-header-cell,
+.fc .fc-scrollgrid-section-header th,
+.fc .fc-scrollgrid-sync-inner {
+    background-color: var(--bg-calendar-header) !important;
+    color: var(--texto-principal) !important;
+    border-color: var(--borde-dorado) !important;
+}
+
+.fc .fc-col-header-cell-cushion {
+    color: var(--texto-principal) !important;
+    font-weight: 700;
+    text-transform: capitalize;
+    padding: 8px 0 !important;
+}
+
+/* 4. Bordes de la cuadrícula general */
+.fc td,
+.fc th,
+.fc-theme-standard td,
+.fc-theme-standard th,
+.fc-scrollgrid {
+    border-color: var(--borde-dorado) !important;
+}
+
+/* 5. Título del mes/año y números de días */
+.fc .fc-toolbar-title {
+    color: var(--dorado) !important;
+    font-size: 1.5rem !important;
+    text-transform: capitalize;
+}
+
+.fc .fc-daygrid-day-number {
+    color: var(--texto-principal) !important;
+    font-weight: 600;
+}
+
+/* Fondo de las celdas de días */
+.fc .fc-daygrid-day {
+    background-color: transparent !important;
+}
+
+/* Días de otros meses */
+.fc .fc-day-other .fc-daygrid-day-top {
+    opacity: 0.3;
+}
+
+/* 6. Botones de navegación */
+.fc .fc-button-primary {
+    background: var(--morado) !important;
+    border: 1px solid var(--dorado) !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    text-transform: capitalize;
+}
+
+.fc .fc-button-primary:hover {
+    background: var(--morado-hover) !important;
+    box-shadow: 0 0 10px rgba(184, 146, 32, 0.4) !important;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+    background: var(--dorado) !important;
+    color: #ffffff !important;
+    border-color: var(--dorado) !important;
+    font-weight: bold;
+}
+
+/* 7. Eventos/Turnos dentro de las casillas */
+.fc-daygrid-event {
+    background: var(--morado) !important;
+    border: 1px solid var(--dorado) !important;
+    border-radius: 6px !important;
+    padding: 3px 6px !important;
+}
+
+.fc-event-title {
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+/* ==========================================================
+   ESTILOS BASE PARA EL MODAL DE DESCARGA
+   ========================================================== */
+.modal-reporte-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-reporte-contenido {
+    background-color: var(--bg-card);
+    color: var(--texto-principal);
+    width: 380px;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid var(--borde-dorado);
+    box-shadow: 0 4px 15px var(--sombra-card);
+    position: relative;
+}
+
+.modal-reporte-cerrar {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--texto-secundario);
+}
+
+.modal-reporte-cerrar:hover {
+    color: var(--texto-principal);
+}
+
+.modal-reporte-titulo {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: var(--morado);
+}
+
+.form-group-reporte {
+    margin-bottom: 15px;
+}
+
+.form-group-reporte label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--texto-principal);
+}
+
+.select-reporte {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--borde-dorado);
+    background: var(--bg-body);
+    color: var(--texto-principal);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.modal-reporte-acciones {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-reporte {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.btn-pdf {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.btn-pdf:hover {
+    background-color: #bb2d3b;
+}
+
+.btn-excel {
+    background-color: #198754;
+    color: #ffffff;
+}
+
+.btn-excel:hover {
+    background-color: #157347;
+}
+
+.btn-cancelar {
+    background-color: #6c757d;
+    color: #ffffff;
+}
+
+.btn-cancelar:hover {
+    background-color: #5c636a;
+}
+
+/* FORZAR POSICIÓN FLOTANTE EN TODA LA PANTALLA */
+.modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 99999 !important;
+    /* Asegura que quede por encima de la barra lateral y todo lo demás */
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(4px);
+    overflow-y: auto;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    border: 1px solid var(--borde-dorado);
+    margin: 5% auto !important;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    position: relative !important;
+    color: var(--texto-principal);
+}
+
+.checkbox-list {
+    max-height: 140px;
+    overflow-y: auto;
+    background-color: var(--bg-body);
+    border: 1px solid var(--borde-dorado);
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--texto-secundario);
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.checkbox-item:hover {
+    color: var(--texto-principal);
+}
+
+.checkbox-item input[type="checkbox"] {
+    accent-color: var(--morado-claro);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* ARREGLO DE FONDO BLANCO EN SELECTS Y CONTENEDORES */
+.form-control option {
+    background-color: var(--bg-body, #0a0a0a) !important;
+    color: var(--texto-principal, #ffffff) !important;
+}
+
+.checkbox-list {
+    max-height: 120px;
+    overflow-y: auto;
+    background-color: var(--bg-body, #0a0a0a) !important;
+    border: 1px solid var(--borde-dorado, rgba(212, 175, 55, 0.25));
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+/* BOTONES DEL MODAL INTEGRADOS AL TEMA */
+.modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-cancel {
+    background: transparent !important;
+    color: var(--texto-secundario, #cfcfcf) !important;
+    border: 1px solid var(--texto-secundario, #cfcfcf) !important;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-submit {
+    background-color: var(--morado, #4B2A6B) !important;
+    color: var(--blanco, #ffffff) !important;
+    border: 1px solid var(--borde-dorado, rgba(212, 175, 55, 0.25)) !important;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-submit:hover {
+    background-color: var(--morado-hover, #551d8a) !important;
+}
+
+/* ==========================================================
+   REGLAS PARA CAPTURA Y EXPORTACIÓN DEL CALENDARIO EN PDF
+   ========================================================== */
+.modo-exportar-pdf {
+    background-color: #ffffff !important;
+    padding: 10px !important;
+    width: 100% !important;
+}
+
+.modo-exportar-pdf #external-events {
+    display: none !important;
+}
+
+.modo-exportar-pdf #calendar {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.modo-exportar-pdf::before {
+    content: "KADOSH BARBER SHOP - CALENDARIO DE HORARIOS";
+    display: block;
+    text-align: center;
+    font-size: 16pt;
+    font-weight: bold;
+    color: #3D2857;
+    margin-bottom: 12px;
+}
+
+/* Modal de Asignación */
+#modalHorario>div {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--borde-dorado) !important;
+    color: var(--texto-principal) !important;
+    border-radius: 16px !important;
+}
+
+#modalHorario h3 {
+    color: var(--dorado) !important;
+}
+
+#modalHorario label {
+    color: var(--texto-secundario) !important;
+}
+
+/* =====================================================
+   📱 MEDIA QUERIES (ADAPTABILIDAD RESPONSIVA)
+===================================================== */
+@media (max-width: 992px) {
+    .admin-header {
+        padding: 15px 20px;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    #panel-horarios>div[style*="display: flex"] {
+        flex-direction: column !important;
+    }
+
+    #external-events {
+        width: 100% !important;
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .admin-content-wrapper {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--borde-dorado);
+        padding: 15px;
+    }
+
+    .sidebar-title {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    #panel-inicio {
+        padding: 20px;
+    }
+
+    #panel-inicio h2 {
+        font-size: 22px;
+    }
+
+    .fc .fc-toolbar {
+        flex-direction: column !important;
+        gap: 10px;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 1.1rem !important;
+    }
 }

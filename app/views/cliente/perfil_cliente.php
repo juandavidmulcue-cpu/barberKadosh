@@ -6,12 +6,23 @@ if (!isset($_SESSION['id'])) {
     exit;
 }
 
-$nombre = $_SESSION['nombre'] ?? 'Cliente';
-$apellido = $_SESSION['apellido'] ?? '';
-$rol    = $_SESSION['nombre_rol'] ?? 'cliente';
+$nombre    = $_SESSION['nombre'] ?? 'Cliente';
+$apellido  = $_SESSION['apellido'] ?? '';
+$rol       = $_SESSION['nombre_rol'] ?? 'cliente';
+
 $servicios = $servicios ?? [];
-$barberos = $barberos ?? [];
+$barberos  = $barberos ?? [];
+$historial = $historial ?? [];
+
+// Rutas de fotos para el carrusel
+$fotosCortes = [
+    ["src" => "app/public/assets/img/foto1.png", "alt" => "Corte clásico"],
+    ["src" => "app/public/assets/img/foto2.png", "alt" => "Fade moderno"],
+    ["src" => "app/public/assets/img/foto3.png", "alt" => "Barba profesional"],
+    ["src" => "app/public/assets/img/foto4.png", "alt" => "Estilo premium"]
+];
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -20,6 +31,9 @@ $barberos = $barberos ?? [];
     <title>Perfil Cliente - Kadosh Barber</title>
     <link rel="stylesheet" href="app/public/css/perfilCliente.css">
     <link rel="stylesheet" href="app/public/css/index.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 </head>
 
 <body>
@@ -32,14 +46,14 @@ $barberos = $barberos ?? [];
 
         <!-- Usuario -->
         <div class="card info-usuario">
-            <img src="app/public/assets/img/logo1.jpeg" class="avatar">
+            <img src="<?= !empty($_SESSION['foto']) ? htmlspecialchars($_SESSION['foto']) : 'app/public/assets/img/avatar.png'; ?>" class="avatar" alt="Foto de Perfil">
 
             <h2><?php echo htmlspecialchars($nombre . ' ' . $apellido); ?></h2>
             <p class="rol"><?php echo strtoupper(htmlspecialchars($rol)); ?></p>
 
             <div class="acciones">
-                <a href="index.php?controller=gestionCita&action=agendarCita" class="btn btn-primary"><button>AGENDAR</button></a>
-                <a href="index.php?controller=auth&action=resetPassword" class="btn"><button class="btn-outline">Cambiar contraseña</button></a>
+                <a href="index.php?controller=gestionCita&action=agendarCita" class="btn btn-primary"><button type="button">AGENDAR</button></a>
+                <a href="index.php?controller=password&action=resetPassword" class="btn"><button type="button" class="btn-outline">Cambiar contraseña</button></a>
             </div>
 
             <a href="index.php?controller=auth&action=logout">Cerrar sesión</a>
@@ -51,94 +65,104 @@ $barberos = $barberos ?? [];
             <h2 class="carousel-title">Nuestro Estilo</h2>
 
             <div class="carousel">
-                <div class="carousel-track">
-                    <div class="carousel-item">
-                        <img src="app/public/assets/img/foto1.png" alt="Corte clásico">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="app/public/assets/img/foto2.png" alt="Fade moderno">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="app/public/assets/img/foto3.png" alt="Barba profesional">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="app/public/assets/img/foto4.png" alt="Estilo premium">
+                <button class="carousel-btn prev" onclick="moverCarruselCliente(-1)">&#10094;</button>
+
+                <div class="carousel-track-container">
+                    <div class="carousel-track" id="carouselTrackCliente">
+                        <?php foreach ($fotosCortes as $foto): ?>
+                            <div class="carousel-item">
+                                <img src="<?php echo htmlspecialchars($foto['src']); ?>" alt="<?php echo htmlspecialchars($foto['alt']); ?>">
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
+
+                <button class="carousel-btn next" onclick="moverCarruselCliente(1)">&#10095;</button>
             </div>
         </section>
 
         <!-- Dirección -->
         <div class="card direccion">
             <h3>DIRECCIÓN</h3>
-            <p>Cra 99 #999-99<br>2do piso – Soacha</p>
-            <a href="#">Ver en el mapa</a>
-        </div>
+            <p>
+                Cra 99 #999-99<br>
+                2do piso – Soacha
+            </p>
 
+            <a href="#">Ver en el mapa</a>
+
+            <button type="button" class="btn-historial" onclick="abrirModalHistorial()"> Ver historial </button>
+            <button type="button" onclick="abrirModalPerfil()" class="btn-historial">Editar Perfil</button>
+        </div>
     </div>
 
+    <?php
+    $hoy = date('d/m/Y');
+    $finRango = date('d/m/Y', strtotime('+4 days'));
+    ?>
+
     <div class="panel" id="panel-reservas">
-
         <h2 class="section-title">Mis Reservas</h2>
-
         <br>
-
         <div class="section-card">
-
             <table class="data-table" id="tablaCitas">
-
                 <thead>
                     <tr>
                         <th>Barbero</th>
                         <th>Servicio</th>
+                        <th>Producto</th>
                         <th>Fecha</th>
                         <th>Hora</th>
+                        <th>Total</th>
                         <th>Estado</th>
                         <th>Acción</th>
                     </tr>
                 </thead>
-
                 <tbody>
-
                     <?php if (!empty($citas)): ?>
-
                         <?php foreach ($citas as $c): ?>
-
+                            <?php
+                            // Formatear el valor total recibido desde la consulta SQL
+                            $total = isset($c['total']) ? '$' . number_format($c['total'], 0, ',', '.') : '$0';
+                            $producto = !empty($c['producto']) ? $c['producto'] : 'Ninguno';
+                            ?>
                             <tr>
-
                                 <td><?= htmlspecialchars($c['barbero']) ?></td>
-
                                 <td><?= htmlspecialchars($c['servicio']) ?></td>
-
+                                <td><?= htmlspecialchars($producto) ?></td>
                                 <td><?= htmlspecialchars($c['fecha_cita']) ?></td>
-
                                 <td><?= htmlspecialchars($c['hora_cita']) ?></td>
-
+                                <td><strong><?= htmlspecialchars($total) ?></strong></td>
                                 <td>
-                                    <?php
-                                    if ($c['estado'] == 'Pendiente') {
-                                        echo "<span style='color:orange;font-weight:bold;'>🟡 Pendiente</span>";
-                                    } elseif ($c['estado'] == 'Confirmada') {
-                                        echo "<span style='color:green;font-weight:bold;'>🟢 Confirmada</span>";
-                                    } elseif ($c['estado'] == 'Cancelada') {
-                                        echo "<span style='color:red;font-weight:bold;'>🔴 Cancelada</span>";
-                                    } else {
-                                        echo htmlspecialchars($c['estado']);
-                                    }
-                                    ?>
+                                    <?php if ($c['estado'] == 'Pendiente'): ?>
+                                        <span style="color:orange;font-weight:bold;">
+                                            🟡 Pendiente
+                                        </span>
+                                    <?php elseif ($c['estado'] == 'Cancelada'): ?>
+                                        <span style="color:red;font-weight:bold;">
+                                            🔴 Cancelada
+                                        </span>
+                                    <?php elseif ($c['estado'] == 'Completada'): ?>
+                                        <span style="color:green;font-weight:bold;">
+                                            🟢 Completada
+                                        </span>
+                                    <?php else: ?>
+                                        <?= htmlspecialchars($c['estado']) ?>
+                                    <?php endif; ?>
                                 </td>
-
                                 <td>
+                                    <?php if ($c['estado'] == 'Pendiente'): ?>
 
-                                    <?php if ($c['estado'] != 'Cancelada'): ?>
-
+                                        <!-- CANCELAR -->
                                         <a class="cancelar-cita"
-                                            href="index.php?controller=gestionCita&action=cancelar&id=<?= $c['id_reservacion'] ?>"
+                                            href="index.php?controller=gestionCita&action=cancelar&id=<?= htmlspecialchars($c['id_reservacion']) ?>"
                                             onclick="return confirm('¿Desea cancelar esta reserva?')"
                                             title="Cancelar">
-                                            <img src="app/public/assets/icons/cancelarcita.png" alt="Cancelar">
+                                            <img src="app/public/assets/icons/cancelarcita.png"
+                                                alt="Cancelar">
                                         </a>
 
+                                        <!-- EDITAR -->
                                         <a href="#"
                                             class="btn-editar-cita"
                                             onclick="abrirModalEditar(
@@ -152,44 +176,49 @@ $barberos = $barberos ?? [];
                                             <img src="app/public/assets/icons/editar.png" alt="Editar">
                                         </a>
 
-                                    <?php else: ?>
-                                        <span style="color:gray;">Sin acciones</span>
+                                        <!-- FINALIZAR -->
+                                        <button type="button" class="btn-finalizar" onclick="abrirModalFinalizar('<?= htmlspecialchars($c['id_reservacion']) ?>','<?= htmlspecialchars($c['id_barbero']) ?>')"
+                                            title="Finalizar">
+                                            <img src="app/public/assets/icons/finalizarReservacion.png" alt="Finalizar">
+                                        </button>
+
+                                    <?php elseif ($c['estado'] == 'Cancelada'): ?>
+
+                                        <span style="color:gray;">
+                                            Sin acciones
+                                        </span>
+
+                                    <?php elseif ($c['estado'] == 'Completada'): ?>
+
+                                        <span style="color:green;">
+                                            ✓ Fina lizada
+                                        </span>
+
                                     <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="6" style="text-align:center;">
-                                No tienes reservas registradas.
-                            </td>
+                            <td colspan="8" style="text-align:center;">No tienes reservas registradas.</td>
                         </tr>
-
                     <?php endif; ?>
-
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
 
     <div id="modalEditarCita" class="modal-editar-cita">
 
         <div class="contenido-modal">
 
-            <button type="button"
-                class="cerrar-modal"
-                onclick="cerrarModalEditar()">
+            <button type="button" class="cerrar-modal" onclick="cerrarModalEditar()">
                 &times;
             </button>
 
             <h2>Actualizar reservación</h2>
             <div id="horariosEditar">
-                <p>
-                    Seleccione servicio, barbero y fecha.
-                </p>
+                <p>Seleccione servicio, barbero y fecha.</p>
             </div>
             <br>
             <p>
@@ -197,53 +226,31 @@ $barberos = $barberos ?? [];
                 <span id="idReservaEditar"></span>
             </p>
 
-            <form id="formEditarCita"
-                method="POST"
-                action="index.php?controller=gestionCita&action=actualizarCita">
+            <form id="formEditarCita" method="POST" action="index.php?controller=gestionCita&action=actualizarCita">
 
-                <input type="hidden"
-                    name="id_reservacion"
-                    id="idReservacionEditar">
-
-
+                <input type="hidden" name="id_reservacion" id="idReservacionEditar">
                 <!-- SERVICIO -->
 
-                <label for="servicioEditar">
-                    Servicio:
-                </label>
+                <label for="servicioEditar">Servicio:</label>
 
-                <select name="servicio"
-                    id="servicioEditar"
-                    required>
-
-                    <option value="">
-                        Seleccione un servicio
-                    </option>
+                <select name="servicio" id="servicioEditar" required>
+                    <option value="">Seleccione un servicio</option>
 
                     <?php foreach ($servicios as $servicio): ?>
-
                         <option value="<?= htmlspecialchars($servicio['id_servicio']) ?>">
                             <?= htmlspecialchars($servicio['nombre']) ?>
                         </option>
-
                     <?php endforeach; ?>
-
                 </select>
-
                 <br>
+
                 <!-- BARBERO -->
 
-                <label for="barberoEditar">
-                    Barbero:
-                </label>
+                <label for="barberoEditar">Barbero:</label>
 
-                <select name="barbero"
-                    id="barberoEditar"
-                    required>
+                <select name="barbero" id="barberoEditar" required>
 
-                    <option value="">
-                        Seleccione un barbero:
-                    </option>
+                    <option value="">Seleccione un barbero:</option>
 
                     <?php foreach ($barberos as $barbero): ?>
 
@@ -252,40 +259,259 @@ $barberos = $barberos ?? [];
                                 $barbero['nombre'] . ' ' . $barbero['apellido']
                             ) ?>
                         </option>
-
                     <?php endforeach; ?>
-
                 </select>
 
                 <br>
                 <!-- FECHA -->
 
-                <label for="fechaEditar">
-                    Fecha:
-                </label>
+                <label for="fechaEditar">Fecha:</label>
 
-                <input type="date"
-                    name="fecha"
-                    id="fechaEditar"
-                    required>
-
-
+                <input type="date" name="fecha" id="fechaEditar" required>
                 <!-- HORARIOS -->
                 <br>
-                <label>
-                    Hora disponible:
-                </label>
-
-
-                <input type="hidden"
-                    name="hora"
-                    id="horaEditar"
-                    required>
-
+                <label>Hora disponible:</label>
+                <input type="hidden" name="hora" id="horaEditar" required>
                 <br>
-                <button type="submit">
-                    Guardar cambios
-                </button>
+                <button type="submit">Guardar cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- =========================================
+     MODAL HISTORIAL DE RESERVAS
+========================================= -->
+
+    <div id="modalHistorial" class="modal-historial">
+
+        <div class="contenido-modal-historial">
+
+            <!-- CERRAR -->
+            <button
+                type="button"
+                class="cerrar-modal-historial"
+                onclick="cerrarModalHistorial()">
+                &times;
+            </button>
+            <h2>Historial de reservas</h2>
+            <p class="subtitulo-historial">
+                Aquí puedes consultar tus reservas anteriores.
+            </p>
+
+            <!-- BARRA DE BÚSQUEDA -->
+            <div class="header-historial-acciones">
+                <input
+                    type="text"
+                    id="inputBuscarHistorial"
+                    placeholder="Buscar por barbero, servicio, producto, fecha..."
+                    onkeyup="buscarEnHistorial()">
+            </div>
+
+            <div class="tabla-historial">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Barbero</th>
+                            <th>Servicio</th>
+                            <th>Producto</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyHistorial">
+                        <?php if (!empty($historial)): ?>
+                            <?php foreach ($historial as $h): ?>
+                                <?php
+                                $totalFormateado = '$' . number_format($h['total'], 0, ',', '.');
+                                ?>
+                                <tr class="fila-historial">
+                                    <td><?= htmlspecialchars($h['barbero']) ?></td>
+                                    <td><?= htmlspecialchars($h['servicio']) ?></td>
+                                    <td><?= htmlspecialchars($h['producto']) ?></td>
+                                    <td><?= htmlspecialchars($h['fecha_cita']) ?></td>
+                                    <td><?= htmlspecialchars($h['hora_cita']) ?></td>
+                                    <td><strong><?= htmlspecialchars($totalFormateado) ?></strong></td>
+                                    <td>
+                                        <?php if ($h['estado'] == 'Completada'): ?>
+                                            <span class="estado-completada">🟢 Completada</span>
+                                        <?php else: ?>
+                                            <span class="estado-cancelada">🔴 Cancelada</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <button type="button"
+                                            class="btn-descargar-pdf"
+                                            onclick="generarPDFReserva(
+                                        '<?= htmlspecialchars($h['barbero'], ENT_QUOTES) ?>', 
+                                        '<?= htmlspecialchars($h['servicio'], ENT_QUOTES) ?>', 
+                                        '<?= htmlspecialchars($h['producto'], ENT_QUOTES) ?>', 
+                                        '<?= htmlspecialchars($h['fecha_cita'], ENT_QUOTES) ?>', 
+                                        '<?= htmlspecialchars($h['hora_cita'], ENT_QUOTES) ?>', 
+                                        '<?= htmlspecialchars($totalFormateado, ENT_QUOTES) ?>',
+                                        '<?= htmlspecialchars($h['estado'], ENT_QUOTES) ?>')"
+                                            title="Descargar Comprobante PDF">
+
+                                            <img src="app/public/assets/icons/descargar.png" alt="Descargar">
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr id="sinHistorialInicio">
+                                <td colspan="8" class="sin-historial">No tienes reservas en tu historial.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CONTROLES DE PAGINACIÓN -->
+            <?php if (!empty($historial)): ?>
+                <div class="paginacion-historial">
+                    <button type="button" id="btnPagAnterior" onclick="cambiarPaginaHistorial(-1)" class="btn-paginacion">&laquo; Anterior</button>
+                    <span id="infoPaginacionHistorial">Página 1 de 1</span>
+                    <button type="button" id="btnPagSiguiente" onclick="cambiarPaginaHistorial(1)" class="btn-paginacion">Siguiente &raquo;</button>
+                </div>
+            <?php endif; ?>
+
+        </div>
+    </div>
+
+    <!-- =========================================
+     MODAL FINALIZAR CITA
+========================================= -->
+
+    <div id="modalFinalizar" class="modal-finalizar">
+
+        <div class="contenido-modal-finalizar">
+
+            <button type="button" class="cerrar-modal-finalizar" onclick="cerrarModalFinalizar()">
+                &times;
+            </button>
+
+            <h2>¡Cita finalizada! 🎉</h2>
+            <p>¿Te gustaría calificar nuestro servicio?</p>
+
+            <div class="botones-finalizar">
+                <button type="button" onclick="mostrarModalResena()">Sí</button>
+                <form method="POST" action="index.php?controller=gestionCita&action=finalizar">
+                    <input type="hidden" name="id_reservacion" id="idReservaFinalizar">
+                    <button type="submit"> No </button>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL ACTUALIZAR DATOS Y FOTO DEL CLIENTE -->
+    <div id="modalActualizarPerfil" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar-modal" onclick="cerrarModalPerfil()">&times;</span>
+            <h2>Actualizar Perfil</h2>
+
+            <form action="index.php?controller=cliente&action=actualizarPerfil" method="POST" enctype="multipart/form-data" class="form-perfil">
+
+                <!-- FOTO DE PERFIL -->
+                <div class="perfil-foto-contenedor" style="text-align: center; margin-bottom: 20px;">
+                    <div class="avatar-preview" style="width: 120px; height: 120px; margin: 0 auto 10px; border-radius: 50%; overflow: hidden; border: 3px solid #D4AF37;">
+                        <img src="<?= !empty($_SESSION['foto']) ? htmlspecialchars($_SESSION['foto']) : 'app/public/assets/img/avatar.png'; ?>" class="avatar" alt="Foto de Perfil">
+                    </div>
+
+                    <label for="inputFotoPerfil" class="btn-cambiar-foto" style="cursor: pointer; background-color: #4A154B; color: #fff; padding: 8px 15px; border-radius: 5px; font-size: 0.9rem; display: inline-block;">
+                        Cambiar Foto
+                    </label>
+                    <input type="file" id="inputFotoPerfil" name="foto_perfil" accept="image/*" style="display: none;" onchange="previsualizarFoto(event)">
+                </div>
+
+                <!-- DATOS PERSONALES -->
+                <div class="form-grupo">
+                    <label for="perfilNombre">Nombre</label>
+                    <input type="text" id="perfilNombre" name="nombre" value="<?= htmlspecialchars($_SESSION['nombre'] ?? '', ENT_QUOTES); ?>" required>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="perfilApellido">Apellido</label>
+                    <input type="text" id="perfilApellido" name="apellido" value="<?= htmlspecialchars($_SESSION['apellido'] ?? '', ENT_QUOTES); ?>" required>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="perfilTelefono">Número de Teléfono</label>
+                    <input type="tel" id="perfilTelefono" name="telefono" value="<?= htmlspecialchars($_SESSION['telefono'] ?? '', ENT_QUOTES); ?>" required>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="perfilCorreo">Correo Electrónico</label>
+                    <input type="email" id="perfilCorreo" name="correo" value="<?= htmlspecialchars($_SESSION['correo'] ?? '', ENT_QUOTES); ?>" required>
+                </div>
+
+                <div class="modal-acciones" style="margin-top: 20px; text-align: right;">
+                    <button type="button" class="btn-cancelar" onclick="cerrarModalPerfil()">Cancelar</button>
+                    <button type="submit" class="btn-guardar" style="background-color: #D4AF37; color: #1A1A1A; font-weight: bold; padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer;">Guardar Cambios</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- =========================================
+     MODAL RESEÑA
+========================================= -->
+
+    <div id="modalResena" class="modal-resena">
+
+        <div class="contenido-modal-resena">
+
+            <button type="button" class="cerrar-modal-resena" onclick="cerrarModalResena()">
+                &times;
+            </button>
+
+            <h2>Califica nuestro servicio</h2>
+
+            <p>¿Cómo fue tu experiencia?</p>
+
+            <form method="POST" action="index.php?controller=gestionCita&action=guardarResena">
+
+                <input type="hidden" name="id_reservacion" id="idReservaResena">
+                <input type="hidden" name="id_barbero" id="idBarberoResena">
+                <label>Calificación</label>
+
+                <select name="calificacion" required>
+
+                    <option value="">Selecciona una calificación</option>
+
+                    <option value="5">
+                        ⭐⭐⭐⭐⭐ Excelente
+                    </option>
+
+                    <option value="4">
+                        ⭐⭐⭐⭐ Muy bueno
+                    </option>
+
+                    <option value="3">
+                        ⭐⭐⭐ Bueno
+                    </option>
+
+                    <option value="2">
+                        ⭐⭐ Regular
+                    </option>
+
+                    <option value="1">
+                        ⭐ Malo
+                    </option>
+
+                </select>
+
+
+                <label>Comentario</label>
+
+                <textarea name="comentario" placeholder="Cuéntanos tu experiencia..." rows="4"></textarea>
+
+                <button type="submit">Publicar reseña</button>
 
             </form>
 
@@ -293,6 +519,397 @@ $barberos = $barberos ?? [];
 
     </div>
 
+
+    <footer class="footer">
+
+        <div class="footer-container">
+
+            <div class="footer-section">
+                <h4>Enlaces</h4>
+
+                <a href="http://localhost/barberkadosh/index.html">Inicio</a>
+                <a href="#">Servicios</a>
+                <a href="#">Política de Privacidad</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Contacto</h4>
+
+                <p>📍 Bogotá - Colombia</p>
+                <a href="tel:+573003593276">📞 +573003593276</a>
+                <a href="mailto:kadosh1234@gmail.com">✉️ kadosh1234@gmail.com</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Desarrollado por:</h4>
+
+                <p>Daniela Yara, Laura Buitrago, Juan Acuña, Juan Mulcue, Jose Cuastumal</p>
+
+                <br>
+
+                <p><strong>SENA - ADSO</strong></p>
+                <p>Ficha: 3171693</p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                © 2026 <strong>KADOSH Barber Shop</strong>. Todos los derechos reservados.
+                | Versión 1.0
+            </p>
+        </div>
+
+    </footer>
+
+    <script>
+        /* ==========================================================
+   MODAL ACTUALIZAR PERFIL Y PREVISUALIZACIÓN DE FOTO
+   ========================================================== */
+        function abrirModalPerfil() {
+            document.getElementById('modalActualizarPerfil').classList.add('activo');
+        }
+
+        function cerrarModalPerfil() {
+            document.getElementById('modalActualizarPerfil').classList.remove('activo');
+        }
+
+        function previsualizarFoto(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imgPreviewPerfil').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Variables de control para el historial
+        let paginaActualHistorial = 1;
+        const filasPorPaginaHistorial = 10;
+        let filasVisiblesHistorial = [];
+
+        // Función para inicializar o resetear la paginación al abrir el modal
+        function inicializarPaginacionHistorial() {
+            const tbody = document.getElementById('tbodyHistorial');
+            if (!tbody) return;
+
+            // Obtener todas las filas que no sean la de "Sin resultados"
+            const todasLasFilas = Array.from(tbody.querySelectorAll('.fila-historial'));
+            filasVisiblesHistorial = todasLasFilas;
+            paginaActualHistorial = 1;
+
+            // Limpiar input de búsqueda si existe
+            const inputBuscar = document.getElementById('inputBuscarHistorial');
+            if (inputBuscar) inputBuscar.value = '';
+
+            mostrarPaginaHistorial();
+        }
+
+        // Función principal para renderizar la página activa
+        function mostrarPaginaHistorial() {
+            const totalFilas = filasVisiblesHistorial.length;
+            const totalPaginas = Math.ceil(totalFilas / filasPorPaginaHistorial) || 1;
+
+            // Asegurar que la página actual no sobrepase el límite
+            if (paginaActualHistorial > totalPaginas) paginaActualHistorial = totalPaginas;
+            if (paginaActualHistorial < 1) paginaActualHistorial = 1;
+
+            // Ocultar todas las filas del historial primero
+            const tbody = document.getElementById('tbodyHistorial');
+            if (tbody) {
+                const filas = tbody.querySelectorAll('.fila-historial');
+                filas.forEach(fila => fila.style.display = 'none');
+            }
+
+            // Calcular los índices de la página actual
+            const inicio = (paginaActualHistorial - 1) * filasPorPaginaHistorial;
+            const fin = inicio + filasPorPaginaHistorial;
+
+            // Mostrar solo las 10 filas del rango actual
+            filasVisiblesHistorial.slice(inicio, fin).forEach(fila => {
+                fila.style.display = '';
+            });
+
+            // Actualizar texto informativo (Ej: "Página 1 de 2")
+            const infoPaginacion = document.getElementById('infoPaginacionHistorial');
+            if (infoPaginacion) {
+                infoPaginacion.textContent = `Página ${paginaActualHistorial} de ${totalPaginas}`;
+            }
+
+            // Activar / Desactivar botones de navegación
+            const btnAnterior = document.getElementById('btnPagAnterior');
+            const btnSiguiente = document.getElementById('btnPagSiguiente');
+
+            if (btnAnterior) btnAnterior.disabled = (paginaActualHistorial === 1);
+            if (btnSiguiente) btnSiguiente.disabled = (paginaActualHistorial === totalPaginas || totalPaginas === 0);
+        }
+
+        // Función para avanzar o retroceder de página
+        function cambiarPaginaHistorial(direccion) {
+            paginaActualHistorial += direccion;
+            mostrarPaginaHistorial();
+        }
+
+        // Función para filtrar filas en tiempo real por el buscador
+        function buscarEnHistorial() {
+            const input = document.getElementById('inputBuscarHistorial');
+            const filtro = input.value.toLowerCase().trim();
+            const tbody = document.getElementById('tbodyHistorial');
+            if (!tbody) return;
+
+            const filas = Array.from(tbody.querySelectorAll('.fila-historial'));
+
+            // Filtrar coincidencias
+            filasVisiblesHistorial = filas.filter(fila => {
+                const textoFila = fila.textContent.toLowerCase();
+                return textoFila.includes(filtro);
+            });
+
+            // Ocultar mensaje previo si existía
+            let filaSinResultados = document.getElementById('filaSinResultadosBusqueda');
+            if (filaSinResultados) filaSinResultados.remove();
+
+            // Si no hay coincidencias en la búsqueda, mostrar fila informativa
+            if (filasVisiblesHistorial.length === 0 && filas.length > 0) {
+                const tr = document.createElement('tr');
+                tr.id = 'filaSinResultadosBusqueda';
+                tr.innerHTML = `<td colspan="8" class="sin-historial" style="text-align:center; padding: 15px;">No se encontraron reservas que coincidan con "${input.value}".</td>`;
+                tbody.appendChild(tr);
+            }
+
+            paginaActualHistorial = 1; // Volver a la página 1 tras filtrar
+            mostrarPaginaHistorial();
+        }
+
+        // Ejecutar automáticamente al abrir el modal
+        document.addEventListener('DOMContentLoaded', () => {
+            inicializarPaginacionHistorial();
+        });
+
+        // Paleta de colores corporativos
+        const coloresKadosh = {
+            morado: '#4A154B',
+            dorado: '#D4AF37',
+            negro: '#1A1A1A'
+        };
+
+        // Carga previa de la imagen en Base64 para el reporte
+        const logoBase64 = 'data:image/jpeg;base64,<?= base64_encode(file_get_contents("app/public/assets/img/logo1.jpeg")); ?>';
+        const nombreCliente = '<?= htmlspecialchars($nombre . " " . $apellido, ENT_QUOTES); ?>';
+
+        function generarPDFReserva(barbero, servicio, producto, fecha, hora, total, estado) {
+            // Si la variable llega vacía o indefinida, mostramos 'Ninguno'
+            const productoTexto = (producto && producto.trim() !== '') ? producto : 'Ninguno';
+
+            const docDefinition = {
+                pageSize: 'A4',
+                pageOrientation: 'landscape',
+                pageMargins: [35, 40, 35, 50],
+                content: [
+                    /* LOGO KADOSH */
+                    {
+                        image: logoBase64,
+                        width: 70,
+                        height: 70,
+                        alignment: 'center',
+                        margin: [0, 0, 0, 8]
+                    },
+                    {
+                        text: 'KADOSH',
+                        fontSize: 23,
+                        bold: true,
+                        color: coloresKadosh.morado,
+                        alignment: 'center',
+                        margin: [0, 0, 0, 2]
+                    },
+                    {
+                        text: 'BARBER SHOP',
+                        fontSize: 10,
+                        bold: true,
+                        color: coloresKadosh.dorado,
+                        alignment: 'center',
+                        characterSpacing: 3,
+                        margin: [0, 0, 0, 5]
+                    },
+                    {
+                        text: 'Comprobante de Reserva - ' + nombreCliente,
+                        fontSize: 11,
+                        bold: true,
+                        color: coloresKadosh.negro,
+                        alignment: 'center',
+                        margin: [0, 3, 0, 10]
+                    },
+                    {
+                        canvas: [{
+                            type: 'line',
+                            x1: 0,
+                            y1: 0,
+                            x2: 770,
+                            y2: 0,
+                            lineWidth: 2,
+                            lineColor: coloresKadosh.dorado
+                        }],
+                        margin: [0, 0, 0, 15]
+                    },
+
+                    /* TABLA DE DETALLES */
+                    {
+                        alignment: 'center',
+                        margin: [0, 10, 0, 10],
+                        table: {
+                            widths: ['*', '*', '*', '*', '*', '*'],
+                            body: [
+                                [{
+                                        text: 'Barbero',
+                                        bold: true,
+                                        color: '#ffffff',
+                                        fillColor: coloresKadosh.morado,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: 'Servicio',
+                                        bold: true,
+                                        color: '#ffffff',
+                                        fillColor: coloresKadosh.morado,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: 'Producto',
+                                        bold: true,
+                                        color: '#ffffff',
+                                        fillColor: coloresKadosh.morado,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: 'Fecha',
+                                        bold: true,
+                                        color: '#ffffff',
+                                        fillColor: coloresKadosh.morado,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: 'Hora',
+                                        bold: true,
+                                        color: '#ffffff',
+                                        fillColor: coloresKadosh.morado,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: 'Estado',
+                                        bold: true,
+                                        color: '#ffffff',
+                                        fillColor: coloresKadosh.morado,
+                                        alignment: 'center'
+                                    }
+                                ],
+                                [{
+                                        text: barbero,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: servicio,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: productoTexto,
+                                        alignment: 'center'
+                                    }, // Se muestra el producto o "Ninguno"
+                                    {
+                                        text: fecha,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: hora,
+                                        alignment: 'center'
+                                    },
+                                    {
+                                        text: estado,
+                                        alignment: 'center'
+                                    }
+                                ],
+                                /* TOTAL DE LA COMPRA (SUMA DE SERVICIO + PRODUCTO SI LO HAY) */
+                                [{
+                                        text: 'TOTAL A PAGAR',
+                                        colSpan: 5,
+                                        bold: true,
+                                        alignment: 'right',
+                                        fillColor: '#F5F5F5'
+                                    },
+                                    {}, {}, {}, {},
+                                    {
+                                        text: total,
+                                        bold: true,
+                                        color: coloresKadosh.morado,
+                                        alignment: 'center',
+                                        fillColor: '#F5F5F5'
+                                    }
+                                ]
+                            ]
+                        },
+                        layout: {
+                            hLineWidth: () => 1,
+                            vLineWidth: () => 1,
+                            hLineColor: () => coloresKadosh.dorado,
+                            vLineColor: () => coloresKadosh.dorado,
+                            paddingLeft: () => 8,
+                            paddingRight: () => 8,
+                            paddingTop: () => 7,
+                            paddingBottom: () => 7
+                        }
+                    }
+                ]
+            };
+
+            pdfMake.createPdf(docDefinition).download('Kadosh_' + nombreCliente.replace(/\s+/g, '_') + '_Reserva.pdf');
+        }
+
+        function abrirModalFinalizar(idReserva, idBarbero) {
+            document.getElementById('idReservaFinalizar').value = idReserva;
+
+            document.getElementById('idReservaResena').value = idReserva;
+
+            document.getElementById('idBarberoResena').value = idBarbero;
+
+
+            document.getElementById('modalFinalizar')
+                .classList.add('activo');
+        }
+
+
+        function cerrarModalFinalizar() {
+            document.getElementById('modalFinalizar')
+                .classList.remove('activo');
+        }
+
+
+        function mostrarModalResena() {
+            document.getElementById('modalFinalizar')
+                .classList.remove('activo');
+
+
+            document.getElementById('modalResena')
+                .classList.add('activo');
+        }
+
+
+        function cerrarModalResena() {
+            document.getElementById('modalResena')
+                .classList.remove('activo');
+        }
+    </script>
+    <script>
+        function abrirModalHistorial() {
+            document.getElementById('modalHistorial')
+                .classList.add('activo');
+        }
+
+        function cerrarModalHistorial() {
+            document.getElementById('modalHistorial')
+                .classList.remove('activo');
+        }
+    </script>
     <script>
         function abrirModalEditar(
             idReserva,
@@ -331,5 +948,35 @@ $barberos = $barberos ?? [];
                 .classList.remove('activo');
 
         }
+
+        /* LÓGICA DE MOVIMIENTO DEL CARRUSEL */
+        let posCliente = 0;
+
+        function moverCarruselCliente(direccion) {
+            const track = document.getElementById('carouselTrackCliente');
+            const items = track.querySelectorAll('.carousel-item');
+            const total = items.length;
+
+            // Determina la cantidad visible según el ancho de pantalla
+            const visibles = window.innerWidth <= 600 ? 1 : 2;
+            const maxPos = total - visibles;
+
+            posCliente += direccion;
+
+            if (posCliente < 0) {
+                posCliente = maxPos > 0 ? maxPos : 0;
+            } else if (posCliente > maxPos) {
+                posCliente = 0;
+            }
+
+            const desplazamiento = -(posCliente * (100 / visibles));
+            track.style.transform = `translateX(${desplazamiento}%)`;
+        }
     </script>
+
+    <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2026/05/14/17/20260514174101-A2E9JALD.js" defer></script>
+
 </body>
+
+</html>

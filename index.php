@@ -19,9 +19,21 @@ if (!isset($_SESSION['id_usuario'])) {
    ROUTER MVC
 ================================ */
 
-// Controlador y acción por defecto
-$controller = $_GET['controller'] ?? 'auth';
-$action     = $_GET['action'] ?? 'loginCliente';
+// Controlador y acción
+$controller = $_GET['controller'] ?? null;
+$action     = $_GET['action'] ?? null;
+
+// Si no se especifica controlador o acción
+if ($controller === null || $action === null) {
+
+    http_response_code(404);
+
+    $codigoError = 404;
+
+    require_once 'app/views/errors/error.php';
+
+    exit;
+}
 
 // Nombre del controlador
 $controllerName = ucfirst($controller) . 'Controller';
@@ -29,7 +41,11 @@ $controllerFile = "app/controllers/$controllerName.php";
 
 // Validar controlador
 if (!file_exists($controllerFile)) {
-    die("Error: el controlador '$controllerName' no existe.");
+    http_response_code(404);
+    $codigoError = 404;
+
+    require_once 'app/views/errors/error.php';
+    exit;
 }
 
 // Cargar controlador
@@ -40,7 +56,12 @@ $controllerObj = new $controllerName();
 
 // Validar acción
 if (!method_exists($controllerObj, $action)) {
-    die("Error: la acción '$action' no existe en $controllerName.");
+
+    http_response_code(404);
+    $codigoError = 404;
+
+    require_once 'app/views/errors/error.php';
+    exit;
 }
 
 // Ejecutar acción
