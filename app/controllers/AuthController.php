@@ -88,13 +88,13 @@ class AuthController extends Controller
 
                         // Contraseña incorrecta
                         $_SESSION['login_intentos']++;
-                        $error = "Credenciales incorrectas.";
+                        $error = "Correo o contraseña incorrectos.";
                     }
                 } else {
 
                     // Usuario inexistente o correo incorrecto
                     $_SESSION['login_intentos']++;
-                    $error = "Credenciales incorrectas.";
+                    $error = "Usuario no encontrado.";
                 }
 
                 // Si llega a 5 intentos fallidos
