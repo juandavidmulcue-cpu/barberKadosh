@@ -101,6 +101,7 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
 
             <div class="grid-barberos">
                 <?php if (!empty($barberos)): ?>
+                    
                     <?php foreach ($barberos as $barbero): ?>
                         <?php
                         $fotoBD = !empty($barbero['foto']) ? trim($barbero['foto']) : '';
@@ -126,7 +127,6 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
                                     <p class="telefono-barbero">📱 <?= htmlspecialchars($barbero['telefono']); ?></p>
                                 <?php endif; ?>
 
-                                <span class="badge-disponible">Disponible 5 días seguidos</span>
                             </div>
                         </div>
                     <?php endforeach; ?>

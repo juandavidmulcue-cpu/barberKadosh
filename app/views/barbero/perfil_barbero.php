@@ -67,7 +67,9 @@ foreach ($horarios as $h) {
             </div>
             <nav class="nav-barberia">
                 <a href="index.php?controller=auth&action=logout" class="btn-logout">Cerrar Sesión</a>
+                <a href="index.php?controller=ayuda&action=barbero" class="btn-logout" data-toggle="tooltip" title="Ayuda">?</a>
             </nav>
+
         </div>
     </header>
 
@@ -117,7 +119,7 @@ foreach ($horarios as $h) {
                     <p><strong>Teléfono:</strong> <?php echo $telefonoBarbero; ?></p>
                     <p><strong>Correo:</strong> <?php echo $correoBarbero; ?></p>
                 </div>
-
+                <br>
                 <button type="button" class="btn-editar-perfil" onclick="abrirModalEditarPerfil()">
                     ✏️ Editar Perfil
                 </button>
@@ -320,9 +322,9 @@ foreach ($horarios as $h) {
                 <div class="modal-foto-container">
                     <img id="previewFotoBarbero" src="<?php echo $fotoBarbero; ?>" alt="Foto de perfil" class="avatar-preview">
                     <label for="fotoBarberoInput" class="btn-cambiar-foto">
-                        📷 Cambiar Foto
+                        Cambiar Foto
                     </label>
-                    <input type="file" id="fotoBarberoInput" name="foto_perfil" accept="image/*" onchange="previsualizarFoto(event)">
+                    <input type="file" id="fotoBarberoInput" name="foto" accept="image/jpeg,image/png,image/webp" onchange="previsualizarFoto(event)">
                 </div>
 
                 <div class="form-grupo">
@@ -404,7 +406,18 @@ foreach ($horarios as $h) {
         }
     </script>
 
-    <script>
+    <script> 
+        function previsualizarFoto(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewFotoBarbero').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         function mostrarSeccion(opcion) {
             const reservas = document.getElementById("reservas");
             const historial = document.getElementById("historial");

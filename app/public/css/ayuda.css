@@ -1,0 +1,359 @@
+
+/* =========================
+   ESTILOS GENERALES DE AYUDA
+   KADOSH BARBER SHOP
+   Compatible con global.css
+========================= */
+
+/* =========================
+   CONTENEDOR PRINCIPAL
+========================= */
+
+.contenedor-ayuda {
+    width: 90%;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 25px 20px;
+}
+
+/* =========================
+   TÍTULO PRINCIPAL
+========================= */
+
+.contenedor-ayuda h1 {
+    text-align: center;
+    color: var(--dorado);
+    font-size: 2.5rem;
+    margin-bottom: 30px !important;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.25);
+}
+
+/* =========================
+   TEXTO DE BIENVENIDA
+========================= */
+
+.contenedor-ayuda > p {
+    text-align: center;
+    color: var(--texto-secundario);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 35px !important;
+}
+
+/* =========================
+   BUSCADOR
+========================= */
+
+.buscador-ayuda {
+    display: block !important;
+    margin-top: 35px !important;
+    margin-bottom: 65px !important;
+    padding-top: 10px !important;
+    width: 100%;
+    max-width: 650px;
+}
+
+.buscador-ayuda input {
+    width: 100%;
+    padding: 16px 22px;
+    border-radius: 30px;
+    border: 1px solid var(--borde-input);
+    background: var(--bg-input);
+    color: var(--texto-cuerpo);
+    font-size: 1rem;
+    box-shadow: var(--sombra-card);
+    transition: 0.3s ease;
+    margin-top: 0 !important;
+}
+
+.buscador-ayuda input::placeholder {
+    color: var(--placeholder);
+}
+
+.buscador-ayuda input:focus {
+    outline: 1px solid var(--dorado);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+}
+
+/* =========================
+   SECCIONES DE AYUDA
+========================= */
+
+.seccion-ayuda {
+    background: var(--bg-card);
+    border: 1px solid var(--borde-card);
+    border-radius: 18px;
+    padding: 28px;
+    margin-top: 0;
+    margin-top: 30px !important;
+    box-shadow: var(--sombra-card);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.seccion-ayuda:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--sombra-card-hover);
+}
+
+/* =========================
+   TÍTULOS DE LAS SECCIONES
+========================= */
+
+.seccion-ayuda h2 {
+    color: var(--dorado);
+    font-size: 1.5rem;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--borde-card);
+}
+
+.seccion-ayuda h3 {
+    color: var(--texto-titulo);
+    font-size: 1.15rem;
+    margin-top: 22px;
+    margin-bottom: 12px;
+}
+
+/* =========================
+   PÁRRAFOS
+========================= */
+
+.seccion-ayuda p {
+    color: var(--texto-cuerpo);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+/* =========================
+   LISTAS
+========================= */
+
+.seccion-ayuda ol,
+.seccion-ayuda ul {
+    padding-left: 25px;
+    margin: 15px 0 20px;
+}
+
+.seccion-ayuda li {
+    color: var(--texto-secundario);
+    line-height: 1.8;
+    margin-bottom: 10px;
+    padding-left: 5px;
+}
+
+.seccion-ayuda li::marker {
+    color: var(--dorado);
+    font-weight: bold;
+}
+
+/* =========================
+   NOTAS IMPORTANTES
+========================= */
+
+.nota-ayuda {
+    background: rgba(212, 175, 55, 0.08);
+    border-left: 4px solid var(--dorado);
+    border-radius: 8px;
+    padding: 15px 18px;
+    margin-top: 20px;
+    color: var(--texto-secundario);
+    line-height: 1.7;
+}
+
+/* =========================
+   ENLACES DENTRO DE LA AYUDA
+========================= */
+
+.seccion-ayuda a {
+    color: var(--dorado);
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.seccion-ayuda a:hover {
+    color: var(--texto-titulo);
+    text-decoration: underline;
+}
+
+/* =========================
+   MENSAJE SIN RESULTADOS
+========================= */
+
+.sin-resultados {
+    display: none;
+    text-align: center;
+    color: var(--texto-secundario);
+    background: var(--bg-card);
+    border: 1px solid var(--borde-card);
+    border-radius: 14px;
+    padding: 25px;
+    margin: 20px 0;
+}
+
+/* =========================
+   BOTÓN VOLVER
+========================= */
+
+.btn-volver {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--morado);
+    color: #ffffff;
+    border-radius: 30px;
+    font-weight: 600;
+    text-align: center;
+    transition: 0.3s ease;
+    margin-top: 15px;
+}
+
+.btn-volver:hover {
+    background: var(--morado-hover);
+    box-shadow: 0 0 18px rgba(212, 175, 55, 0.3);
+    transform: translateY(-2px);
+}
+
+/* =========================
+   CONTENEDOR DEL BOTÓN
+========================= */
+
+.contenedor-volver {
+    text-align: center;
+    margin: 35px 0;
+}
+
+/* =========================
+   DISEÑO RESPONSIVE
+   TABLET
+========================= */
+
+@media (max-width: 768px) {
+
+    .contenedor-ayuda {
+        width: 94%;
+        margin: 25px auto;
+        padding: 20px 10px;
+    }
+
+    .contenedor-ayuda h1 {
+        font-size: 2rem;
+        margin-bottom: 25px !important;
+    }
+
+    .contenedor-ayuda > p {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-bottom: 28px !important;
+    }
+
+    .buscador-ayuda {
+        margin-bottom: 40px !important;
+        margin-top: 30px !important;
+        padding-top: 5px;
+    }
+
+    .buscador-ayuda input {
+        padding: 14px 18px;
+    }
+
+    .seccion-ayuda {
+        padding: 20px;
+        border-radius: 14px;
+        margin-bottom: 24px;
+    }
+
+    .seccion-ayuda h2 {
+        font-size: 1.3rem;
+    }
+
+    .seccion-ayuda h3 {
+        font-size: 1.05rem;
+    }
+
+    .seccion-ayuda p,
+    .seccion-ayuda li {
+        font-size: 0.95rem;
+    }
+}
+
+/* =========================
+   DISEÑO RESPONSIVE
+   CELULARES
+========================= */
+
+@media (max-width: 480px) {
+
+    .contenedor-ayuda {
+        width: 96%;
+        margin: 20px auto;
+        padding: 15px 8px;
+    }
+
+    .contenedor-ayuda h1 {
+        font-size: 1.7rem;
+    }
+
+    .contenedor-ayuda > p {
+        font-size: 0.9rem;
+        margin-bottom: 25px;
+    }
+
+    .buscador-ayuda {
+        margin-bottom: 32px;
+        padding-top: 5px;
+    }
+
+    .buscador-ayuda input {
+        padding: 13px 16px;
+        font-size: 0.95rem;
+    }
+
+    .seccion-ayuda {
+        padding: 16px;
+        margin-bottom: 20px;
+    }
+
+    .seccion-ayuda h2 {
+        font-size: 1.15rem;
+    }
+
+    .seccion-ayuda h3 {
+        font-size: 1rem;
+    }
+
+    .seccion-ayuda p,
+    .seccion-ayuda li {
+        font-size: 0.9rem;
+    }
+
+    .seccion-ayuda ol,
+    .seccion-ayuda ul {
+        padding-left: 20px;
+    }
+
+    .nota-ayuda {
+        padding: 12px;
+    }
+
+    .btn-volver {
+        max-width: 100%;
+        padding: 12px 20px;
+    }
+}
+
+/* =========================
+   ACCESIBILIDAD
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .seccion-ayuda,
+    .buscador-ayuda input,
+    .btn-volver {
+        transition: none;
+    }
+
+    .seccion-ayuda:hover,
+    .btn-volver:hover {
+        transform: none;
+    }
+}

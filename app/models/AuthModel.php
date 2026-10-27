@@ -10,6 +10,28 @@ class AuthModel
     }
 
     /* =========================
+       VALIDAR LOGIN (extra seguridad opcional)
+    ========================== */
+    public function verifyPassword($correo, $rol)
+    {
+        $stmt = $this->db->prepare("
+            SELECT password 
+            FROM usuarios u
+            INNER JOIN roles r ON u.id_rol = r.id_rol
+            WHERE u.correo = :correo
+            AND r.nombre_rol = :rol
+            LIMIT 1
+        ");
+
+        $stmt->execute([
+            ':correo' => $correo,
+            ':rol' => $rol
+        ]);
+
+        return $stmt->fetchColumn();
+    }
+
+    /* =========================
        LOGIN (por rol)
     ========================== */
     public function getUserByEmailAndRole($correo, $rol)
@@ -139,27 +161,5 @@ class AuthModel
             ':password' => $passwordHash,
             ':id' => $id
         ]);
-    }
-
-    /* =========================
-       VALIDAR LOGIN (extra seguridad opcional)
-    ========================== */
-    public function verifyPassword($correo, $rol)
-    {
-        $stmt = $this->db->prepare("
-            SELECT password 
-            FROM usuarios u
-            INNER JOIN roles r ON u.id_rol = r.id_rol
-            WHERE u.correo = :correo
-            AND r.nombre_rol = :rol
-            LIMIT 1
-        ");
-
-        $stmt->execute([
-            ':correo' => $correo,
-            ':rol' => $rol
-        ]);
-
-        return $stmt->fetchColumn();
     }
 }

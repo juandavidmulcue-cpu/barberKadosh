@@ -38,9 +38,19 @@ $fotosCortes = [
 
 <body>
 
-    <div class="barra">
-        HOLA, <?php echo htmlspecialchars($nombre . ' ' . $apellido); ?>! 💈
-    </div>
+    <header class="header-barberia">
+        <div class="contenedor-header">
+            <div class="logo">
+                <img src="app/public/assets/img/logo1.jpeg" alt="Logo Kadosh Barber" class="logo-img">
+                <h2>KADOSH <span>BARBER</span></h2>
+            </div>
+
+            <nav class="nav-barberia">
+                <a href="index.php?controller=auth&action=logout" class="btn-logout">Cerrar Sesión</a>
+                <a href="index.php?controller=ayuda&action=cliente" class="btn-logout" data-toggle="tooltip" title="Ayuda">?</a>
+            </nav>
+        </div>
+    </header>
 
     <div class="perfil">
 
@@ -55,8 +65,6 @@ $fotosCortes = [
                 <a href="index.php?controller=gestionCita&action=agendarCita" class="btn btn-primary"><button type="button">AGENDAR</button></a>
                 <a href="index.php?controller=password&action=resetPassword" class="btn"><button type="button" class="btn-outline">Cambiar contraseña</button></a>
             </div>
-
-            <a href="index.php?controller=auth&action=logout">Cerrar sesión</a>
         </div>
 
 
@@ -419,13 +427,13 @@ $fotosCortes = [
                 <!-- FOTO DE PERFIL -->
                 <div class="perfil-foto-contenedor" style="text-align: center; margin-bottom: 20px;">
                     <div class="avatar-preview" style="width: 120px; height: 120px; margin: 0 auto 10px; border-radius: 50%; overflow: hidden; border: 3px solid #D4AF37;">
-                        <img src="<?= !empty($_SESSION['foto']) ? htmlspecialchars($_SESSION['foto']) : 'app/public/assets/img/avatar.png'; ?>" class="avatar" alt="Foto de Perfil">
+                        <img id="imgPreviewPerfil" src="<?= !empty($_SESSION['foto']) ? htmlspecialchars($_SESSION['foto']) : 'app/public/assets/img/avatar.png'; ?>" class="avatar" alt="Foto de Perfil">
                     </div>
 
                     <label for="inputFotoPerfil" class="btn-cambiar-foto" style="cursor: pointer; background-color: #4A154B; color: #fff; padding: 8px 15px; border-radius: 5px; font-size: 0.9rem; display: inline-block;">
                         Cambiar Foto
                     </label>
-                    <input type="file" id="inputFotoPerfil" name="foto_perfil" accept="image/*" style="display: none;" onchange="previsualizarFoto(event)">
+                    <input type="file" id="inputFotoPerfil" name="foto" accept="image/jpeg,image/png,image/webp" style="display: none;" onchange="previsualizarFoto(event)">
                 </div>
 
                 <!-- DATOS PERSONALES -->
