@@ -23,7 +23,8 @@ class GestionPerfilBarberoModel
                     nombre,
                     apellido,
                     telefono,
-                    correo
+                    correo,
+                    foto
                 FROM usuarios
                 WHERE id_usuario = ?
                 AND id_rol = 2";

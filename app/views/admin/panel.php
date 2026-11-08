@@ -30,6 +30,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
         </div>
 
         <div class="header-actions">
+
             <div class="user-profile-icon" data-tooltip="<?php echo htmlspecialchars(Session::nombreCompleto()); ?>">
                 <span class="user-icon">👤</span>
             </div>
@@ -38,6 +39,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
                 <span id="theme-icon">☀️</span>
             </button>
             <a href="index.php?controller=auth&action=logout" class="btn btn-outline">Cerrar sesión</a>
+            <a href="index.php?controller=ayuda&action=admin" class="btn btn-outline" data-toggle="tooltip" title="Ayuda">?</a>
         </div>
 
     </header>
@@ -45,7 +47,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
     <div class="admin-content-wrapper">
         <!-- SIDEBAR -->
         <aside class="sidebar">
-            <p class="sidebar-title">Gestión</p>
+            <p class="sidebar-title">Menú Gestión</p>
 
             <div class="sidebar-link" onclick="showPanel('inicio')">📊 Panel</div>
             <div class="sidebar-link" onclick="showPanel('barberos')">👤 Barberos</div>

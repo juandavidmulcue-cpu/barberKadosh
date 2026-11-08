@@ -19,7 +19,8 @@ class BarberoModel
         $sql = "SELECT
                     id_usuario,
                     nombre,
-                    apellido
+                    apellido,
+                    foto
                 FROM usuarios
                 WHERE id_rol = 2
                   AND estado = 'activo'
