@@ -23,27 +23,27 @@
 
             <div class="form-group">
                 <label>Documento</label>
-                <input type="text" name="id_usuario" inputmode="numeric" maxlength="11" required>
+                <input type="text" name="id_usuario" inputmode="numeric" maxlength="11" placeholder="Ingresa tu documento" required>
             </div>
 
             <div class="form-group">
                 <label>Nombre</label>
-                <input type="text" name="nombre" required>
+                <input type="text" name="nombre" placeholder="Ingresa tu nombre (solo letras)" required>
             </div>
 
             <div class="form-group">
                 <label>Apellido</label>
-                <input type="text" name="apellido" required>
+                <input type="text" name="apellido" placeholder="Ingresa tu apellido (solo letras)" required>
             </div>
 
             <div class="form-group">
                 <label>Teléfono</label>
-                <input type="text" name="telefono" required>
+                <input type="text" name="telefono" placeholder="Ingresa tu teléfono (solo números)" required>
             </div>
 
             <div class="form-group">
                 <label>Correo electrónico</label>
-                <input type="email" name="correo" required>
+                <input type="email" name="correo" placeholder="Ingresa tu correo electrónico (obligatorio "@" y ".com")" required>
             </div>
 
             <div class="form-group">
@@ -54,7 +54,7 @@
                         type="password"
                         name="password"
                         id="password"
-                        placeholder="Ingresa tu contraseña"
+                        placeholder="Ingresa tu contraseña (mínimo 8 caracteres)"
                         required>
 
                     <button
