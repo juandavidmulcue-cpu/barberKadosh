@@ -149,8 +149,8 @@ class GestionPerfilBarberoModel
                 FROM resenas r
 
                 INNER JOIN usuarios u
-                    ON r.id_cliente = u.id_usuario
-                WHERE r.id_barbero = ?
+                    ON r.id_cliente COLLATE utf8mb4_general_ci = u.id_usuario COLLATE utf8mb4_general_ci
+                WHERE r.id_barbero COLLATE utf8mb4_general_ci = ? COLLATE utf8mb4_general_ci
                 ORDER BY r.fecha DESC";
 
         $stmt = $this->db->prepare($sql);
