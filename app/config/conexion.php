@@ -13,7 +13,7 @@ class Database
     private static $port = "24141"; // <--- Reemplaza con tu puerto de Aiven (ej. 23456)
     private static $db   = "barberia_kadosh";
     private static $user = "avnadmin";
-    private static $pass = "AVNS_QCSRO_O8i3V1GHTBWje"; // <--- Tu contraseña real
+    private static $pass = "hola"; // <--- Tu contraseña real
     private static $charset = "utf8mb4";
 
     public static function conectar()
