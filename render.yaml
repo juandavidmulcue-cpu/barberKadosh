@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: barber-kadosh
+    env: docker
+    plan: free
+    region: ohio
+    branch: main
