@@ -16,7 +16,7 @@
     <main class="contenedor-ayuda">
 
         <header class="encabezado-ayuda">
-            <a href="index.html" class="logout-btn">← Volver</a>
+            <a href="home.php" class="logout-btn">← Volver</a>
             <h1>Centro de ayuda de Barber Kadosh</h1>
 
             <p>
@@ -229,7 +229,7 @@
             <div class="footer-section">
                 <h4>Enlaces</h4>
 
-                <a href="http://localhost/barberkadosh/index.html">Inicio</a>
+                <a href="home.php">Inicio</a>
                 <a href="index.php?controller=auth&action=servicios">Servicios</a>
                 <a href="#">Política de Privacidad</a>
             </div>

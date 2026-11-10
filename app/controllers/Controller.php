@@ -78,7 +78,7 @@ class Controller
     {
         Session::destruir();
 
-        header("Location: index.html");
+        header("Location: home.php");
         exit;
     }
 }

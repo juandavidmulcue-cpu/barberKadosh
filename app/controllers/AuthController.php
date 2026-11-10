@@ -145,7 +145,7 @@ class AuthController extends Controller
         $this->destroySession();
 
         // Evitamos el header("Location: ...") y usamos replace
-        echo '<script>window.location.replace("index.html");</script>';
+        echo '<script>window.location.replace("home.php");</script>';
         exit;
     }
 

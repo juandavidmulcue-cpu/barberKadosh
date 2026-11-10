@@ -17,7 +17,7 @@ class ClienteController extends Controller
 
         // 🔐 SOLO CLIENTES
         if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
-            header("Location: index.html");
+            header("Location: home.php");
             exit;
         }
 

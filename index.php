@@ -10,28 +10,25 @@ ini_set('session.cookie_httponly', 1);
 
 session_start();
 
-if (!isset($_SESSION['id_usuario'])) {
-    $controller = 'auth';
-    $action = 'loginCliente';
-}
-
 /* ===============================
    ROUTER MVC
 ================================ */
 
-// Controlador y acción
+// Controlador y acción desde la URL
 $controller = $_GET['controller'] ?? null;
 $action     = $_GET['action'] ?? null;
 
-// Si no se especifica controlador o acción
+// 1. Si no se especifica NI controlador NI acción (estamos en la raíz), cargar home.php
+if ($controller === null && $action === null) {
+    require_once 'home.php';
+    exit;
+}
+
+// 2. Si viene uno de los dos pero falta el otro, es un error 404
 if ($controller === null || $action === null) {
-
     http_response_code(404);
-
     $codigoError = 404;
-
     require_once 'app/views/errors/error.php';
-
     exit;
 }
 
@@ -43,7 +40,6 @@ $controllerFile = "app/controllers/$controllerName.php";
 if (!file_exists($controllerFile)) {
     http_response_code(404);
     $codigoError = 404;
-
     require_once 'app/views/errors/error.php';
     exit;
 }
@@ -56,10 +52,8 @@ $controllerObj = new $controllerName();
 
 // Validar acción
 if (!method_exists($controllerObj, $action)) {
-
     http_response_code(404);
     $codigoError = 404;
-
     require_once 'app/views/errors/error.php';
     exit;
 }

@@ -877,7 +877,7 @@ $panelActivo = $_GET['panel'] ?? 'inicio';
             <div class="footer-section">
                 <h4>Enlaces</h4>
 
-                <a href="http://localhost/barberkadosh/index.html">Inicio</a>
+                <a href="home.php">Inicio</a>
                 <a href="#">Servicios</a>
                 <a href="#">Política de Privacidad</a>
             </div>

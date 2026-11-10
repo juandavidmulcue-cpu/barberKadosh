@@ -13,7 +13,7 @@
     <main class="servicios-container">
         <!-- Botón Volver -->
         <div class="nav-top">
-            <a href="index.html" class="btn-volver">&larr; Volver al inicio</a>
+            <a href="home.php" class="btn-volver">&larr; Volver al inicio</a>
         </div>
 
         <header class="servicios-header">
