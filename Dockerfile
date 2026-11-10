@@ -3,10 +3,10 @@ FROM php:8.2-apache
 # Instalar extensiones necesarias para PDO MySQL
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Habilitar mod_rewrite de Apache para URLs amigables (si tu proyecto las usa)
+# Habilitar mod_rewrite de Apache para URLs amigables
 RUN a2enmod rewrite
 
-# Copiar los archivos del proyecto al directorio web de Apache
+# Copiar todos los archivos del proyecto al directorio web de Apache
 COPY . /var/www/html/
 
 # Dar permisos correctos a la carpeta
