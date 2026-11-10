@@ -7,8 +7,8 @@
     <title>Kadosh Barber Shop</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../barberKadosh/app/public/css/global.css">
-    <link rel="stylesheet" href="../barberKadosh/app/public/css/index.css">
+    <link rel="stylesheet" href="app/public/css/global.css">
+    <link rel="stylesheet" href="app/public/css/index.css">
 </head>
 
 <body>
