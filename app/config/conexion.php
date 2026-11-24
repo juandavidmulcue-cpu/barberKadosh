@@ -10,10 +10,10 @@
 class Database
 {
     private static $host = "kadosh-mysql-juandavidmulcue-24ce.f.aivencloud.com";
-    private static $port = "24141"; // <--- Reemplaza con tu puerto de Aiven (ej. 23456)
+    private static $port = "24141";
     private static $db   = "barberia_kadosh";
     private static $user = "avnadmin";
-    private static $pass = "AVNS_QCSRO_O8i3V1GHTBWje"; // <--- Tu contraseña real
+    private static $pass = "AVNS_QCSRO_O8i3V1GHTBWje";
     private static $charset = "utf8mb4";
 
     public static function conectar()
@@ -24,7 +24,6 @@ class Database
                 ";dbname=" . self::$db .
                 ";charset=" . self::$charset;
 
-            // Opciones obligatorias para que Aiven acepte la conexión segura con SSL
             $options = [
                 PDO::ATTR_ERRMODE                  => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE       => PDO::FETCH_ASSOC,
@@ -40,8 +39,6 @@ class Database
             http_response_code(500);
             $codigoError = 500;
 
-            // Si estás depurando, puedes descomentar la siguiente línea temporalmente para ver el error exacto:
-            // echo "Error PDO: " . $e->getMessage();
 
             require_once __DIR__ . '/../views/errors/error.php';
             exit;
@@ -55,7 +52,7 @@ class Database
    ============================= */
 
 // Ruta base del proyecto
-define('BASE_URL', 'http://localhost/barberkadosh/');
+define('BASE_URL', 'https://barberkadosh.onrender.com/home.php');
 
 // Zona horaria
 date_default_timezone_set('America/Bogota');

@@ -21,7 +21,7 @@
     <h2>Recuperar contraseña</h2>
     <p class="auth-sub">Ingresa tu correo</p>
 
-    <form action="/barberKadosh/app/logicamail.php" method="POST">
+    <form action="app/logicamail.php" method="POST">
 
       <div class="form-group">
         <label>Correo electrónico</label>
@@ -37,7 +37,7 @@
 
       <button class="btn-gold" name="send">Enviar enlace</button>
 
-      <a href="/barberKadosh/index.php?controller=auth&action=loginCliente"
+      <a href="index.php?controller=auth&action=loginCliente"
         class="btn btn-danger">Cancelar</a>
 
     </form>

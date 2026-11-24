@@ -128,7 +128,7 @@ function EnviarCorreoResetPassword($correo, $nombre, $id, $token)
         $mail->setFrom(USERNAME, 'Recupera tu clave');
         $mail->addAddress($correo, $nombre);
 
-        $link = "http://localhost/barberKadosh/app/views/auth/cambiarContraseña.php?id=$id&token=$token";
+        $link = "https://barberkadosh.onrender.com/app/views/auth/cambiarContraseña.php?id=$id&token=$token";
 
         $mail->isHTML(true);
         $mail->Subject = 'Recupera tu clave aqui';
