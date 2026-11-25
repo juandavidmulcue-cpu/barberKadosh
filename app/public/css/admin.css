@@ -983,13 +983,15 @@ svg {
 }
 
 /* Las tablas pueden desplazarse horizontalmente en pantallas pequeñas */
-.data-table,
-table.dataTable {
-    display: block;
-    width: 100% !important;
-    max-width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+@media (max-width: 992px) {
+    .data-table,
+    table.dataTable {
+        display: block;
+        width: 100% !important;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 }
 
 /* Formularios y campos no deben salirse de sus tarjetas */
@@ -1346,219 +1348,160 @@ textarea.form-control {
 }
 
 /* =========================================================
-   AJUSTE FINAL DE TABLAS ADMIN + DATATABLES
-   Basado en tablaBarberos, tablaClientes, tablaProductos y tablaServicios
+   RESPONSIVE DE TABLAS ADMIN + DATATABLES
+   Los cambios solo afectan tablet y celular.
+   En computador se conserva el diseño original.
    ========================================================= */
 
-/* Evita que la tabla estire o rompa el panel */
-.section-card {
-    min-width: 0;
-    max-width: 100%;
-    overflow: hidden;
-}
+@media (max-width: 992px) {
 
-.dataTables_wrapper {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    color: var(--texto-principal) !important;
-    font-size: 12px !important;
-}
-
-/* Desplazamiento horizontal solo dentro del área de la tabla */
-.dataTables_wrapper .dataTables_scroll,
-.dataTables_wrapper .dataTables_scrollBody,
-.dataTables_wrapper .dataTables_scrollHead {
-    max-width: 100%;
-}
-
-.dataTables_wrapper .dataTables_scrollBody {
-    overflow-x: auto !important;
-}
-
-.data-table,
-.dataTables_wrapper table.dataTable {
-    width: 100% !important;
-    margin: 0 !important;
-    border-collapse: collapse !important;
-    table-layout: auto !important;
-    font-size: 12px !important;
-    color: var(--texto-principal) !important;
-}
-
-.dataTables_wrapper table.dataTable thead th,
-.data-table thead th {
-    padding: 9px 10px !important;
-    background: var(--morado) !important;
-    color: #fff !important;
-    border: 1px solid var(--borde-dorado) !important;
-    font-size: 11.5px !important;
-    font-weight: 600 !important;
-    line-height: 1.35 !important;
-    text-align: center !important;
-    white-space: nowrap;
-}
-
-.dataTables_wrapper table.dataTable tbody td,
-.data-table tbody td {
-    padding: 8px 10px !important;
-    border: 1px solid var(--borde-dorado) !important;
-    color: var(--texto-principal) !important;
-    background: transparent !important;
-    font-size: 11.5px !important;
-    line-height: 1.4 !important;
-    vertical-align: middle !important;
-}
-
-.dataTables_wrapper table.dataTable tbody tr:nth-child(even) td {
-    background: rgba(125, 80, 160, 0.08) !important;
-}
-
-.dataTables_wrapper table.dataTable tbody tr:hover td {
-    background: rgba(212, 175, 55, 0.08) !important;
-}
-
-/* Datos largos, especialmente correo y descripción, no agrandan la tabla */
-#tablaBarberos td:nth-child(5),
-#tablaClientes td:nth-child(5),
-#tablaServicios td:nth-child(3) {
-    max-width: 220px;
-    overflow-wrap: anywhere;
-    white-space: normal !important;
-}
-
-/* Acciones alineadas y con iconos pequeños dentro de su botón */
-.data-table td:last-child,
-.dataTables_wrapper table.dataTable td:last-child {
-    text-align: center !important;
-    white-space: nowrap !important;
-}
-
-.data-table .btn-danger,
-.data-table .btn-success,
-.data-table .icono-editar,
-.dataTables_wrapper table.dataTable .btn-danger,
-.dataTables_wrapper table.dataTable .btn-success,
-.dataTables_wrapper table.dataTable .icono-editar {
-    display: inline-flex !important;
-    width: 28px !important;
-    height: 28px !important;
-    min-width: 28px !important;
-    padding: 4px !important;
-    margin: 2px !important;
-    align-items: center !important;
-    justify-content: center !important;
-    vertical-align: middle !important;
-    border-radius: 6px !important;
-    box-sizing: border-box !important;
-}
-
-.data-table .btn-danger img,
-.data-table .btn-success img,
-.data-table .icono-editar img,
-.dataTables_wrapper table.dataTable .btn-danger img,
-.dataTables_wrapper table.dataTable .btn-success img,
-.dataTables_wrapper table.dataTable .icono-editar img {
-    width: 18px !important;
-    height: 18px !important;
-    min-width: 18px !important;
-    min-height: 18px !important;
-    max-width: 18px !important;
-    max-height: 18px !important;
-    object-fit: contain !important;
-}
-
-/* Controles de DataTables compactos */
-.dataTables_wrapper .dataTables_length,
-.dataTables_wrapper .dataTables_filter,
-.dataTables_wrapper .dataTables_info,
-.dataTables_wrapper .dataTables_paginate {
-    font-size: 11.5px !important;
-    color: var(--texto-secundario) !important;
-    margin-top: 8px;
-}
-
-.dataTables_wrapper .dataTables_length label,
-.dataTables_wrapper .dataTables_filter label {
-    font-size: 11.5px !important;
-    color: var(--texto-secundario) !important;
-}
-
-.dataTables_wrapper .dataTables_length select,
-.dataTables_wrapper .dataTables_filter input {
-    height: 29px !important;
-    padding: 4px 7px !important;
-    margin: 0 4px !important;
-    border: 1px solid var(--borde-dorado) !important;
-    border-radius: 6px !important;
-    background: var(--bg-body) !important;
-    color: var(--texto-principal) !important;
-    font-size: 11.5px !important;
-    box-sizing: border-box !important;
-}
-
-.dataTables_wrapper .dataTables_filter input {
-    max-width: 150px;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    padding: 4px 8px !important;
-    margin: 0 2px !important;
-    border-radius: 5px !important;
-    font-size: 11px !important;
-    color: var(--texto-principal) !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current,
-.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-    background: var(--morado) !important;
-    border: 1px solid var(--dorado) !important;
-    color: #fff !important;
-}
-
-/* Botones de exportación pequeños, en una fila flexible */
-.dataTables_wrapper .dt-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 10px;
-}
-
-.dataTables_wrapper .dt-buttons .dt-button {
-    padding: 5px 10px !important;
-    margin: 0 !important;
-    border: 1px solid var(--dorado) !important;
-    border-radius: 6px !important;
-    background: var(--morado) !important;
-    color: #fff !important;
-    font-size: 11px !important;
-    line-height: 1.3 !important;
-}
-
-/* No aumentar tipografía en tablet o celular */
-@media (max-width: 768px) {
-    .dataTables_wrapper {
-        font-size: 11px !important;
+    /* Contenedor de las tablas */
+    .section-card {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
     }
 
-    .dataTables_wrapper table.dataTable thead th,
-    .data-table thead th {
-        padding: 7px 8px !important;
-        font-size: 10.5px !important;
+    .section-card .dataTables_wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        overflow: visible !important;
     }
 
-    .dataTables_wrapper table.dataTable tbody td,
-    .data-table tbody td {
-        padding: 7px 8px !important;
-        font-size: 10.5px !important;
+    .dataTables_wrapper .dataTables_scroll,
+    .dataTables_wrapper .dataTables_scrollHead,
+    .dataTables_wrapper .dataTables_scrollBody {
+        max-width: 100% !important;
+    }
+
+    .dataTables_wrapper .dataTables_scrollBody {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Ancho de las tablas */
+    #tablaBarberos,
+    #tablaClientes {
+        min-width: 1100px !important;
+    }
+
+    #tablaServicios {
+        min-width: 950px !important;
+    }
+
+    #tablaProductos {
+        min-width: 650px !important;
+    }
+
+    /* Mantener las columnas legibles */
+    .section-card .dataTables_wrapper table.dataTable th,
+    .section-card .dataTables_wrapper table.dataTable td,
+    .section-card table.data-table th,
+    .section-card table.data-table td {
+        white-space: nowrap !important;
+        padding: 10px 12px !important;
+    }
+
+    /* Evitar que las acciones se compriman */
+    #tablaBarberos td:last-child,
+    #tablaClientes td:last-child,
+    #tablaProductos td:last-child,
+    #tablaServicios td:last-child {
+        min-width: 110px !important;
+        white-space: nowrap !important;
+    }
+
+    /* Controles de DataTables */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        font-size: 11.5px !important;
+        color: var(--texto-secundario) !important;
+    }
+
+    .dataTables_wrapper .dataTables_length select,
+    .dataTables_wrapper .dataTables_filter input {
+        height: 29px !important;
+        padding: 4px 7px !important;
+        border: 1px solid var(--borde-dorado) !important;
+        border-radius: 6px !important;
+        background: var(--bg-body) !important;
+        color: var(--texto-principal) !important;
+    }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (min-width: 481px) and (max-width: 768px) {
+
+    .section-card {
+        padding: 16px !important;
+    }
+
+    #tablaBarberos,
+    #tablaClientes {
+        min-width: 1150px !important;
+    }
+
+    #tablaServicios {
+        min-width: 1000px !important;
+    }
+
+    #tablaProductos {
+        min-width: 700px !important;
+    }
+
+    .section-card .dataTables_wrapper table.dataTable th,
+    .section-card .dataTables_wrapper table.dataTable td,
+    .section-card table.data-table th,
+    .section-card table.data-table td {
+        padding: 11px 13px !important;
+        font-size: 11.5px !important;
+    }
+}
+
+/* =========================================================
+   CELULAR
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .section-card {
+        padding: 12px !important;
+    }
+
+    #tablaBarberos,
+    #tablaClientes {
+        min-width: 1150px !important;
+    }
+
+    #tablaServicios {
+        min-width: 1000px !important;
+    }
+
+    #tablaProductos {
+        min-width: 700px !important;
+    }
+
+    .section-card .dataTables_wrapper table.dataTable th,
+    .section-card .dataTables_wrapper table.dataTable td,
+    .section-card table.data-table th,
+    .section-card table.data-table td {
+        padding: 10px 12px !important;
+        font-size: 11.5px !important;
     }
 
     .dataTables_wrapper .dataTables_length,
     .dataTables_wrapper .dataTables_filter {
         float: none !important;
-        width: 100%;
+        width: 100% !important;
         text-align: left !important;
-        margin: 6px 0 !important;
+        margin: 8px 0 !important;
     }
 
     .dataTables_wrapper .dataTables_filter input {
@@ -1568,186 +1511,14 @@ textarea.form-control {
     .dataTables_wrapper .dataTables_info,
     .dataTables_wrapper .dataTables_paginate {
         float: none !important;
+        width: 100% !important;
         text-align: center !important;
-        width: 100%;
         margin-top: 8px !important;
     }
 
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-        padding: 4px 6px !important;
-        font-size: 10px !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .dataTables_wrapper .dataTables_length select,
-    .dataTables_wrapper .dataTables_filter input {
-        font-size: 10.5px !important;
-        height: 27px !important;
-    }
-
-    .dataTables_wrapper .dt-buttons .dt-button {
-        padding: 5px 8px !important;
-        font-size: 10px !important;
-    }
-}
-
-/* Mantiene columnas legibles; si no caben, se desplaza la tarjeta */
-.section-card {
-    overflow-x: auto !important;
-    overflow-y: visible !important;
-}
-
-#tablaBarberos,
-#tablaClientes,
-#tablaServicios {
-    min-width: 650px !important;
-}
-
-#tablaProductos {
-    min-width: 420px !important;
-}
-
-.dataTables_wrapper {
-    overflow: visible !important;
-}
-
-/* Corrección: evitar que DataTables comprima demasiado las columnas */
-.section-card {
-    min-width: 0 !important;
-    overflow-x: auto !important;
-    overflow-y: visible !important;
-}
-
-.section-card .dataTables_wrapper {
-    width: 100% !important;
-    min-width: 0 !important;
-}
-
-.section-card .dataTables_wrapper .dataTables_scroll,
-.section-card .dataTables_wrapper .dataTables_scrollHead,
-.section-card .dataTables_wrapper .dataTables_scrollBody {
-    width: 100% !important;
-    max-width: 100% !important;
-}
-
-.section-card .dataTables_wrapper table.dataTable,
-.section-card table.data-table {
-    width: 100% !important;
-    min-width: 100% !important;
-    table-layout: auto !important;
-}
-
-/* Anchos mínimos por tabla para que los textos y acciones respiren */
-#tablaBarberos,
-#tablaClientes {
-    min-width: 1050px !important;
-}
-
-#tablaServicios {
-    min-width: 850px !important;
-}
-
-#tablaProductos {
-    min-width: 560px !important;
-}
-
-.section-card .dataTables_wrapper table.dataTable th,
-.section-card .dataTables_wrapper table.dataTable td,
-.section-card table.data-table th,
-.section-card table.data-table td {
-    white-space: nowrap !important;
-    padding: 10px 12px !important;
-}
-
-/* Las columnas largas pueden ocupar varias líneas */
-#tablaBarberos td:nth-child(5),
-#tablaClientes td:nth-child(4),
-#tablaServicios td:nth-child(3),
-#tablaServicios td:nth-child(4) {
-    white-space: normal !important;
-    min-width: 150px;
-    overflow-wrap: anywhere;
-}
-
-/* No dejar que la columna de acciones se encoja */
-#tablaBarberos td:last-child,
-#tablaClientes td:last-child,
-#tablaProductos td:last-child,
-#tablaServicios td:last-child {
-    min-width: 110px !important;
-    white-space: nowrap !important;
-}
-
-@media (max-width: 768px) {
-    #tablaBarberos,
-    #tablaClientes {
-        min-width: 950px !important;
-    }
-
-    #tablaServicios {
-        min-width: 780px !important;
-    }
-
-    #tablaProductos {
-        min-width: 520px !important;
-    }
-
-    .section-card .dataTables_wrapper table.dataTable th,
-    .section-card .dataTables_wrapper table.dataTable td,
-    .section-card table.data-table th,
-    .section-card table.data-table td {
-        padding: 9px 10px !important;
-    }
-}
-
-/* Ajuste final: tablas un poco más amplias y con texto más cómodo */
-.section-card .dataTables_wrapper table.dataTable,
-.section-card table.data-table {
-    font-size: 12px !important;
-    min-width: max-content !important;
-}
-
-#tablaBarberos,
-#tablaClientes {
-    min-width: 1250px !important;
-}
-
-#tablaServicios {
-    min-width: 1000px !important;
-}
-
-#tablaProductos {
-    min-width: 650px !important;
-}
-
-.section-card .dataTables_wrapper table.dataTable th,
-.section-card .dataTables_wrapper table.dataTable td,
-.section-card table.data-table th,
-.section-card table.data-table td {
-    padding: 11px 14px !important;
-    font-size: 12px !important;
-}
-
-@media (max-width: 768px) {
-    #tablaBarberos,
-    #tablaClientes {
-        min-width: 1150px !important;
-    }
-
-    #tablaServicios {
-        min-width: 900px !important;
-    }
-
-    #tablaProductos {
-        min-width: 600px !important;
-    }
-
-    .section-card .dataTables_wrapper table.dataTable th,
-    .section-card .dataTables_wrapper table.dataTable td,
-    .section-card table.data-table th,
-    .section-card table.data-table td {
-        padding: 10px 12px !important;
-        font-size: 11.5px !important;
+    .dataTables_wrapper .dt-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
     }
 }
