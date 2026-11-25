@@ -110,7 +110,7 @@ class AuthModel
     public function getUserById($id)
     {
         $stmt = $this->db->prepare("
-            SELECT id_usuario, nombre, apellido, telefono, correo, id_rol
+            SELECT id_usuario, nombre, apellido, telefono, correo, foto, id_rol
             FROM usuarios
             WHERE id_usuario = :id
             LIMIT 1

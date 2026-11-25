@@ -4,11 +4,9 @@ if (!isset($_SESSION['id'])) {
     exit;
 }
 
-$servicios        = $servicios ?? [];
-$barberos         = $barberos ?? [];
-$productos        = $productos ?? [];
-$promosServicios  = $promosServicios ?? [];
-$promosProductos  = $promosProductos ?? [];
+$servicios = $servicios ?? [];
+$barberos  = $barberos ?? [];
+$productos = $productos ?? [];
 
 $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/avatar.png';
 ?>
@@ -42,18 +40,14 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
             <!-- SERVICIO -->
             <div class="form-group">
                 <label for="servicio">Servicio Principal</label>
-                <select name="servicio" id="servicio" required onchange="verificarPromoServicio(this)">
+                <select name="servicio" id="servicio" required onchange="actualizarPrecioServicio(this)">
                     <option value="">Seleccione un servicio...</option>
                     <?php foreach ($servicios as $servicio):
                         $idServ = $servicio['id_servicio'];
-                        $hasPromo = isset($promosServicios[$idServ]);
-                        $desc = $hasPromo ? $promosServicios[$idServ]['descuento'] : 0;
                     ?>
                         <option value="<?= htmlspecialchars($idServ) ?>"
-                            data-precio="<?= htmlspecialchars($servicio['precio']) ?>"
-                            data-descuento="<?= $desc ?>">
+                            data-precio="<?= htmlspecialchars($servicio['precio']) ?>">
                             <?= htmlspecialchars($servicio['nombre']) ?> - $<?= number_format($servicio['precio'], 0, ',', '.') ?>
-                            <?= $hasPromo ? " ({$desc}% OFF)" : '' ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -87,7 +81,7 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
                 <input type="hidden" name="hora" id="hora" required>
             </div>
 
-            <!-- CAMPOS OCULTOS DE PROMOCIONES Y PRODUCTOS -->
+            <!-- CAMPOS OCULTOS DE SERVICIO Y PRODUCTOS -->
             <input type="hidden" name="precio_servicio_final" id="precio_servicio_final">
             <input type="hidden" name="productos_seleccionados" id="productos_seleccionados" value="">
 
@@ -95,32 +89,57 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
 
         </form>
 
+        <!-- MODAL DE RESEÑAS DEL BARBERO -->
+        <div id="modalResenasBarbero" class="modal-resenas-overlay">
+
+            <div class="modal-resenas-content">
+
+                <button type="button"
+                    class="cerrar-modal-resenas"
+                    id="cerrarModalResenas">
+                    ×
+                </button>
+
+                <div id="contenidoResenasBarbero">
+
+                    <p class="cargando-resenas">
+                        Cargando información del barbero...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
         <!-- SECCIÓN BARBEROS DISPONIBLES (5 DÍAS) -->
         <div class="seccion-barberos">
             <h2 class="titulo-seccion-barberos">💈 Barberos Disponibles</h2>
 
             <div class="grid-barberos">
                 <?php if (!empty($barberos)): ?>
-                    
+
                     <?php foreach ($barberos as $barbero): ?>
                         <?php
                         $fotoBD = !empty($barbero['foto']) ? trim($barbero['foto']) : '';
-                        $fotoBarbero = !empty($fotoBD) ? $fotoBD : 'app/public/assets/img/avatar.png';
+                        $fotoBarbero = !empty($fotoBD) ? $fotoBD : 'app/public/assets/img/avatar.jpg';
+                        $nombreBarbero = trim(($barbero['nombre'] ?? '') . ' ' . ($barbero['apellido'] ?? ''));
                         ?>
-                        <div class="tarjeta-barbero">
+                        <div class="tarjeta-barbero"
+                            data-barbero-id="<?= htmlspecialchars($barbero['id_usuario']); ?>"
+                            role="button"
+                            tabindex="0"
+                            aria-label="Ver reseñas de <?= htmlspecialchars(!empty($nombreBarbero) ? $nombreBarbero : $barbero['nombre']); ?>">
                             <div class="avatar-barbero-container">
                                 <img src="<?= htmlspecialchars($fotoBarbero); ?>"
                                     class="avatar-barbero"
                                     alt="Foto de <?= htmlspecialchars($barbero['nombre']); ?>"
-                                    onerror="this.onerror=null; this.src='app/public/assets/img/avatar.png';">
+                                    onerror="this.onerror=null; this.src='app/public/assets/img/avatar.jpg';">
                             </div>
 
                             <div class="info-barbero">
                                 <h3>
-                                    <?php
-                                    $nombreBarbero = trim(($barbero['nombre'] ?? '') . ' ' . ($barbero['apellido'] ?? ''));
-                                    echo !empty($nombreBarbero) ? htmlspecialchars($nombreBarbero) : 'Barbero sin nombre';
-                                    ?>
+                                    <?= !empty($nombreBarbero) ? htmlspecialchars($nombreBarbero) : 'Barbero sin nombre'; ?>
                                 </h3>
 
                                 <?php if (!empty($barbero['telefono'])): ?>
@@ -138,18 +157,6 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
 
         <a href="index.php?controller=gestionCita&action=misCitas">← Volver a mis citas</a>
 
-    </div>
-
-    <!-- MODAL CONFIRMACIÓN PROMO SERVICIO -->
-    <div id="modalPromoServicio" class="modal-producto-overlay">
-        <div class="modal-producto-content">
-            <h2>¡Promoción Disponible!</h2>
-            <p id="textoPromoServicio"></p>
-            <div class="modal-producto-botones">
-                <button type="button" id="btnAplicarPromoServicio" class="btn-producto-si">Sí, aplicar descuento</button>
-                <button type="button" id="btnRechazarPromoServicio" class="btn-producto-no">No, precio normal</button>
-            </div>
-        </div>
     </div>
 
     <!-- MODAL PREGUNTA PRODUCTO -->
@@ -172,21 +179,17 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
             <div id="listaProductos">
                 <?php foreach ($productos as $prod):
                     $idProd = $prod['id_producto'];
-                    $hasPromo = isset($promosProductos[$idProd]);
-                    $desc = $hasPromo ? $promosProductos[$idProd]['descuento'] : 0;
                 ?>
-                    <div class="item-producto">
+                    <label class="item-producto">
                         <input type="checkbox" class="chk-producto"
-                            value="<?= $idProd ?>"
-                            data-precio-orig="<?= $prod['precio'] ?>"
-                            data-descuento="<?= $desc ?>"
+                            value="<?= htmlspecialchars($idProd) ?>"
+                            data-precio-orig="<?= htmlspecialchars($prod['precio']) ?>"
                             data-nombre="<?= htmlspecialchars($prod['nombre']) ?>">
                         <span class="nombre-producto"><?= htmlspecialchars($prod['nombre']) ?></span>
                         <span class="precio-producto">
                             $<?= number_format($prod['precio'], 0, ',', '.') ?>
-                            <?= $hasPromo ? " ({$desc}% OFF)" : '' ?>
                         </span>
-                    </div>
+                    </label>
                 <?php endforeach; ?>
             </div>
             <div class="modal-producto-botones">
@@ -230,78 +233,18 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
     <!-- ========================================== -->
 
     <script>
-        let precioServicioBase = 0;
-
-        function verificarPromoServicio(select) {
+        function actualizarPrecioServicio(select) {
             const option = select.options[select.selectedIndex];
-            if (!option.value) return;
+            const precioInput = document.getElementById('precio_servicio_final');
 
-            precioServicioBase = parseFloat(option.getAttribute('data-precio'));
-            const descuento = parseFloat(option.getAttribute('data-descuento'));
-
-            if (descuento > 0) {
-                const precioConDesc = precioServicioBase * (1 - (descuento / 100));
-                document.getElementById('textoPromoServicio').innerText =
-                    `Este servicio tiene un descuento del ${descuento}%. El precio bajará de $${precioServicioBase.toLocaleString()} a $${precioConDesc.toLocaleString()}. ¿Desea aplicarlo?`;
-
-                document.getElementById('modalPromoServicio').style.display = 'flex';
-
-                document.getElementById('btnAplicarPromoServicio').onclick = function() {
-                    document.getElementById('precio_servicio_final').value = precioConDesc;
-                    document.getElementById('modalPromoServicio').style.display = 'none';
-                };
-
-                document.getElementById('btnRechazarPromoServicio').onclick = function() {
-                    document.getElementById('precio_servicio_final').value = precioServicioBase;
-                    document.getElementById('modalPromoServicio').style.display = 'none';
-                };
-            } else {
-                document.getElementById('precio_servicio_final').value = precioServicioBase;
+            if (!option || !option.value) {
+                precioInput.value = '';
+                return;
             }
+
+            const precioBase = parseFloat(option.getAttribute('data-precio')) || 0;
+            precioInput.value = precioBase;
         }
-
-        // Modal Productos
-        document.getElementById('btnSiProducto').onclick = function() {
-            document.getElementById('modalProducto').style.display = 'none';
-            document.getElementById('modalProductos').style.display = 'flex';
-        };
-
-        document.getElementById('btnNoProducto').onclick = function() {
-            document.getElementById('modalProducto').style.display = 'none';
-            document.getElementById('formAgendar').submit();
-        };
-
-        document.getElementById('btnContinuarProducto').onclick = function() {
-            const seleccionados = [];
-            const checkboxes = document.querySelectorAll('.chk-producto:checked');
-
-            checkboxes.forEach(chk => {
-                const idProd = chk.value;
-                const desc = parseFloat(chk.getAttribute('data-descuento'));
-                const precioOrig = parseFloat(chk.getAttribute('data-precio-orig'));
-
-                let aplicarDesc = true;
-                if (desc > 0) {
-                    aplicarDesc = confirm(`El producto "${chk.getAttribute('data-nombre')}" tiene un ${desc}% de descuento. ¿Desea aplicarlo?`);
-                }
-
-                const precioFinal = (aplicarDesc && desc > 0) ? precioOrig * (1 - (desc / 100)) : precioOrig;
-
-                seleccionados.push({
-                    id_producto: idProd,
-                    cantidad: 1,
-                    precio_aplicado: precioFinal
-                });
-            });
-
-            document.getElementById('productos_seleccionados').value = JSON.stringify(seleccionados);
-            document.getElementById('modalProductos').style.display = 'none';
-            document.getElementById('formAgendar').submit();
-        };
-
-        document.getElementById('btnCancelarProducto').onclick = function() {
-            document.getElementById('modalProductos').style.display = 'none';
-        };
     </script>
 
     <script>
@@ -341,9 +284,9 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
                     const duracion = data.duracion;
 
                     horariosDisponibles.innerHTML = `
-                    <p style="color:green;">🟢 Horario del barbero: <strong>${inicio}</strong> a <strong>${fin}</strong></p>
-                    <div id="listaHoras"></div>
-                `;
+                        <p style="color:green;">🟢 Horario del barbero: <strong>${inicio}</strong> a <strong>${fin}</strong></p>
+                        <div id="listaHoras"></div>
+                    `;
 
                     generarHoras(inicio, fin, duracion, data.ocupadas);
                 })
@@ -452,6 +395,10 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
                 return;
             }
 
+            if (!document.getElementById('precio_servicio_final').value) {
+                actualizarPrecioServicio(servicio);
+            }
+
             modalProducto.style.display = 'flex';
         });
 
@@ -473,32 +420,18 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
 
             checkboxes.forEach(chk => {
                 const idProd = chk.value;
-                const desc = parseFloat(chk.getAttribute('data-descuento')) || 0;
                 const precioOrig = parseFloat(chk.getAttribute('data-precio-orig')) || 0;
-                const nombre = chk.getAttribute('data-nombre');
-
-                // 1️⃣ Leemos si es 'producto' o 'servicio'
-                const tipo = chk.getAttribute('data-tipo') || 'producto';
-
-                let aplicarDesc = true;
-
-                // 2️⃣ Usamos la variable "tipo" en el confirm
-                if (desc > 0) {
-                    aplicarDesc = confirm(`Este ${tipo} "${nombre}" tiene una promoción del ${desc}%. ¿Desea aplicarla?`);
-                }
-
-                const precioFinal = (aplicarDesc && desc > 0) ? precioOrig * (1 - (desc / 100)) : precioOrig;
 
                 seleccionados.push({
                     id_producto: idProd,
                     cantidad: 1,
-                    precio_aplicado: precioFinal
+                    precio_aplicado: precioOrig
                 });
             });
 
-            document.getElementById('productos_seleccionados').value = JSON.stringify(seleccionados);
-            document.getElementById('modalProductos').style.display = 'none';
-            document.getElementById('formAgendar').submit();
+            productosInput.value = JSON.stringify(seleccionados);
+            modalProductos.style.display = 'none';
+            formulario.submit();
         };
 
         btnCancelarProducto.addEventListener('click', function() {
@@ -506,7 +439,7 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
             modalProducto.style.display = 'flex';
         });
 
-        // 6. CARGAR PRODUCTOS DESDE LA BD CON LA ESTRUCTURA CORRECTA
+        // 6. CARGAR PRODUCTOS DESDE LA BD
         function cargarProductos() {
             listaProductos.innerHTML = `<p style="text-align:center; color:#ccc;">Cargando productos...</p>`;
 
@@ -521,22 +454,18 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
                     }
 
                     productos.forEach(producto => {
-                        const desc = producto.descuento || 0; // Si el endpoint envía el % de descuento
                         const label = document.createElement('label');
                         label.className = 'item-producto';
                         label.innerHTML = `
-                    <input type="checkbox" class="chk-producto" name="productoSeleccionado" 
-                           value="${producto.id_producto}"
-                           data-tipo="producto"
-                           data-precio-orig="${producto.precio}"
-                           data-descuento="${desc}"
-                           data-nombre="${producto.nombre}">
-                    <span class="nombre-producto">${producto.nombre}</span>
-                    <span class="precio-producto">
-                        $${Number(producto.precio).toLocaleString('es-CO')}
-                        ${desc > 0 ? ` (${desc}% OFF)` : ''}
-                    </span>
-                `;
+                            <input type="checkbox" class="chk-producto" name="productoSeleccionado" 
+                                   value="${producto.id_producto}"
+                                   data-precio-orig="${producto.precio}"
+                                   data-nombre="${producto.nombre}">
+                            <span class="nombre-producto">${producto.nombre}</span>
+                            <span class="precio-producto">
+                                $${Number(producto.precio).toLocaleString('es-CO')}
+                            </span>
+                        `;
                         listaProductos.appendChild(label);
                     });
                 })
@@ -545,6 +474,172 @@ $foto = !empty($_SESSION['foto']) ? $_SESSION['foto'] : 'app/public/assets/img/a
                     listaProductos.innerHTML = `<p style="color:red; text-align:center;">❌ Error al cargar los productos.</p>`;
                 });
         }
+    </script>
+
+    <script>
+        const tarjetasBarberos = document.querySelectorAll('.tarjeta-barbero');
+        const modalResenas = document.getElementById('modalResenasBarbero');
+        const cerrarModalResenas = document.getElementById('cerrarModalResenas');
+        const contenidoResenas = document.getElementById('contenidoResenasBarbero');
+
+        function escaparHTML(texto) {
+            const elemento = document.createElement('div');
+            elemento.textContent = texto ?? '';
+            return elemento.innerHTML;
+        }
+
+        function generarEstrellas(calificacion) {
+            const valor = Math.max(0, Math.min(5, Number(calificacion) || 0));
+            const llenas = Math.round(valor);
+
+            return '★'.repeat(llenas) + '☆'.repeat(5 - llenas);
+        }
+
+        function abrirModalResenas(idBarbero) {
+
+            modalResenas.style.display = 'flex';
+
+            contenidoResenas.innerHTML = `
+                <p class="cargando-resenas">
+                    Cargando reseñas del barbero...
+                </p>
+            `;
+
+            fetch(`index.php?controller=resena&action=obtenerResenasBarbero&id=${encodeURIComponent(idBarbero)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al consultar las reseñas.');
+                    }
+
+                    return response.json();
+                })
+                .then(data => {
+
+                    if (!data.success) {
+                        throw new Error(data.mensaje || 'No se pudo obtener la información.');
+                    }
+
+                    const barbero = data.barbero;
+                    const resenas = data.resenas;
+
+                    let contenidoLista = '';
+
+                    if (resenas.length > 0) {
+
+                        contenidoLista = resenas.map(resena => {
+
+                            const comentario = resena.comentario ?
+                                escaparHTML(resena.comentario) :
+                                'El cliente no dejó un comentario.';
+
+                            return `
+                                <div class="resena-item">
+
+                                    <h4>${escaparHTML(resena.nombre_cliente || 'Cliente')}</h4>
+
+                                    <div class="estrellas-resenas">
+                                        ${generarEstrellas(resena.calificacion)}
+                                    </div>
+
+                                    <p class="comentario-resena">
+                                        ${comentario}
+                                    </p>
+
+                                    <span class="fecha-resena">
+                                        ${escaparHTML(resena.fecha || '')}
+                                    </span>
+
+                                </div>
+                            `;
+
+                        }).join('');
+
+                    } else {
+
+                        contenidoLista = `
+                            <p class="sin-resenas">
+                                Este barbero todavía no tiene reseñas.
+                                ¡Sé el primero en calificar su servicio!
+                            </p>
+                        `;
+
+                    }
+
+                    contenidoResenas.innerHTML = `
+
+                        <div class="perfil-resenas">
+
+                            <h2>${escaparHTML(barbero.nombre)}</h2>
+
+                            <div class="promedio-resenas">
+                                ${Number(barbero.promedio).toFixed(1)}
+                            </div>
+
+                            <div class="estrellas-resenas">
+                                ${generarEstrellas(barbero.promedio)}
+                            </div>
+
+                            <p>
+                                ${barbero.total} reseña(s)
+                            </p>
+
+                        </div>
+
+                        <h3 class="titulo-lista-resenas">
+                            Reseñas de clientes
+                        </h3>
+
+                        <div class="lista-resenas">
+                            ${contenidoLista}
+                        </div>
+
+                    `;
+
+                })
+                .catch(error => {
+
+                    console.error(error);
+
+                    contenidoResenas.innerHTML = `
+                        <p class="sin-resenas">
+                            No fue posible cargar las reseñas.
+                            Inténtalo nuevamente.
+                        </p>
+                    `;
+
+                });
+        }
+
+        tarjetasBarberos.forEach(tarjeta => {
+
+            tarjeta.addEventListener('click', function() {
+                abrirModalResenas(this.dataset.barberoId);
+            });
+
+            tarjeta.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    abrirModalResenas(this.dataset.barberoId);
+                }
+            });
+
+        });
+
+        cerrarModalResenas.addEventListener('click', function() {
+            modalResenas.style.display = 'none';
+        });
+
+        modalResenas.addEventListener('click', function(event) {
+            if (event.target === modalResenas) {
+                modalResenas.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                modalResenas.style.display = 'none';
+            }
+        });
     </script>
 
     <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>

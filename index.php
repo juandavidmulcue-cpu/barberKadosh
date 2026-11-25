@@ -18,9 +18,10 @@ session_start();
 $controller = $_GET['controller'] ?? null;
 $action     = $_GET['action'] ?? null;
 
-// 1. Si no se especifica NI controlador NI acción (estamos en la raíz), cargar home.php
 if ($controller === null && $action === null) {
-    require_once 'home.php';
+    require_once 'app/controllers/HomeController.php';
+    $controllerObj = new HomeController();
+    $controllerObj->index();
     exit;
 }
 

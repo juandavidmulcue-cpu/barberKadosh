@@ -12,78 +12,96 @@
 
 <body class="auth-body">
 
-    <div class="auth-container">
+    <div class="auth-wrapper">
 
-        <!-- 🔝 BOTÓN SUPERIOR -->
-        <div class="login-switch">
-            <a href="index.php?controller=auth&action=loginBarbero" class="switch-btn">
-                Barbero
-            </a>
-        </div>
+        <?php if (isset($_GET['mensaje']) && $_GET['mensaje'] === 'login_requerido'): ?>
+            <div class="alerta-login">
+                <div class="alerta-icono">
+                    !
+                </div>
 
-        <h2>Iniciar Sesión</h2>
-        <p class="login-sub">Clientes</p>
-
-        <?php if (isset($error)): ?>
-            <div class="error-msg"><?= $error ?></div>
-        <?php endif; ?>
-
-        <form method="POST" action="index.php?controller=auth&action=loginCliente">
-
-            <div class="form-group">
-                <label>Correo</label>
-                <input type="correo" name="correo" placeholder="Ingresa tu correo" required>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Contraseña</label>
-
-                <div class="campo-password">
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        placeholder="Ingresa tu contraseña"
-                        required>
-
-                    <button
-                        type="button"
-                        class="btn-ojo"
-                        id="btnOjo"
-                        onclick="alternarPassword()"
-                        aria-label="Mostrar contraseña"
-                        title="Mostrar contraseña">
-                        <svg
-                            id="iconoOjo"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="22"
-                            height="22"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
-                            <circle cx="12" cy="12" r="3" />
-                        </svg>
-                    </button>
+                <div class="alerta-contenido">
+                    <strong>¡Inicia sesión para continuar!</strong>
+                    <p>
+                        Debes iniciar sesión para poder agendar una cita con nuestros barberos.
+                    </p>
                 </div>
             </div>
+        <?php endif; ?>
 
-            <button type="submit" class="btn-primary">Entrar</button>
+        <div class="auth-container">
 
-        </form>
+            <!-- 🔝 BOTÓN SUPERIOR -->
+            <div class="login-switch">
+                <a href="index.php?controller=auth&action=loginBarbero" class="switch-btn">
+                    Barbero
+                </a>
+            </div>
 
-        <p class="auth-link">
-            ¿No tienes cuenta?
-            <a href="index.php?controller=auth&action=register">Regístrate</a>
-        </p>
-        <p class="auth-link">
-            <a href="index.php?controller=password&action=resetPassword">¿Olvidaste la contraseña?</a>
-        </p>
-        <a href="index.php?controller=auth&action=logout" class="back-home">← Volver al inicio</a>
+            <h2>Iniciar Sesión</h2>
+            <p class="login-sub">Clientes</p>
 
+            <?php if (isset($error)): ?>
+                <div class="error-msg"><?= $error ?></div>
+            <?php endif; ?>
+
+            <form method="POST" action="index.php?controller=auth&action=loginCliente">
+
+                <div class="form-group">
+                    <label>Correo</label>
+                    <input type="correo" name="correo" placeholder="Ingresa tu correo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+
+                    <div class="campo-password">
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            placeholder="Ingresa tu contraseña"
+                            required>
+
+                        <button
+                            type="button"
+                            class="btn-ojo"
+                            id="btnOjo"
+                            onclick="alternarPassword()"
+                            aria-label="Mostrar contraseña"
+                            title="Mostrar contraseña">
+                            <svg
+                                id="iconoOjo"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">Entrar</button>
+
+            </form>
+
+            <p class="auth-link">
+                ¿No tienes cuenta?
+                <a href="index.php?controller=auth&action=register">Regístrate</a>
+            </p>
+            <p class="auth-link">
+                <a href="index.php?controller=password&action=resetPassword">¿Olvidaste la contraseña?</a>
+            </p>
+            <a href="index.php?controller=auth&action=logout" class="back-home">← Volver al inicio</a>
+
+        </div>
     </div>
 
     <script>
@@ -128,6 +146,23 @@
     </script>
     <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
     <script src="https://files.bpcontent.cloud/2026/05/14/17/20260514174101-A2E9JALD.js" defer></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerta = document.querySelector('.alerta-login');
+
+            if (alerta) {
+                setTimeout(() => {
+                    alerta.classList.add('alerta-ocultar');
+
+                    setTimeout(() => {
+                        alerta.remove();
+                    }, 500);
+
+                }, 3000);
+            }
+        });
+    </script>
 </body>
 
 </html>

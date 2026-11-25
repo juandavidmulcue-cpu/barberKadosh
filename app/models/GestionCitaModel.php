@@ -341,18 +341,72 @@ class GestionCitaModel
 
     public function finalizarReserva($idReserva, $idCliente)
     {
-        $sql = "UPDATE reservacion
-            SET estado = 'Completada'
-            WHERE id_reservacion = :id
-            AND id_cliente = :cliente
-            AND estado = 'Pendiente'";
+        try {
+            $this->db->beginTransaction();
 
-        $stmt = $this->db->prepare($sql);
+            // 1. Marcar como 'Completada' solo si estaba en 'Pendiente'
+            $sql = "UPDATE reservacion
+                SET estado = 'Completada'
+                WHERE id_reservacion = :id
+                  AND id_cliente = :cliente
+                  AND estado = 'Pendiente'";
 
-        return $stmt->execute([
-            ':id' => $idReserva,
-            ':cliente' => $idCliente
-        ]);
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                ':id'      => $idReserva,
+                ':cliente' => $idCliente
+            ]);
+
+            // Si no se actualizó ninguna fila (no existe, no es del cliente o ya estaba completada)
+            if ($stmt->rowCount() === 0) {
+                $this->db->rollBack();
+                return false;
+            }
+
+            // 2. Consultar los productos vinculados a la reservación
+            $sqlDetalle = "SELECT id_producto, cantidad
+                       FROM detalle_reservacion
+                       WHERE id_reservacion = :id";
+
+            $stmtDetalle = $this->db->prepare($sqlDetalle);
+            $stmtDetalle->execute([':id' => $idReserva]);
+            $productosReserva = $stmtDetalle->fetchAll(PDO::FETCH_ASSOC);
+
+            // 3. Descontar del stock de cada producto
+            if (!empty($productosReserva)) {
+                $sqlStock = "UPDATE productos
+                         SET stock = stock - :cantidad
+                         WHERE id_producto = :id_producto
+                           AND stock >= :cantidad";
+
+                $stmtStock = $this->db->prepare($sqlStock);
+
+                foreach ($productosReserva as $item) {
+                    $cantidad   = (int) $item['cantidad'];
+                    $idProducto = $item['id_producto'];
+
+                    $stmtStock->execute([
+                        ':cantidad'    => $cantidad,
+                        ':id_producto' => $idProducto
+                    ]);
+
+                    // Si no hay stock suficiente para completar la venta del producto, revertimos
+                    if ($stmtStock->rowCount() === 0) {
+                        $this->db->rollBack();
+                        return false;
+                    }
+                }
+            }
+
+            $this->db->commit();
+            return true;
+        } catch (Throwable $e) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            error_log("Error en finalizarReserva ({$idReserva}): " . $e->getMessage());
+            return false;
+        }
     }
 
     /* =========================================

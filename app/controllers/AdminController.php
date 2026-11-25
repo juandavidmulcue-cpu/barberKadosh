@@ -5,7 +5,6 @@ require_once 'app/models/AdminModel.php';
 require_once 'app/models/GestionProductoModel.php';
 require_once 'app/models/ServicioModel.php';
 require_once 'app/models/HorarioModel.php';
-require_once 'app/models/PromocionModel.php';
 
 class AdminController extends Controller
 {
@@ -13,7 +12,6 @@ class AdminController extends Controller
     private $productoModel;
     private $servicioModel;
     private $horarioModel;
-    private $promocionModel;
 
     public function __construct()
     {
@@ -26,7 +24,6 @@ class AdminController extends Controller
         $this->productoModel = new GestionProductoModel();
         $this->servicioModel = new ServicioModel();
         $this->horarioModel  = new HorarioModel(Database::conectar());
-        $this->promocionModel = new PromocionModel();
     }
 
     /* =========================
@@ -40,7 +37,6 @@ class AdminController extends Controller
         $productos   = $this->productoModel->obtenerProductos();
         $servicios   = $this->servicioModel->obtenerServicios();
         $horarios    = $this->horarioModel->obtenerHorarios();
-        $promociones = $this->promocionModel->obtenerTodas(); // 4. Consulta de las promociones
 
         $servicioEditar = null;
 
@@ -57,7 +53,6 @@ class AdminController extends Controller
             'productos'      => $productos,
             'servicios'      => $servicios,
             'horarios'       => $horarios,
-            'promociones'    => $promociones, // 5. Se pasa la variable a la vista
             'servicioEditar' => $servicioEditar,
             'panelActivo'    => $panelActivo
         ]);

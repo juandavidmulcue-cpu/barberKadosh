@@ -195,14 +195,14 @@ class GestionPerfilBarberoModel
        TOTAL DE RESERVACIONES
     ========================== */
 
+
+
     public function obtenerTotalReservas($idBarbero)
     {
-        $sql = "SELECT
-                    COUNT(*) AS total
-
-                FROM reservacion
-
-                WHERE id_barbero = ?";
+        $sql = "SELECT COUNT(*) AS total
+            FROM reservacion
+            WHERE id_barbero = ?
+            AND estado = 'Pendiente'";
 
         $stmt = $this->db->prepare($sql);
 
@@ -212,8 +212,9 @@ class GestionPerfilBarberoModel
 
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $resultado['total'] ?? 0;
+        return (int) ($resultado['total'] ?? 0);
     }
+
 
 
     /* =========================

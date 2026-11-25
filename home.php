@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kadosh Barber Shop</title>
+    <title>Barber Kadosh</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="app/public/css/global.css">
@@ -49,7 +49,6 @@
                     Aquí, tu imagen no se improvisa: se diseña con precisión y se ejecuta con maestría.
                 </p>
 
-                <a href="index.php?controller=auth&action=loginCliente" class="btn-primary">Agendar cita</a>
             </div>
         </section>
 
@@ -75,9 +74,68 @@
             </div>
         </section>
 
-
-
     </section>
+
+    <!-- ===== TOP 2 BARBEROS DESDE BD ===== -->
+    <?php if (!empty($topBarberos)): ?>
+        <section class="top-barbers-section">
+            <div class="top-barbers-header">
+                <p class="hero-eyebrow">⭐ Los mejor calificados</p>
+                <h2 class="section-title">Nuestros Barberos Destacados</h2>
+                <p class="section-subtitle">
+                    Conoce a los dos profesionales con mejor promedio y reseñas de nuestros clientes.
+                </p>
+            </div>
+
+            <div class="top-barbers-grid">
+                <?php foreach ($topBarberos as $index => $barbero): ?>
+                    <?php
+                    $etiquetaTop = $index === 0 ? '#1 Mejor Promedio' : 'Top 2';
+                    $nombre = htmlspecialchars($barbero['nombre_barbero'] ?? 'Barbero', ENT_QUOTES, 'UTF-8');
+                    $promedio = htmlspecialchars($barbero['promedio_estrellas'] ?? '5.0', ENT_QUOTES, 'UTF-8');
+                    $estrellasHtml = $barbero['estrellas_html'] ?? '★★★★★';
+                    $fotoUrl = $barbero['foto_url'] ?? 'app/public/assets/img/logo1.jpeg';
+                    $totalResenas = (int) ($barbero['total_resenas'] ?? 0);
+                    $textoResenas = $totalResenas === 1 ? '1 reseña' : $totalResenas . ' reseñas';
+                    $comentario = !empty($barbero['ultima_resena'])
+                        ? htmlspecialchars($barbero['ultima_resena'], ENT_QUOTES, 'UTF-8')
+                        : 'Excelente servicio y atención personalizada en Kadosh Barber Shop.';
+                    $autorResena = !empty($barbero['nombre_cliente_resena'])
+                        ? htmlspecialchars($barbero['nombre_cliente_resena'], ENT_QUOTES, 'UTF-8')
+                        : 'Cliente Kadosh';
+                    ?>
+                    <article class="barber-card">
+                        <div class="barber-card-top">
+                            <img
+                                src="<?= $fotoUrl ?>"
+                                alt="Fotografía de <?= $nombre ?>"
+                                class="barber-avatar"
+                                onerror="this.onerror=null; this.src='app/public/assets/img/logo1.jpeg';">
+                            <div class="barber-meta">
+                                <span class="barber-badge"><?= $etiquetaTop ?></span>
+                                <h3 class="barber-name"><?= $nombre ?></h3>
+                                <div class="barber-rating" aria-label="Promedio <?= $promedio ?> de 5 estrellas">
+                                    <span class="stars"><?= $estrellasHtml ?></span>
+                                    <strong class="rating-score"><?= $promedio ?></strong>
+                                    <span class="review-count">(<?= $textoResenas ?>)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <blockquote class="barber-review">
+                            “<?= $comentario ?>”
+                            <cite>— <?= $autorResena ?></cite>
+                        </blockquote>
+
+                        <a href="index.php?controller=auth&action=loginCliente&mensaje=login_requerido"
+                            class="btn btn-outline barber-cta">
+                            Agendar con <?= $nombre ?>
+                        </a>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </section>
+    <?php endif; ?>
 
     <!-- ===== INFO ABAJO ===== -->
     <section class="info-section">

@@ -17,7 +17,8 @@
    CONTENEDOR PRINCIPAL EN 2 COLUMNAS
    ========================================= */
 .container {
-    max-width: 1100px; /* Ampliado para acomodar dos columnas con espacio */
+    max-width: 1100px;
+    /* Ampliado para acomodar dos columnas con espacio */
     margin: 40px auto;
     padding: 35px;
     background: rgba(13, 13, 13, 0.88);
@@ -27,7 +28,7 @@
         0 0 25px rgba(0, 0, 0, 0.7),
         0 0 35px rgba(75, 42, 107, 0.45);
     backdrop-filter: blur(10px);
-    
+
     /* Layout Flex para organizar las 2 secciones */
     display: flex;
     flex-wrap: wrap;
@@ -36,11 +37,289 @@
     gap: 30px;
 }
 
+/* =====================================
+   MODAL DE RESEÑAS DE BARBEROS (NEGRO + MORADO OSCURO + DORADO)
+===================================== */
+
+.tarjeta-barbero {
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.tarjeta-barbero:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.65),
+        0 0 14px rgba(212, 175, 55, 0.16);
+    border-color: rgba(212, 175, 55, 0.65);
+}
+
+.tarjeta-barbero:focus-visible {
+    outline: 2px solid var(--dorado);
+    outline-offset: 3px;
+}
+
+/* Fondo detras del modal: negro profundo con leve tinte morado */
+.modal-resenas-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(4, 3, 7, 0.88);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+}
+
+.modal-resenas-overlay.activo,
+.modal-resenas-overlay[style*="display: flex"],
+.modal-resenas-overlay[style*="display:flex"] {
+    display: flex !important;
+}
+
+/* Contenedor principal: predominio negro, morado bien oscuro y detalle dorado */
+.modal-resenas-content {
+    position: relative;
+    width: 100%;
+    max-width: 650px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 34px 30px 30px;
+    border-radius: 22px;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(56, 22, 89, 0.36), transparent 62%),
+        linear-gradient(165deg, #160c21 0%, #0d0914 48%, #07060a 100%);
+    border: 1px solid rgba(212, 175, 55, 0.38);
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.88),
+        0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+    animation: aparecerModalResenas 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Linea dorada superior sobria */
+.modal-resenas-content::before {
+    content: "";
+    position: sticky;
+    top: -34px;
+    display: block;
+    height: 2.5px;
+    margin: -34px -30px 20px;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(212, 175, 55, 0.55),
+            var(--dorado),
+            rgba(212, 175, 55, 0.55),
+            transparent);
+}
+
+/* Scrollbar discreto en negro, morado oscuro y dorado */
+.modal-resenas-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-resenas-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+}
+
+.modal-resenas-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #3b185e, rgba(212, 175, 55, 0.75));
+    border-radius: 10px;
+}
+
+@keyframes aparecerModalResenas {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Boton cerrar */
+.cerrar-modal-resenas {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    background: rgba(22, 12, 33, 0.9);
+    color: var(--dorado);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.cerrar-modal-resenas:hover {
+    background: var(--dorado);
+    border-color: var(--dorado);
+    color: #09070c;
+    transform: rotate(90deg);
+    box-shadow: 0 0 14px rgba(212, 175, 55, 0.28);
+}
+
+/* Encabezado / Perfil del barbero */
+.perfil-resenas {
+    text-align: center;
+    padding: 18px 20px 22px;
+    margin-bottom: 24px;
+    border-radius: 16px;
+    background: linear-gradient(150deg, rgba(43, 17, 69, 0.42), rgba(11, 9, 16, 0.85));
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.perfil-resenas img {
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    border: 2.5px solid var(--dorado);
+    padding: 3px;
+    background: #120b1a;
+    margin-bottom: 14px;
+    box-shadow:
+        0 0 0 3px rgba(59, 24, 94, 0.45),
+        0 8px 22px rgba(0, 0, 0, 0.7);
+}
+
+.perfil-resenas h2 {
+    color: #f7f4fa;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 10px;
+}
+
+.promedio-resenas {
+    display: inline-block;
+    color: var(--dorado);
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    margin-bottom: 4px;
+}
+
+.estrellas-resenas {
+    display: block;
+    color: var(--dorado);
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+}
+
+/* Titulo de la lista */
+.titulo-lista-resenas {
+    color: #e7dff0;
+    font-size: 1.02rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    margin: 0 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.22);
+}
+
+/* Lista de resenas */
+.lista-resenas {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.resena-item {
+    position: relative;
+    padding: 15px 18px;
+    border-radius: 14px;
+    background: linear-gradient(150deg,
+            rgba(34, 14, 56, 0.48),
+            rgba(10, 8, 14, 0.92));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-left: 3px solid rgba(212, 175, 55, 0.75);
+    transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+}
+
+.resena-item:hover {
+    transform: translateX(3px);
+    border-color: rgba(212, 175, 55, 0.35);
+    border-left-color: var(--dorado);
+    background: linear-gradient(150deg,
+            rgba(48, 20, 79, 0.55),
+            rgba(13, 10, 18, 0.95));
+}
+
+.resena-item h4 {
+    color: #ffffff;
+    font-size: 0.96rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+}
+
+.resena-item .fecha-resena {
+    display: inline-block;
+    color: #a499b3;
+    font-size: 0.78rem;
+}
+
+.resena-item .comentario-resena {
+    color: #dfd8e8;
+    font-size: 0.9rem;
+    margin: 10px 0 0;
+    line-height: 1.6;
+}
+
+.sin-resenas,
+.cargando-resenas {
+    color: #cfc6dc;
+    font-size: 0.92rem;
+    text-align: center;
+    padding: 26px 14px;
+    margin: 0;
+    border-radius: 14px;
+    background: rgba(28, 12, 46, 0.35);
+    border: 1px dashed rgba(212, 175, 55, 0.25);
+}
+
+@media (max-width: 500px) {
+    .modal-resenas-content {
+        padding: 28px 18px 22px;
+        border-radius: 18px;
+    }
+
+    .cerrar-modal-resenas {
+        top: 12px;
+        right: 12px;
+        width: 34px;
+        height: 34px;
+        font-size: 20px;
+    }
+
+    .perfil-resenas img {
+        width: 90px;
+        height: 90px;
+    }
+
+    .perfil-resenas h2 {
+        font-size: 1.22rem;
+    }
+}
+
 /* =========================================
    TÍTULO Y ENLACE DE VOLVER
    ========================================= */
 .container h1 {
-    width: 100%; /* Ocupa todo el ancho superior */
+    width: 100%;
+    /* Ocupa todo el ancho superior */
     text-align: center;
     color: var(--dorado);
     font-size: 30px;
@@ -51,7 +330,7 @@
 }
 
 /* Alerta de error si aplica */
-.container > div[style*="background"] {
+.container>div[style*="background"] {
     width: 100%;
     background: rgba(255, 0, 0, 0.12) !important;
     color: #ffaaaa !important;
@@ -63,7 +342,8 @@
    COLUMNA IZQUIERDA: FORMULARIO AGENDAR
    ========================================= */
 form#formAgendar {
-    flex: 1 1 480px; /* Ancho base para la columna izquierda */
+    flex: 1 1 480px;
+    /* Ancho base para la columna izquierda */
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -130,7 +410,7 @@ input[type="date"] {
     border-radius: 15px;
 }
 
-#horariosDisponibles > p {
+#horariosDisponibles>p {
     margin: 0;
     color: var(--gris);
     text-align: center;
@@ -189,7 +469,7 @@ input[type="date"] {
 }
 
 /* Botón Submit */
-form > button[type="submit"] {
+form>button[type="submit"] {
     width: 100%;
     margin-top: 10px;
     padding: 15px;
@@ -205,7 +485,7 @@ form > button[type="submit"] {
     box-shadow: 0 0 15px rgba(75, 42, 107, 0.5);
 }
 
-form > button[type="submit"]:hover {
+form>button[type="submit"]:hover {
     background: linear-gradient(135deg, var(--dorado), #b8941f);
     color: var(--negro);
     transform: translateY(-2px);
@@ -216,10 +496,12 @@ form > button[type="submit"]:hover {
    COLUMNA DERECHA: BARBEROS DISPONIBLES
    ========================================= */
 .seccion-barberos {
-    flex: 1 1 400px; /* Ancho base para la columna derecha */
+    flex: 1 1 400px;
+    /* Ancho base para la columna derecha */
     margin: 0;
     padding-left: 20px;
-    border-left: 1px solid rgba(212, 175, 55, 0.2); /* Separador sutil */
+    border-left: 1px solid rgba(212, 175, 55, 0.2);
+    /* Separador sutil */
 }
 
 .titulo-seccion-barberos {
@@ -324,7 +606,7 @@ form > button[type="submit"]:hover {
 }
 
 /* Enlace inferior centrado */
-.container > a {
+.container>a {
     width: 100%;
     text-align: center;
     margin: 20px auto 0;
@@ -334,7 +616,7 @@ form > button[type="submit"]:hover {
     transition: 0.3s ease;
 }
 
-.container > a:hover {
+.container>a:hover {
     color: var(--dorado);
 }
 
@@ -497,6 +779,7 @@ form > button[type="submit"]:hover {
         opacity: 0;
         transform: scale(0.9);
     }
+
     to {
         opacity: 1;
         transform: scale(1);

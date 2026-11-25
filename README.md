@@ -28,7 +28,7 @@ KADOSH es una **plataforma web de reservas digitales para barberías**, desarrol
 
 La plataforma permite a los clientes **agendar citas de forma personalizada, rápida y autónoma**, así como consultar el perfil profesional y la calificación de cada barbero, facilitando una elección informada.  
 
-A su vez, proporciona a la administración herramientas para **gestionar eficientemente los horarios, los servicios ofrecidos, el historial de clientes y la comunicación de promociones**, mejorando la experiencia del usuario, optimizando la operación diaria y fortaleciendo la fidelización de clientes.
+A su vez, proporciona a la administración herramientas para **gestionar eficientemente los horarios, los servicios ofrecidos, el historial de clientes**, mejorando la experiencia del usuario, optimizando la operación diaria y fortaleciendo la fidelización de clientes.
 
 ---
 
@@ -38,7 +38,6 @@ A su vez, proporciona a la administración herramientas para **gestionar eficien
 - Reservación, cancelación y reagendamiento de citas
 - CRUD completo (crear, actualizar y eliminar) de productos
 - Venta de productos
-- Sistema de promociones
 - Reseñas de servicios
 - Base de datos segura con PDO y sentencias preparadas
 

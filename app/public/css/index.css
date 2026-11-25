@@ -1,206 +1,604 @@
+
+/* =========================================
+   KADOSH BARBER SHOP - INICIO
+   Paleta original: Negro, morado y dorado
+========================================= */
+
 /* =========================
    HEADER
 ========================= */
-.header{
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 60px;
-    border-bottom: 2px solid rgba(255, 196, 0, 0.927);
+    padding: 18px 6%;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.55);
+    background: rgba(5, 3, 8, 0.88);
+    gap: 25px;
 }
 
-.logo{
+.logo {
     display: flex;
     align-items: center;
+    gap: 14px;
+}
+
+.logo-img-circle {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--dorado);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+}
+
+.logo-text {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+.header-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 12px;
 }
 
-.logo-img-circle{
-    width: 85px;
-    height: 85px;
-    border-radius: 70%;
-    object-fit: cover;
-    border: 2px solid var(--dorado);
-}
-
-.logo-text{
-    font-size: 30px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    color: var(--blanco);
-}
-
-.header-buttons{
-    display: flex;
-    gap: 15px;
-}
-
-.btn{
-    padding: 10px 20px;
+.header-buttons .btn {
+    padding: 11px 19px;
     border-radius: 30px;
     border: 1px solid var(--morado);
-    color: var(--blanco);
-    transition: 0.3s;
+    color: #fff;
+    font-size: 14px;
+    transition: .3s ease;
 }
 
-.btn:hover{
+.header-buttons .btn:hover {
     background: var(--morado);
+    border-color: var(--dorado);
+    transform: translateY(-2px);
 }
 
-.btn-outline{
-    border: 1px solid var(--dorado);
+.header-buttons .btn-outline {
+    border-color: var(--dorado);
 }
 
-.btn-outline:hover{
+.header-buttons .btn-outline:hover {
     background: var(--dorado);
-    color: var(--negro);
+    color: #100b13;
 }
 
 /* =========================
-   HERO + CARRUSEL WRAPPER
+   HERO + CARRUSEL
 ========================= */
-.hero-wrapper{
+.hero-wrapper {
+    width: 100%;
+    max-width: 1450px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 50px;
-    padding: 80px 60px;
+    grid-template-columns: 1fr 1fr;
+    gap: 55px;
+    padding: 85px 6%;
     align-items: center;
 }
 
-/* =========================
-   HERO
-========================= */
-.hero{
-    padding: 0;
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.hero-text{
-    max-width: 520px;
+.hero-text {
+    width: 100%;
+    max-width: 580px;
+    margin: auto;
 }
 
-.hero-eyebrow{
+.hero-eyebrow {
     color: var(--dorado);
-    letter-spacing: 1px;
-    margin-bottom: 15px;
+    letter-spacing: 1.2px;
+    font-size: 14px;
+    margin-bottom: 17px;
 }
 
-.hero-title{
-    font-size: 3rem;
-    line-height: 1.1;
-    margin-bottom: 20px;
+.hero-title {
+    color: #fff;
+    font-size: clamp(36px, 4vw, 55px);
+    line-height: 1.12;
+    margin-bottom: 23px;
+    letter-spacing: -1px;
 }
 
-.hero-title span{
-    color: var(--morado-claro);
+.hero-title span {
+    color: var(--dorado);
 }
 
-.hero-desc{
-    color: var(--gris);
+.hero-desc {
+    color: #d8d8d8;
+    line-height: 1.8;
+    font-size: 16px;
     margin-bottom: 30px;
-    line-height: 1.6;
+}
+
+.hero .btn-primary {
+    display: inline-block;
+    text-decoration: none;
 }
 
 /* =========================
    CARRUSEL
 ========================= */
-.carousel-section{
-    position: relative;
+.carousel-section {
+    width: 100%;
+    min-width: 0;
 }
 
-.carousel-title{
-    margin-bottom: 20px;
+.carousel-title {
     color: var(--dorado);
+    font-size: 25px;
+    margin-bottom: 20px;
+    text-align: left;
 }
 
-.carousel{
+.carousel {
+    width: 100%;
     overflow: hidden;
     border-radius: 20px;
-    border: 1px solid rgba(212,175,55,0.4);
-    position: relative;
+    border: 1px solid rgba(212, 175, 55, .5);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .4);
+    background: #100817;
 }
 
-.carousel-track{
+.carousel-track {
     display: flex;
-    transition: transform 1s ease;
+    transition: transform .8s ease;
 }
 
-.carousel-item{
+.carousel-item {
+    flex: 0 0 100%;
     min-width: 100%;
 }
 
-.carousel-item img{
+.carousel-item img {
+    display: block;
     width: 100%;
     height: 345px;
     object-fit: cover;
-    display: block;
 }
 
-/* =========================
-   INFO ABAJO
-========================= */
-.info-section{
-    padding: 80px 60px;
-}
-
-.info-grid{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 40px;
-}
-
-.card{
-    background: rgba(0,0,0,0.6);
-    border-radius: 20px;
-    padding: 30px;
-    border: 1px solid rgba(213, 167, 14, 0.863);
+/* =========================================
+   BARBEROS DESTACADOS
+========================================= */
+.top-barbers-section {
     position: relative;
+    width: 100%;
+    padding: 85px 6%;
+    background:
+        radial-gradient(ellipse at top, rgba(75, 42, 107, .30), transparent 65%),
+        rgba(5, 3, 8, .45);
+    border-top: 1px solid rgba(212, 175, 55, .18);
+    border-bottom: 1px solid rgba(212, 175, 55, .18);
+    overflow: hidden;
 }
 
-.card::before{
+/* Encabezado centrado */
+.top-barbers-header {
+    text-align: center;
+    max-width: 750px;
+    margin: 0 auto 50px;
+}
+
+.top-barbers-header .hero-eyebrow {
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.top-barbers-header .section-title {
+    color: #fff;
+    font-size: clamp(27px, 3vw, 38px);
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+.top-barbers-header .section-subtitle {
+    color: #c9c1d0;
+    font-size: 15px;
+    line-height: 1.7;
+    text-align: center;
+}
+
+/* Contenedor de tarjetas */
+.top-barbers-grid {
+    width: 100%;
+    max-width: 1050px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 35px;
+    justify-content: center;
+    align-items: stretch;
+}
+
+/* Tarjetas */
+.barber-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-width: 0;
+    padding: 32px;
+    border-radius: 22px;
+
+    /* Se conserva el fondo original */
+    background: linear-gradient(
+        145deg,
+        rgba(27, 12, 39, .98),
+        rgba(8, 7, 11, .98)
+    );
+
+    border: 1px solid rgba(212, 175, 55, .35);
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, .35),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
+
+    transition: transform .3s ease,
+                border-color .3s ease,
+                box-shadow .3s ease;
+
+    overflow: hidden;
+}
+
+/* Detalle dorado superior */
+.barber-card::before {
     content: "";
-    position: certain;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 3px;    
-    background: var(--dorado);
-    border-radius: 20px 20px 0 0;
+    height: 4px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--dorado),
+        #f8e6a0,
+        var(--dorado),
+        transparent
+    );
 }
 
-.card h3{
+.barber-card:hover {
+    transform: translateY(-7px);
+    border-color: var(--dorado);
+
+    box-shadow:
+        0 18px 40px rgba(0, 0, 0, .5),
+        0 0 22px rgba(212, 175, 55, .13);
+}
+
+/* Foto y datos centrados */
+.barber-card-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 15px;
+    min-width: 0;
+    margin-bottom: 25px;
+}
+
+.barber-avatar {
+    display: block;
+    flex: 0 0 112px;
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    border: 3px solid var(--dorado);
+    padding: 3px;
+    background: #170d20;
+    box-shadow: 0 0 18px rgba(212, 175, 55, .2);
+}
+
+.barber-meta {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.barber-badge {
+    display: inline-block;
+    padding: 7px 15px;
+    margin-bottom: 12px;
+    border-radius: 20px;
+    background: rgba(212, 175, 55, .12);
+    border: 1px solid rgba(212, 175, 55, .55);
     color: var(--dorado);
-    margin-bottom: 15px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .7px;
+    text-transform: uppercase;
 }
 
-.card p{
-    color: var(--gris);
-    margin-bottom: 8px;
+.barber-name {
+    color: #fff;
+    font-size: 23px;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    overflow-wrap: anywhere;
+    text-align: center;
 }
+
+.barber-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.barber-rating .stars {
+    color: var(--dorado);
+    font-size: 19px;
+    letter-spacing: 2px;
+    white-space: nowrap;
+}
+
+.rating-score {
+    color: #fff;
+    font-size: 17px;
+}
+
+.review-count {
+    color: #aaa0b2;
+    font-size: 12px;
+}
+
+/* Reseña */
+.barber-review {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin: 0 0 25px;
+    padding: 22px;
+    min-height: 125px;
+    flex: 1;
+
+    background: rgba(255, 255, 255, .035);
+    border: 1px solid rgba(212, 175, 55, .15);
+    border-left: 3px solid var(--dorado);
+    border-radius: 12px;
+
+    color: #e1dce5;
+    font-size: 14px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+.barber-review cite {
+    display: block;
+    margin-top: 13px;
+    color: var(--dorado);
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 600;
+}
+
+/* Botón */
+.barber-cta {
+    display: block;
+    width: 100%;
+    padding: 14px 18px;
+    text-align: center;
+    border: 1px solid var(--dorado);
+    border-radius: 30px;
+    color: var(--dorado);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: .3s ease;
+}
+
+.barber-cta:hover {
+    background: var(--dorado);
+    color: #100b13;
+    box-shadow: 0 0 17px rgba(212, 175, 55, .2);
+}
+
+/* =========================
+   INFORMACIÓN INFERIOR
+========================= */
+.info-section {
+    width: 100%;
+    padding: 75px 6%;
+}
+
+.info-grid {
+    width: 100%;
+    max-width: 1050px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px;
+}
+
+.info-grid .card {
+    position: relative;
+    padding: 32px;
+    text-align: center;
+    background: rgba(9, 1, 16, .85);
+    border: 1px solid rgba(212, 175, 55, .45);
+    border-radius: 18px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .3);
+    overflow: hidden;
+    transition: .3s ease;
+}
+
+.info-grid .card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--dorado);
+}
+
+.info-grid .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--dorado);
+}
+
+.info-grid .card h3 {
+    color: var(--dorado);
+    font-size: 21px;
+    margin-bottom: 17px;
+}
+
+.info-grid .card p {
+    color: #ddd5e3;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 7px;
+}
+
+.info-grid .card .btn {
+    display: inline-block;
+}
+
 
 /* =========================
    RESPONSIVE
 ========================= */
-@media(max-width: 900px){
-    .header{
-        flex-direction: column;
-        gap: 20px;
+@media (max-width: 1000px) {
+    .hero-wrapper {
+        gap: 35px;
+        padding: 65px 5%;
     }
 
-    .hero-wrapper{
+    .barber-card {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 760px) {
+    .header {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .header-buttons {
+        justify-content: center;
+    }
+
+    .hero-wrapper {
         grid-template-columns: 1fr;
+        padding: 55px 6%;
         text-align: center;
     }
 
-    .hero-text{
+    .hero-text {
         margin: auto;
     }
 
-    .carousel-title{
-        text-align: center;
+    .carousel-title {
+        text-align: left;
     }
 
-    .info-grid{
+    .carousel-item img {
+        height: 280px;
+    }
+
+    .top-barbers-section {
+        padding: 65px 5%;
+    }
+
+    .top-barbers-grid {
         grid-template-columns: 1fr;
+        max-width: 520px;
+        gap: 25px;
     }
 
+    .info-grid {
+        grid-template-columns: 1fr;
+        max-width: 520px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-img-circle {
+        width: 62px;
+        height: 62px;
+    }
+
+    .logo-text {
+        font-size: 21px;
+    }
+
+    .header-buttons {
+        gap: 9px;
+    }
+
+    .header-buttons .btn {
+        padding: 9px 13px;
+        font-size: 12px;
+    }
+
+    .hero-title {
+        font-size: 36px;
+    }
+
+    .carousel-item img {
+        height: 225px;
+    }
+
+    .top-barbers-header {
+        margin-bottom: 30px;
+    }
+
+    .barber-card {
+        padding: 22px 18px;
+    }
+
+    .barber-avatar {
+        width: 95px;
+        height: 95px;
+        flex-basis: 95px;
+    }
+
+    .barber-name {
+        font-size: 19px;
+    }
+
+    .barber-badge {
+        font-size: 9px;
+        padding: 6px 9px;
+    }
+
+    .barber-rating .stars {
+        font-size: 15px;
+        letter-spacing: 0;
+    }
+
+    .rating-score {
+        font-size: 15px;
+    }
+
+    .barber-review {
+        padding: 16px;
+    }
+
+    .info-section {
+        padding: 50px 6%;
+    }
 }

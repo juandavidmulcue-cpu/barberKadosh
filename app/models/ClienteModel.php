@@ -5,9 +5,9 @@ class ClienteModel
 {
     private $db;
 
-    public function __construct()
+    public function __construct($db = null)
     {
-        $this->db = Database::conectar();
+        $this->db = $db ?? Database::conectar();
     }
 
     public function actualizarDatosPerfil($idUsuario, $nombre, $apellido, $telefono, $correo, $foto = null)

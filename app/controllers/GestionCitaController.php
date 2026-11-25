@@ -5,7 +5,6 @@ require_once 'app/models/GestionCitaModel.php';
 require_once 'app/models/ServicioModel.php';
 require_once 'app/models/BarberoModel.php';
 require_once 'app/models/ClienteProductoModel.php';
-require_once 'app/models/PromocionModel.php';
 require_once 'app/models/GestionProductoModel.php';
 
 class GestionCitaController extends Controller
@@ -14,7 +13,6 @@ class GestionCitaController extends Controller
     private $servicioModel;
     private $barberoModel;
     private $clienteProductoModel;
-    private $promocionModel;
     private $gestionProductoModel;
 
     public function __construct()
@@ -28,7 +26,6 @@ class GestionCitaController extends Controller
         $this->servicioModel = new ServicioModel();
         $this->barberoModel = new BarberoModel();
         $this->clienteProductoModel = new ClienteProductoModel();
-        $this->promocionModel = new PromocionModel();
         $this->gestionProductoModel = new GestionProductoModel();
     }
 
@@ -68,16 +65,10 @@ class GestionCitaController extends Controller
         $barberos = $this->barberoModel->obtenerBarberosDisponibles();
         $productos = $this->gestionProductoModel->obtenerProductos();
 
-        // Obtener arreglos de promociones activas
-        $promosServicios = $this->promocionModel->obtenerPromocionesServiciosActivas();
-        $promosProductos = $this->promocionModel->obtenerPromocionesProductosActivas();
-
         $this->view('app/views/cliente/agendar.php', [
             'servicios' => $servicios,
             'barberos'  => $barberos,
             'productos' => $productos,
-            'promosServicios' => $promosServicios,
-            'promosProductos' => $promosProductos,
             'idServicio' => '',
             'idBarbero' => '',
             'fecha' => '',
@@ -358,6 +349,10 @@ class GestionCitaController extends Controller
        FINALIZAR RESERVA
     ========================================= */
 
+    /* =========================================
+       FINALIZAR RESERVA
+    ========================================= */
+
     public function finalizar()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -373,6 +368,9 @@ class GestionCitaController extends Controller
 
         if (!$idReserva) {
 
+            $_SESSION['error_cita'] =
+                '❌ No se indicó la reserva a finalizar.';
+
             $this->redirect(
                 "index.php?controller=gestionCita&action=misCitas"
             );
@@ -380,7 +378,7 @@ class GestionCitaController extends Controller
             return;
         }
 
-        // Finalizar solamente si pertenece al cliente
+        // Finalizar solamente si pertenece al cliente y descontar stock de productos
         $resultado = $this->citaModel->finalizarReserva(
             $idReserva,
             $_SESSION['id']
@@ -390,6 +388,10 @@ class GestionCitaController extends Controller
 
             $_SESSION['mensaje_cita'] =
                 '✅ La cita ha sido finalizada correctamente.';
+        } else {
+
+            $_SESSION['error_cita'] =
+                '❌ No se pudo finalizar la cita. Verifica que esté pendiente y que haya stock suficiente de los productos seleccionados.';
         }
 
         // Volver al perfil
